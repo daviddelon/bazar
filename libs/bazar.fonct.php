@@ -2315,7 +2315,7 @@ function gen_RSS($typeannonce='', $nbitem='', $emetteur='', $valide=1, $requeteS
 function baz_rechercher($typeannonce = 'toutes', $categorienature = 'toutes') {
 	
 	$res = '';
-	
+
 	//creation du lien pour le formulaire de recherche
 	$lien_formulaire = $GLOBALS['wiki']->href('', $GLOBALS['wiki']->GetPageTag(), BAZ_VARIABLE_VOIR.'='.BAZ_VOIR_DEFAUT.'&'.BAZ_VARIABLE_ACTION.'='.BAZ_MOTEUR_RECHERCHE, 0);
 	$formtemplate = new HTML_QuickForm('formulaire', 'post', $lien_formulaire) ;
@@ -2366,7 +2366,7 @@ function baz_rechercher($typeannonce = 'toutes', $categorienature = 'toutes') {
 	}
 
 	// Ajout des options si un type de fiche a ete choisie
-	if ( (isset($_REQUEST['id_typeannonce']) && $_REQUEST['id_typeannonce'] != 'toutes' && $_REQUEST['id_typeannonce'] != '') || ($nb_type_de_fiches==1) ) {
+	if ( (isset($_REQUEST['id_typeannonce']) && ($_REQUEST['id_typeannonce'] != 'toutes' && $_REQUEST['id_typeannonce'] != '' || ($nb_type_de_fiches==1) )) ) {
 
 		$requete_sql =  'SELECT * FROM `'.BAZ_PREFIXE.'nature` WHERE bn_id_nature='.$_REQUEST['id_typeannonce'] ;
 		$nomwikiformulaire = $GLOBALS['wiki']->LoadAll($requete_sql);
