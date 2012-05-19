@@ -170,11 +170,11 @@ width:200px;
 margin:10px auto 0;
 }
 
-div.overlay {
+div.yeswiki-overlay {
 display:none;
 }
 
-div.overlay div.close {
+div.yeswiki-overlay div.close {
 background-image:url(images/overlay_close.png);
 position:absolute;
 right:5px;
@@ -182,6 +182,9 @@ top:5px;
 cursor:pointer;
 height:35px;
 width:35px;
+opacity: 1;
+-moz-opacity: 1;
+filter:alpha(opacity=1);
 }
 
 div.contentWrap_bazar {
@@ -696,7 +699,7 @@ a.active img {
 }
 
 /* close button positioned on upper right corner */
-.simple_overlay .close, .close{
+.yeswiki-overlay .close{
 	background-image:url(images/overlay_close.png);
 	position:absolute;
 	right:-15px;
@@ -704,6 +707,7 @@ a.active img {
 	cursor:pointer;
 	height:35px;
 	width:35px;
+	opacity:1;
 }
 /* the large image. we use a gray border around it */
 #img {
