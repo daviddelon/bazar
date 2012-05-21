@@ -2368,8 +2368,7 @@ function baz_rechercher($typeannonce = 'toutes', $categorienature = 'toutes') {
 	}
 
 	// Ajout des options si un type de fiche a ete choisie
-	if ( (isset($_REQUEST['id_typeannonce']) && ($_REQUEST['id_typeannonce'] != 'toutes' && $_REQUEST['id_typeannonce'] != '' || ($nb_type_de_fiches==1) )) ) {
-
+	if ( isset($_REQUEST['id_typeannonce']) && $_REQUEST['id_typeannonce'] != 'toutes' && $_REQUEST['id_typeannonce'] != '' && $nb_type_de_fiches!=1 ) {
 		$requete_sql =  'SELECT * FROM `'.BAZ_PREFIXE.'nature` WHERE bn_id_nature='.$_REQUEST['id_typeannonce'] ;
 		$nomwikiformulaire = $GLOBALS['wiki']->LoadAll($requete_sql);
 		$tab_nature = $nomwikiformulaire[0];
