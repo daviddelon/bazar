@@ -170,11 +170,11 @@ width:200px;
 margin:10px auto 0;
 }
 
-div.overlay {
+div.yeswiki-overlay {
 display:none;
 }
 
-div.overlay div.close {
+div.yeswiki-overlay div.close {
 background-image:url(images/overlay_close.png);
 position:absolute;
 right:5px;
@@ -182,6 +182,9 @@ top:5px;
 cursor:pointer;
 height:35px;
 width:35px;
+opacity: 1;
+-moz-opacity: 1;
+filter:alpha(opacity=1);
 }
 
 div.contentWrap_bazar {
@@ -696,7 +699,7 @@ a.active img {
 }
 
 /* close button positioned on upper right corner */
-.simple_overlay .close, .close{
+.yeswiki-overlay .close{
 	background-image:url(images/overlay_close.png);
 	position:absolute;
 	right:-15px;
@@ -704,6 +707,7 @@ a.active img {
 	cursor:pointer;
 	height:35px;
 	width:35px;
+	opacity:1;
 }
 /* the large image. we use a gray border around it */
 #img {
@@ -787,43 +791,93 @@ a.active img {
 
 /*****************************************boutons*********************************************************/
 
-.btn, .btn:visited, .btn:link {
-	background: #222 url(images/alert-overlay.png) repeat-x; 
-	display: inline-block; 
-	padding: 5px 10px 6px;
-	margin:1px; 
-	color: #fff; 
-	text-decoration: none;
-	-moz-border-radius: 5px; 
-	-webkit-border-radius: 5px;
-	-moz-box-shadow: 0 1px 3px rgba(0,0,0,0.5);
-	-webkit-box-shadow: 0 1px 3px rgba(0,0,0,0.5);
-	text-shadow: 0 -1px 1px rgba(0,0,0,0.25);
-	border: 0;
-	border-bottom: 1px solid rgba(0,0,0,0.25);
-	position: relative;
-	cursor: pointer;
-	font-size: 13px; font-weight: bold; line-height: 1;
+.BAZ_menu .btn, #formulaire .btn {
+  display: inline-block;
+  *display: inline;
+  padding: 4px 10px 4px;
+  margin-bottom: 0;
+  *margin-left: .3em;
+  font-size: 13px;
+  line-height: 18px;
+  *line-height: 20px;
+  color: #333333;
+  text-align: center;
+  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75);
+  vertical-align: middle;
+  cursor: pointer;
+  background-color: #f5f5f5;
+  *background-color: #e6e6e6;
+  background-image: -ms-linear-gradient(top, #ffffff, #e6e6e6);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#ffffff), to(#e6e6e6));
+  background-image: -webkit-linear-gradient(top, #ffffff, #e6e6e6);
+  background-image: -o-linear-gradient(top, #ffffff, #e6e6e6);
+  background-image: linear-gradient(top, #ffffff, #e6e6e6);
+  background-image: -moz-linear-gradient(top, #ffffff, #e6e6e6);
+  background-repeat: repeat-x;
+  border: 1px solid #cccccc;
+  *border: 0;
+  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+  border-color: #e6e6e6 #e6e6e6 #bfbfbf;
+  border-bottom-color: #b3b3b3;
+  -webkit-border-radius: 4px;
+     -moz-border-radius: 4px;
+          border-radius: 4px;
+  filter: progid:dximagetransform.microsoft.gradient(startColorstr='#ffffff', endColorstr='#e6e6e6', GradientType=0);
+  filter: progid:dximagetransform.microsoft.gradient(enabled=false);
+  *zoom: 1;
+  -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+     -moz-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+          box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
 }
-.btn:hover,.btn:active, .btn:focus		{ background-color: #111; color: #fff; text-decoration: none;}
-.btn:active								{ top: 1px; }
-.small.btn, .small.btn:visited 			{ font-size: 11px; padding:0; }
-.btn, .btn:visited,
-.medium.btn, .medium.btn:visited 		{ font-size: 13px; font-weight: bold; line-height: 1; text-shadow: 0 -1px 1px rgba(0,0,0,0.25); }
-.large.btn, .large.btn:visited 			{ font-size: 14px; padding: 8px 14px 9px; }
 
-.green.btn, .green.btn:visited, .green.btn:link, .bouton_sauver, .bouton_sauver:visited, .bouton_sauver:link { background-color: #91bd09; }
-.green.btn:hover, .green.btn:active, .green.btn:focus, .bouton_sauver:hover, .bouton_sauver.btn:active, .bouton_sauver.btn:focus			{ background-color: #749a02; }
-.blue.btn, .blue.btn:visited, .blue.btn:link		{ background-color: #2daebf; }
-.blue.btn:hover, .blue.btn:active, .blue.btn:focus	{ background-color: #007d9a; }
-.red.btn, .red.btn:visited, .red.btn:link, .bouton_annuler, .bouton_annuler:visited, .bouton_annuler:link	{ background-color: #e33100; }
-.red.btn:hover, .red.btn:active, .red.btn:focus, .bouton_annuler:hover, .bouton_annuler:active, .bouton_annuler:focus { background-color: #872300; }
-.magenta.btn, .magenta.btn:visited, .magenta.btn:link		{ background-color: #a9014b; }
-.magenta.btn:hover, .magenta.btn:active, .magenta.btn:focus	{ background-color: #630030; }
-.orange.btn, .orange.btn:visited, .orange.btn:link		{ background-color: #ff5c00; }
-.orange.btn:hover, .orange.btn:active, .orange.btn:focus{ background-color: #d45500; }
-.yellow.btn, .yellow.btn:visited, .yellow.btn:link, #BAZ_menu .onglet_actif a	{ background-color: #ffb515; }
-.yellow.btn:hover, .yellow.btn:active, .yellow.btn:focus, #BAZ_menu a:hover		{ background-color: #fc9200; }
+.BAZ_menu .btn:hover, #formulaire .btn:hover,
+.BAZ_menu .btn:active, #formulaire .btn:active,
+.BAZ_menu .btn.active, #formulaire .btn.active,
+.BAZ_menu .btn.disabled, #formulaire .btn.disabled,
+.BAZ_menu .btn[disabled], #formulaire .btn[disabled] {
+  background-color: #e6e6e6;
+  *background-color: #d9d9d9;
+}
+
+.BAZ_menu .btn:active, #formulaire .btn:active,
+.BAZ_menu .btn.active, #formulaire .btn.active {
+  background-color: #cccccc \9;
+}
+
+.BAZ_menu .btn:first-child, #formulaire .btn:first-child {
+  *margin-left: 0;
+}
+
+.BAZ_menu .btn:hover, #formulaire .btn:hover {
+  color: #333333;
+  text-decoration: none;
+  background-color: #e6e6e6;
+  *background-color: #d9d9d9;
+  /* Buttons in IE7 don't get borders, so darken on hover */
+
+  background-position: 0 -15px;
+  -webkit-transition: background-position 0.1s linear;
+     -moz-transition: background-position 0.1s linear;
+      -ms-transition: background-position 0.1s linear;
+       -o-transition: background-position 0.1s linear;
+          transition: background-position 0.1s linear;
+}
+.BAZ_menu .btn:focus, #formulaire .btn:focus {
+  outline: thin dotted #333;
+  outline: 5px auto -webkit-focus-ring-color;
+  outline-offset: -2px;
+}
+
+.BAZ_menu .btn:active, #formulaire .btn:active,
+.BAZ_menu .btn.active, #formulaire .btn.active {
+  background-color: #e6e6e6;
+  background-color: #d9d9d9 \9;
+  background-image: none;
+  outline: 0;
+  -webkit-box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.15), 0 1px 2px rgba(0, 0, 0, 0.05);
+     -moz-box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.15), 0 1px 2px rgba(0, 0, 0, 0.05);
+          box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.15), 0 1px 2px rgba(0, 0, 0, 0.05);
+}
 	
 a.prev-tab, button.prev,input.prev {
 clear:left;

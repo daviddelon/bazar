@@ -26,13 +26,13 @@
 *
 *
 *@package bazar
-//Auteur original :
+* Auteur original :
 *@author        Florian Schmitt <florian@outils-reseaux.org>
 *@author        Alexandre Granier <alexandre@tela-botanica.org>
-//Autres auteurs :
+* Autres auteurs :
 *@copyright     Outils-Réseaux 2000-2010
 *@version       $Revision: 1.10 $ $Date: 2010/03/04 14:19:03 $
-// +------------------------------------------------------------------------------------------------------+
+*  +------------------------------------------------------------------------------------------------------+
 */
 
 // +------------------------------------------------------------------------------------------------------+
@@ -317,10 +317,11 @@ function fiches_a_valider() {
 */
 function baz_afficher_liste_fiches_utilisateur() {
 	$res = '<h2 class="titre_mes_fiches">'.BAZ_VOS_FICHES.'</h2>'."\n";
-	
+	$nomwiki = $GLOBALS['wiki']->getUser();
+
 	//test si l'on est identifié pour voir les fiches
-	if ( baz_a_le_droit('voir_mes_fiches') ) {
-		$nomwiki = $GLOBALS['wiki']->getUser();
+	if ( baz_a_le_droit('voir_mes_fiches') && isset($nomwiki["name"])) {
+		
 		$tableau_dernieres_fiches = baz_requete_recherche_fiches('', '', $GLOBALS['_BAZAR_']['id_typeannonce'], $GLOBALS['_BAZAR_']['categorie_nature'], 1, $nomwiki["name"], 10);
         $res .= baz_afficher_liste_resultat($tableau_dernieres_fiches, false);
 	} else  {
@@ -2348,11 +2349,12 @@ function baz_rechercher($typeannonce = 'toutes', $categorienature = 'toutes') {
 	$nb_type_de_fiches = count($tab_formulaires);
 
 	$type_formulaire_select['toutes'] = BAZ_TOUS_TYPES_FICHES;
-
-	foreach ($tab_formulaires as $type_fiche => $formulaire) {
-		foreach ($formulaire as $nomwiki => $ligne) {
-			$tableau_typeformulaires[] = $nomwiki;
-			$type_formulaire_select[$nomwiki] = $ligne['bn_label_nature'].' ('.$type_fiche.')';
+	if ( is_array($tab_formulaires) ) {
+		foreach ($tab_formulaires as $type_fiche => $formulaire) {
+			foreach ($formulaire as $nomwiki => $ligne) {
+				$tableau_typeformulaires[] = $nomwiki;
+				$type_formulaire_select[$nomwiki] = $ligne['bn_label_nature'].' ('.$type_fiche.')';
+			}
 		}
 	}
 	
@@ -2366,8 +2368,7 @@ function baz_rechercher($typeannonce = 'toutes', $categorienature = 'toutes') {
 	}
 
 	// Ajout des options si un type de fiche a ete choisie
-	if ( (isset($_REQUEST['id_typeannonce']) && ($_REQUEST['id_typeannonce'] != 'toutes' && $_REQUEST['id_typeannonce'] != '' || ($nb_type_de_fiches==1) )) ) {
-
+	if ( isset($_REQUEST['id_typeannonce']) && $_REQUEST['id_typeannonce'] != 'toutes' && $_REQUEST['id_typeannonce'] != '' && $nb_type_de_fiches!=1 ) {
 		$requete_sql =  'SELECT * FROM `'.BAZ_PREFIXE.'nature` WHERE bn_id_nature='.$_REQUEST['id_typeannonce'] ;
 		$nomwikiformulaire = $GLOBALS['wiki']->LoadAll($requete_sql);
 		$tab_nature = $nomwikiformulaire[0];
@@ -2570,7 +2571,8 @@ function baz_valeurs_tous_les_formulaires($categorie = 'toutes', $format = 'html
 	$requete_sql =  'SELECT * FROM `'.BAZ_PREFIXE.'nature` WHERE 1';
 	$nomwikiformulaire = $GLOBALS['wiki']->LoadAll($requete_sql);
 	$valeurs_formulaire = '';
-	if (is_array($nomwikiformulaire[0])) {
+	$valeurs_formulaire_rangees = '';
+	if (count($nomwikiformulaire) > 0  &&is_array($nomwikiformulaire[0]) ) {
 		foreach ($nomwikiformulaire as $nomwiki) {
 			if ($format == 'html') {
 				//$tab_formulaire[$nomwiki['bn_type_fiche']] = $nomwiki;
