@@ -616,7 +616,7 @@ function tags(&$formtemplate, $tableau_template, $mode, $valeurs_fiche)
 			}
 		}		
 		
-		$formtag = '<script src="tools/tags/libs/GrowingInput.js" type="text/javascript" charset="utf-8"></script>
+		/*$formtag = '<script src="tools/tags/libs/GrowingInput.js" type="text/javascript" charset="utf-8"></script>
 		<script src="tools/tags/libs/tags_suggestions.js" type="text/javascript" charset="utf-8"></script>
 		<script type="text/javascript">
 		$(document).ready(function() {
@@ -631,7 +631,36 @@ function tags(&$formtemplate, $tableau_template, $mode, $valeurs_fiche)
 			'.$tags_javascript.'		
 		});
 		</script>';
-		$GLOBALS['js'] = ((isset($GLOBALS['js'])) ? $GLOBALS['js'] : '').$formtag."\n";
+		$GLOBALS['js'] = ((isset($GLOBALS['js'])) ? $GLOBALS['js'] : '').$formtag."\n";*/
+
+		// on recupere tous les tags du site
+		$tab_tous_les_tags = $GLOBALS['wiki']->GetAllTags();
+		if (is_array($tab_tous_les_tags))
+		{
+			foreach ($tab_tous_les_tags as $tab_les_tags)
+			{
+				$response[] = $tab_les_tags['value'];
+			}
+		}
+		sort($response);
+		$tagsexistants = '\''.implode('\',\'', $response).'\'';
+
+		$GLOBALS['js'] = ((isset($GLOBALS['js'])) ? $GLOBALS['js'] : '').'
+		<script src="tools/tags/libs/jquery-ui-1.8.16.custom.min.js" type="text/javascript"></script>
+		<script src="tools/tags/libs/tag-it.js" type="text/javascript"></script>	
+		<script type="text/javascript">
+		$(function(){
+	        var tagsexistants = ['.$tagsexistants.'];
+
+		    $(\'#'.$tableau_template[1].'\').tagit({
+			    availableTags: tagsexistants
+			});
+			
+			//bidouille antispam
+			$(".antispam").attr(\'value\', \'1\');
+		});
+		</script>';
+		
 		
 		$option=array('size'=>$tableau_template[3],'maxlength'=>$tableau_template[4], 'id' => $tableau_template[1], 'class' => 'input_texte microblog_toustags');
 		$bulledaide = '';
