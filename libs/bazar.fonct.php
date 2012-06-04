@@ -1045,6 +1045,12 @@ function baz_requete_bazar_fiche($valeur) {
 	}
 
 	$valeur['statut_fiche'] = BAZ_ETAT_VALIDATION;
+	//pour une insertion d'une nouvelle fiche, on génére l'id de la fiche
+	if (!isset($GLOBALS['_BAZAR_']['id_fiche'])) {
+		// l'identifiant (sous forme de NomWiki) est généré à partir du titre            
+		$GLOBALS['_BAZAR_']['id_fiche'] = genere_nom_wiki($valeur['bf_titre']);
+	} 
+	$valeur['id_fiche'] = $GLOBALS['_BAZAR_']['id_fiche'];
 	
 	$tableau = formulaire_valeurs_template_champs($GLOBALS['_BAZAR_']['template']);
 	for ($i=0; $i<count($tableau); $i++) {
@@ -1052,13 +1058,6 @@ function baz_requete_bazar_fiche($valeur) {
 		if (is_array($tab)) $valeur = array_merge($valeur, $tab);
 	}
 	$valeur['date_maj_fiche'] = date( 'Y-m-d H:i:s', time() );
-	
-	//pour une insertion d'une nouvelle fiche, on génére l'id de la fiche
-	if (!isset($GLOBALS['_BAZAR_']['id_fiche'])) {
-		// l'identifiant (sous forme de NomWiki) est généré à partir du titre            
-		$GLOBALS['_BAZAR_']['id_fiche'] = genere_nom_wiki($valeur['bf_titre']);
-	} 
-	$valeur['id_fiche'] = $GLOBALS['_BAZAR_']['id_fiche'];
 	
 	//on encode en utf-8 pour réussir à encoder en json
 	$valeur = array_map("utf8_encode", $valeur);
@@ -2553,6 +2552,7 @@ function baz_requete_recherche_fiches($tableau_criteres = '', $tri = '', $id_typ
 		$requete .= ' LIMIT 0,'.$nb_limite;
 	} 
 	
+    // debug
 	//echo '<textarea style="width:100%;height:100px;">'.$requete.'</textarea>';
 	//var_dump($GLOBALS['_BAZAR_']['db']->getAll($requete));
 	return $GLOBALS['_BAZAR_']['db']->getAll($requete);

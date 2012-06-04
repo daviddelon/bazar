@@ -870,7 +870,7 @@ function utilisateur_wikini(&$formtemplate, $tableau_template, $mode, $valeurs_f
 			//envoi mail nouveau mot de passe
 			$lien = str_replace("/wakka.php?wiki=","",$GLOBALS['wiki']->config["base_url"]);
 			$objetmail = '['.str_replace("http://","",$lien).'] Vos nouveaux identifiants sur le site '.$GLOBALS['wiki']->config["wakka_name"];
-			$messagemail = "Bonjour!\n\nVotre inscription sur le site a ete finalisee, dorenavant vous pouvez vous identifier avec les informations suivantes :\n\nVotre identifiant NomWiki : ".$nomwiki."\n\nVotre mot de passe : ". $valeurs_fiche['mot_de_passe_wikini'] . "\n\nA tres bientot ! \n\nL equipe Ecorem";
+			$messagemail = "Bonjour!\n\nVotre inscription sur le site a ete finalisee, dorenavant vous pouvez vous identifier avec les informations suivantes :\n\nVotre identifiant NomWiki : ".$nomwiki."\n\nVotre mot de passe : ". $valeurs_fiche['mot_de_passe_wikini'] . "\n\nA tres bientot ! \n\n";
 			$headers =   'From: '.BAZ_ADRESSE_MAIL_ADMIN . "\r\n" .
 			     'Reply-To: '.BAZ_ADRESSE_MAIL_ADMIN . "\r\n" .
 			     'X-Mailer: PHP/' . phpversion();
@@ -888,7 +888,7 @@ function utilisateur_wikini(&$formtemplate, $tableau_template, $mode, $valeurs_f
 			//envoi mail nouveau mot de passe
 			$lien = str_replace("/wakka.php?wiki=","",$GLOBALS['wiki']->config["base_url"]);
 			$objetmail = '['.str_replace("http://","",$lien).'] Vos nouveaux identifiants sur le site '.$GLOBALS['wiki']->config["wakka_name"];
-			$messagemail = "Bonjour!\n\nVotre inscription sur le site a ete modifiee, dorenavant vous pouvez vous identifier avec les informations suivantes :\n\nVotre identifiant NomWiki : ".$valeurs_fiche['nomwiki']."\n\nVotre mot de passe : ". $valeurs_fiche['mot_de_passe_wikini'] . "\n\nA tres bientot !\n\nL equipe Ecorem";
+			$messagemail = "Bonjour!\n\nVotre inscription sur le site a ete modifiee, dorenavant vous pouvez vous identifier avec les informations suivantes :\n\nVotre identifiant NomWiki : ".$valeurs_fiche['nomwiki']."\n\nVotre mot de passe : ". $valeurs_fiche['mot_de_passe_wikini'] . "\n\nA tres bientot !\n\n";
 			$headers =   'From: '.BAZ_ADRESSE_MAIL_ADMIN . "\r\n" .
 			     'Reply-To: '.BAZ_ADRESSE_MAIL_ADMIN . "\r\n" .
 			     'X-Mailer: PHP/' . phpversion();
@@ -2185,7 +2185,7 @@ function bookmarklet(&$formtemplate, $tableau_template, $mode, $valeurs_fiche) {
 		$url_bookmarklet->addQueryString('wiki', $GLOBALS['_BAZAR_']['pagewiki'].'/bazarframe');
 		$url_bookmarklet->addQueryString('id_typeannonce', $GLOBALS['_BAZAR_']['id_typeannonce']);
 		$htmlbookmarklet = "<div class=\"BAZ_info\">
-		<a href=\"javascript:var wleft = (screen.width-700)/2; var wtop=(screen.height-530)/2 ;window.open('".str_replace('&', '&amp;', $url_bookmarklet->getUrl())."&amp;bf_titre='+escape(document.title)+'&amp;url='+encodeURIComponent(location.href)+'&amp;description='+escape(document.getSelection()), 'Veille collective', 'height=530,width=700,left='+wleft+',top='+wtop+',toolbar=no,location=no,directories=no,status=no,scrollbars=yes,resizable=yes,menubar=no');void 0;\">Partager sur Ecorem</a> << d&eacute;placer ce lien dans votre barre des favoris pour y acc&eacute;der facilement.</div>";
+		<a href=\"javascript:var wleft = (screen.width-700)/2; var wtop=(screen.height-530)/2 ;window.open('".str_replace('&', '&amp;', $url_bookmarklet->getUrl())."&amp;bf_titre='+escape(document.title)+'&amp;url='+encodeURIComponent(location.href)+'&amp;description='+escape(document.getSelection()), 'Veille collective', 'height=530,width=700,left='+wleft+',top='+wtop+',toolbar=no,location=no,directories=no,status=no,scrollbars=yes,resizable=yes,menubar=no');void 0;\">Partager</a> << d&eacute;placer ce lien dans votre barre des favoris pour y acc&eacute;der facilement.</div>";
 		$formtemplate->addElement('html', $htmlbookmarklet);
 	}
 }
