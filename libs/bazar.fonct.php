@@ -522,7 +522,7 @@ function baz_afficher_formulaire_export() {
 				$index = str_replace('|','',$index);
 				//ces types de champs nécessitent un traitement particulier
 				if ( $tabindex[0]=='liste' || $tabindex[0]=='checkbox' || $tabindex[0]=='listefiche' || $tabindex[0]=='checkboxfiche') {
-					$html = $tabindex[0]($toto, array(0 => $tabindex[0],1 => $tabindex[1] ,6 => $tabindex[2]), 'html', array($index => $tab_valeurs[$index]));			
+					$html = $tabindex[0]($toto, array(0 => $tabindex[0],1 => $tabindex[1], 2 => '', 6 => $tabindex[2]), 'html', array($index => $tab_valeurs[$index]));			
 					$tabhtml = explode ('</span>', $html);
 					$tab_valeurs[$index] = utf8_encode(html_entity_decode(trim(strip_tags($tabhtml[1]))));
 				}
@@ -1045,7 +1045,7 @@ function baz_requete_bazar_fiche($valeur) {
 	}
 
 	$valeur['statut_fiche'] = BAZ_ETAT_VALIDATION;
-	
+
 	//pour une insertion d'une nouvelle fiche, on génére l'id de la fiche
 	if (!isset($GLOBALS['_BAZAR_']['id_fiche'])) {
 		// l'identifiant (sous forme de NomWiki) est généré à partir du titre            
@@ -1328,12 +1328,12 @@ function baz_liste_rss() {
 	$liste='';
 	while ($ligne = $resultat->fetchRow(DB_FETCHMODE_ASSOC)) {
 		$lien_RSS->addQueryString('id_typeannonce', $ligne['bn_id_nature']);
-		$liste .= '<li><a href="'.str_replace('&', '&amp;', $lien_RSS->getURL()).'"><img src="'.BAZ_CHEMIN.'presentation'.DIRECTORY_SEPARATOR.'images'.DIRECTORY_SEPARATOR.'BAZ_rss.png" alt="'.BAZ_RSS.'" /></a>&nbsp;';
+		$liste .= '<li><a href="'.str_replace('&', '&amp;', $lien_RSS->getURL()).'"><img src="tools/bazar/presentation/images/BAZ_rss.png" alt="'.BAZ_RSS.'" /></a>&nbsp;';
 		$liste .= $ligne['bn_label_nature'];
 		$liste .= '</li>'."\n";
 		$lien_RSS->removeQueryString('id_typeannonce');
 	}
-	if ($liste!='') $res .= '<ul class="BAZ_liste">'."\n".'<li><a href="'.str_replace('&', '&amp;', $lien_RSS->getURL()).'"><img src="'.BAZ_CHEMIN.'presentation'.DIRECTORY_SEPARATOR.'images'.DIRECTORY_SEPARATOR.'BAZ_rss.png" alt="'.BAZ_RSS.'" /></a>&nbsp;<strong>Flux RSS de toutes les fiches</strong></li>'."\n".$liste.'</ul>'."\n";
+	if ($liste!='') $res .= '<ul class="BAZ_liste">'."\n".'<li><a href="'.str_replace('&', '&amp;', $lien_RSS->getURL()).'"><img src="tools/bazar/presentation/images/BAZ_rss.png" alt="'.BAZ_RSS.'" /></a>&nbsp;<strong>Flux RSS de toutes les fiches</strong></li>'."\n".$liste.'</ul>'."\n";
 	// Nettoyage de l'url
 	//GLOBALS['_BAZAR_']['url']->removeQueryString(BAZ_VARIABLE_ACTION);
 	return $res;
@@ -2434,8 +2434,8 @@ function baz_requete_recherche_fiches($tableau_criteres = '', $tri = '', $id_typ
 	$nb_jointures=0;
 	
 	//si les parametres ne sont pas rentrés, on prend les variables globales
-	if ($id_typeannonce == '') $id_typeannonce = $GLOBALS['_BAZAR_']['id_typeannonce'];
-	if ($categorie_fiche == '') $categorie_fiche = $GLOBALS['_BAZAR_']['categorie_nature'];
+	if ($id_typeannonce == '' && isset($GLOBALS['_BAZAR_']['id_typeannonce'])) $id_typeannonce = $GLOBALS['_BAZAR_']['id_typeannonce'];
+	if ($categorie_fiche == '' && isset($GLOBALS['_BAZAR_']['categorie_nature'])) $categorie_fiche = $GLOBALS['_BAZAR_']['categorie_nature'];
 	
 	//requete pour récupérer toutes les PageWiki étant des fiches bazar
     $requete_pages_wiki_bazar_fiches = 'SELECT DISTINCT resource FROM '.BAZ_PREFIXE.'triples WHERE value = "fiche_bazar" AND property = "http://outils-reseaux.org/_vocabulary/type" ORDER BY resource ASC';
@@ -2548,6 +2548,7 @@ function baz_requete_recherche_fiches($tableau_criteres = '', $tri = '', $id_typ
 		$requete .= ' LIMIT 0,'.$nb_limite;
 	} 
 	
+    // debug
 	//echo '<textarea style="width:100%;height:100px;">'.$requete.'</textarea>';
 	//var_dump($GLOBALS['_BAZAR_']['db']->getAll($requete));
 	return $GLOBALS['_BAZAR_']['db']->getAll($requete);
@@ -2727,14 +2728,14 @@ function baz_afficher_flux_RSS() {
 		$id_typeannonce = $_GET['id_typeannonce'];
 	}
 	else {
-		$id_typeannonce = $GLOBALS['_BAZAR_']['id_typeannonce'];
+		$id_typeannonce = '';
 	}
 
 	if (isset($_GET['categorie_fiche'])) {
 		$categorie_fiche = $_GET['categorie_fiche'];
 	}
 	else {
-		$categorie_fiche = $GLOBALS['_BAZAR_']['categorie_nature'];
+		$categorie_fiche = '';
 	}
 
 	if (isset($_GET['nbitem'])) {
