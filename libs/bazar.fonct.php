@@ -59,64 +59,64 @@ function baz_afficher_menu() {
 	if (strstr(BAZ_VOIR_AFFICHER, strval(BAZ_VOIR_MES_FICHES))) {
 		$GLOBALS['_BAZAR_']['url']->addQueryString(BAZ_VARIABLE_VOIR, BAZ_VOIR_MES_FICHES);
 		$res .= '<li id="menu_mes_fiches"';
-		if (isset($_GET[BAZ_VARIABLE_VOIR]) && $_GET[BAZ_VARIABLE_VOIR] == BAZ_VOIR_MES_FICHES) $res .=' class="onglet_actif" ';
-		$res .= '><a href="'.str_replace('&','&amp;',$GLOBALS['_BAZAR_']['url']->getURL()).'" class="btn">'.BAZ_VOIR_VOS_FICHES.'</a>'."\n".'</li>'."\n";
+		if (isset($_GET[BAZ_VARIABLE_VOIR]) && $_GET[BAZ_VARIABLE_VOIR] == BAZ_VOIR_MES_FICHES) $class =' btn-inverse'; else $class = '';
+		$res .= '><a href="'.str_replace('&','&amp;',$GLOBALS['_BAZAR_']['url']->getURL()).'" class="btn'.$class.'">'.BAZ_VOIR_VOS_FICHES.'</a>'."\n".'</li>'."\n";
 	}
 
 	//partie consultation d'annonces
 	if (strstr(BAZ_VOIR_AFFICHER, strval(BAZ_VOIR_CONSULTER))) {
 		$GLOBALS['_BAZAR_']['url']->addQueryString(BAZ_VARIABLE_VOIR, BAZ_VOIR_CONSULTER);
 		$res .= '<li id="menu_consulter"';
-		if ((isset($_GET[BAZ_VARIABLE_VOIR]) && $_GET[BAZ_VARIABLE_VOIR] == BAZ_VOIR_CONSULTER)) $res .=' class="onglet_actif" ';
-		$res .='><a href="'.str_replace('&','&amp;',$GLOBALS['_BAZAR_']['url']->getURL()).'" class="btn">'.BAZ_CONSULTER.'</a>'."\n".'</li>'."\n";
+		if ((isset($_GET[BAZ_VARIABLE_VOIR]) && $_GET[BAZ_VARIABLE_VOIR] == BAZ_VOIR_CONSULTER)) $class =' btn-inverse'; else $class = '';
+		$res .='><a href="'.str_replace('&','&amp;',$GLOBALS['_BAZAR_']['url']->getURL()).'" class="btn'.$class.'">'.BAZ_CONSULTER.'</a>'."\n".'</li>'."\n";
 	}
 
 	//partie saisie d'annonces
 	if (strstr(BAZ_VOIR_AFFICHER, strval(BAZ_VOIR_SAISIR))) {
 		$GLOBALS['_BAZAR_']['url']->addQueryString(BAZ_VARIABLE_VOIR, BAZ_VOIR_SAISIR);
 		$res .= '<li id="menu_deposer"';
-		if (isset($_GET[BAZ_VARIABLE_VOIR]) && ($_GET[BAZ_VARIABLE_VOIR]==BAZ_VOIR_SAISIR )) $res .=' class="onglet_actif" ';
-		$res .='><a href="'.str_replace('&','&amp;',$GLOBALS['_BAZAR_']['url']->getURL()).'" class="btn">'.BAZ_SAISIR.'</a>'."\n".'</li>'."\n";
+		if (isset($_GET[BAZ_VARIABLE_VOIR]) && ($_GET[BAZ_VARIABLE_VOIR]==BAZ_VOIR_SAISIR )) $class =' btn-inverse'; else $class = '';
+		$res .='><a href="'.str_replace('&','&amp;',$GLOBALS['_BAZAR_']['url']->getURL()).'" class="btn'.$class.'">'.BAZ_SAISIR.'</a>'."\n".'</li>'."\n";
 	}
 
 	//partie abonnement aux annonces
 	if (strstr(BAZ_VOIR_AFFICHER, strval(BAZ_VOIR_S_ABONNER))) {
 		$GLOBALS['_BAZAR_']['url']->addQueryString(BAZ_VARIABLE_VOIR, BAZ_VOIR_S_ABONNER);
 		$res .= '<li id="menu_inscrire"';
-		if (isset($_GET[BAZ_VARIABLE_VOIR]) && $_GET[BAZ_VARIABLE_VOIR]==BAZ_VOIR_S_ABONNER) $res .=' class="onglet_actif" ';
-		$res .= '><a href="'.str_replace('&','&amp;',$GLOBALS['_BAZAR_']['url']->getURL()).'" class="btn">'.BAZ_S_ABONNER.'</a></li>'."\n" ;
+		if (isset($_GET[BAZ_VARIABLE_VOIR]) && $_GET[BAZ_VARIABLE_VOIR]==BAZ_VOIR_S_ABONNER) $class =' btn-inverse'; else $class = '';
+		$res .= '><a href="'.str_replace('&','&amp;',$GLOBALS['_BAZAR_']['url']->getURL()).'" class="btn'.$class.'">'.BAZ_S_ABONNER.'</a></li>'."\n" ;
 	}
 
 	//partie affichage formulaire
 	if (strstr(BAZ_VOIR_AFFICHER, strval(BAZ_VOIR_FORMULAIRE))) {
 		$GLOBALS['_BAZAR_']['url']->addQueryString(BAZ_VARIABLE_VOIR, BAZ_VOIR_FORMULAIRE);
 		$res .= '<li id="menu_formulaire"';
-		if (isset($_GET[BAZ_VARIABLE_VOIR]) && $_GET[BAZ_VARIABLE_VOIR]==BAZ_VOIR_FORMULAIRE) $res .=' class="onglet_actif" ';
-		$res .= '><a href="'.str_replace('&','&amp;',$GLOBALS['_BAZAR_']['url']->getURL()).'" class="btn">'.BAZ_FORMULAIRE.'</a></li>'."\n" ;
+		if (isset($_GET[BAZ_VARIABLE_VOIR]) && $_GET[BAZ_VARIABLE_VOIR]==BAZ_VOIR_FORMULAIRE) $class =' btn-inverse'; else $class = '';
+		$res .= '><a href="'.str_replace('&','&amp;',$GLOBALS['_BAZAR_']['url']->getURL()).'" class="btn'.$class.'">'.BAZ_FORMULAIRE.'</a></li>'."\n" ;
 	}
 
 	//partie affichage listes
 	if (strstr(BAZ_VOIR_AFFICHER, strval(BAZ_VOIR_LISTES))) {
 		$GLOBALS['_BAZAR_']['url']->addQueryString(BAZ_VARIABLE_VOIR, BAZ_VOIR_LISTES);
 		$res .= '<li id="menu_listes"';
-		if (isset($_GET[BAZ_VARIABLE_VOIR]) && $_GET[BAZ_VARIABLE_VOIR]==BAZ_VOIR_LISTES) $res .=' class="onglet_actif" ';
-		$res .= '><a href="'.str_replace('&','&amp;',$GLOBALS['_BAZAR_']['url']->getURL()).'" class="btn">'.BAZ_LISTES.'</a></li>'."\n" ;
+		if (isset($_GET[BAZ_VARIABLE_VOIR]) && $_GET[BAZ_VARIABLE_VOIR]==BAZ_VOIR_LISTES) $class =' btn-inverse'; else $class = '';
+		$res .= '><a href="'.str_replace('&','&amp;',$GLOBALS['_BAZAR_']['url']->getURL()).'" class="btn'.$class.'">'.BAZ_LISTES.'</a></li>'."\n" ;
 	}
 	
 	//partie import
 	if (strstr(BAZ_VOIR_AFFICHER, strval(BAZ_VOIR_IMPORTER))) {
 		$GLOBALS['_BAZAR_']['url']->addQueryString(BAZ_VARIABLE_VOIR, BAZ_VOIR_IMPORTER);
 		$res .= '<li id="menu_import"';
-		if (isset($_GET[BAZ_VARIABLE_VOIR]) && $_GET[BAZ_VARIABLE_VOIR]==BAZ_VOIR_IMPORTER) $res .=' class="onglet_actif" ';
-		$res .= '><a href="'.str_replace('&','&amp;',$GLOBALS['_BAZAR_']['url']->getURL()).'" class="btn">'.BAZ_IMPORTER.'</a></li>'."\n" ;
+		if (isset($_GET[BAZ_VARIABLE_VOIR]) && $_GET[BAZ_VARIABLE_VOIR]==BAZ_VOIR_IMPORTER) $class =' btn-inverse'; else $class = '';
+		$res .= '><a href="'.str_replace('&','&amp;',$GLOBALS['_BAZAR_']['url']->getURL()).'" class="btn'.$class.'">'.BAZ_IMPORTER.'</a></li>'."\n" ;
 	}
 	
 	//partie export
 	if (strstr(BAZ_VOIR_AFFICHER, strval(BAZ_VOIR_EXPORTER))) {
 		$GLOBALS['_BAZAR_']['url']->addQueryString(BAZ_VARIABLE_VOIR, BAZ_VOIR_EXPORTER);
 		$res .= '<li id="menu_export"';
-		if (isset($_GET[BAZ_VARIABLE_VOIR]) && $_GET[BAZ_VARIABLE_VOIR]==BAZ_VOIR_EXPORTER) $res .=' class="onglet_actif" ';
-		$res .= '><a href="'.str_replace('&','&amp;',$GLOBALS['_BAZAR_']['url']->getURL()).'" class="btn">'.BAZ_EXPORTER.'</a></li>'."\n" ;
+		if (isset($_GET[BAZ_VARIABLE_VOIR]) && $_GET[BAZ_VARIABLE_VOIR]==BAZ_VOIR_EXPORTER) $class =' btn-inverse'; else $class = '';
+		$res .= '><a href="'.str_replace('&','&amp;',$GLOBALS['_BAZAR_']['url']->getURL()).'" class="btn'.$class.'">'.BAZ_EXPORTER.'</a></li>'."\n" ;
 	}
 	
 	// Au final, on place dans l url, l action courante
@@ -522,7 +522,7 @@ function baz_afficher_formulaire_export() {
 				$index = str_replace('|','',$index);
 				//ces types de champs nécessitent un traitement particulier
 				if ( $tabindex[0]=='liste' || $tabindex[0]=='checkbox' || $tabindex[0]=='listefiche' || $tabindex[0]=='checkboxfiche') {
-					$html = $tabindex[0]($toto, array(0 => $tabindex[0],1 => $tabindex[1] ,6 => $tabindex[2]), 'html', array($index => $tab_valeurs[$index]));			
+					$html = $tabindex[0]($toto, array(0 => $tabindex[0],1 => $tabindex[1], 2 => '', 6 => $tabindex[2]), 'html', array($index => $tab_valeurs[$index]));			
 					$tabhtml = explode ('</span>', $html);
 					$tab_valeurs[$index] = utf8_encode(html_entity_decode(trim(strip_tags($tabhtml[1]))));
 				}
@@ -879,8 +879,8 @@ function baz_formulaire($mode, $url = '', $valeurs = '') {
 				$lien_formulaire->removeQueryString('id_fiche');
 
 				// Nettoyage de l'url avant les return
-				$buttons[] = &HTML_QuickForm::createElement('link', 'annuler', BAZ_ANNULER, str_replace("&amp;", "&", $GLOBALS['_BAZAR_']['url']->getURL()), BAZ_ANNULER, array('class' => 'btn bouton_annuler'));
-				$buttons[] = &HTML_QuickForm::createElement('submit', 'valider', BAZ_VALIDER, array('class' => 'btn bouton_sauver'));
+				$buttons[] = &HTML_QuickForm::createElement('link', 'annuler', BAZ_ANNULER, str_replace("&amp;", "&", $GLOBALS['_BAZAR_']['url']->getURL()), BAZ_ANNULER, array('class' => 'btn btn-danger bouton_annuler'));
+				$buttons[] = &HTML_QuickForm::createElement('submit', 'valider', BAZ_VALIDER, array('class' => 'btn btn-success bouton_sauver'));
 				$formtemplate->addGroup($buttons, 'groupe_boutons', null, '&nbsp;', 0);
 				$squelette->setElementTemplate( '<div class="formulaire_ligne">'."\n".
 									'<div class="formulaire_input"> '."\n".'{element}'."\n".
@@ -972,9 +972,9 @@ function baz_afficher_formulaire_fiche($mode = 'saisie', $formtemplate, $url = '
 		
 		$GLOBALS['_BAZAR_']['url']->removeQueryString(BAZ_VARIABLE_ACTION);
 		$GLOBALS['_BAZAR_']['url']->removeQueryString(BAZ_VARIABLE_VOIR);
-		$buttons[] = &HTML_QuickForm::createElement('link', 'annuler', BAZ_ANNULER, str_replace("&amp;", "&", ($url ? str_replace('/edit', '', $url) : $GLOBALS['_BAZAR_']['url']->getURL())), BAZ_ANNULER, array('class' => 'btn bouton_annuler'));
+		$buttons[] = &HTML_QuickForm::createElement('link', 'annuler', BAZ_ANNULER, str_replace("&amp;", "&", ($url ? str_replace('/edit', '', $url) : $GLOBALS['_BAZAR_']['url']->getURL())), BAZ_ANNULER, array('class' => 'btn btn-danger bouton_annuler'));
 		//$buttons[] = &HTML_QuickForm::createElement('submit', 'valider', BAZ_VALIDER, array('class' => 'btn bouton_sauver'));
-		$buttons[] = &HTML_QuickForm::createElement('link', 'valider', BAZ_VALIDER, '#', BAZ_VALIDER, array('class' => 'btn bouton_sauver'));
+		$buttons[] = &HTML_QuickForm::createElement('link', 'valider', BAZ_VALIDER, '#', BAZ_VALIDER, array('class' => 'btn btn-success bouton_sauver'));
 		$formtemplate->addGroup($buttons, 'groupe_boutons', null, '&nbsp;', 0);
 	}
 	//affichage du formulaire si conditions acceptees
@@ -1011,9 +1011,9 @@ function baz_afficher_formulaire_fiche($mode = 'saisie', $formtemplate, $url = '
 			$GLOBALS['_BAZAR_']['url']->removeQueryString('id_typeannonce');
 			$GLOBALS['_BAZAR_']['url']->removeQueryString('id_fiche');
 		}
-		$buttons[] = &HTML_QuickForm::createElement('link', 'annuler', BAZ_ANNULER, str_replace("&amp;", "&", ($url ? str_replace('/edit', '', $url) : $GLOBALS['_BAZAR_']['url']->getURL())), BAZ_ANNULER, array('class' => 'btn bouton_annuler'));
+		$buttons[] = &HTML_QuickForm::createElement('link', 'annuler', BAZ_ANNULER, str_replace("&amp;", "&", ($url ? str_replace('/edit', '', $url) : $GLOBALS['_BAZAR_']['url']->getURL())), BAZ_ANNULER, array('class' => 'btn btn-danger bouton_annuler'));
 		#$buttons[] = &HTML_QuickForm::createElement('submit', 'valider', BAZ_VALIDER, array('class' => 'btn bouton_sauver'));
-		$buttons[] = &HTML_QuickForm::createElement('link', 'valider', BAZ_VALIDER, '#', BAZ_VALIDER, array('class' => 'btn bouton_sauver'));
+		$buttons[] = &HTML_QuickForm::createElement('link', 'valider', BAZ_VALIDER, '#', BAZ_VALIDER, array('class' => 'btn btn-success bouton_sauver'));
 		$formtemplate->addGroup($buttons, 'groupe_boutons', null, '&nbsp;', 0);
 
 	}
@@ -1045,13 +1045,14 @@ function baz_requete_bazar_fiche($valeur) {
 	}
 
 	$valeur['statut_fiche'] = BAZ_ETAT_VALIDATION;
+
 	//pour une insertion d'une nouvelle fiche, on génére l'id de la fiche
 	if (!isset($GLOBALS['_BAZAR_']['id_fiche'])) {
 		// l'identifiant (sous forme de NomWiki) est généré à partir du titre            
 		$GLOBALS['_BAZAR_']['id_fiche'] = genere_nom_wiki($valeur['bf_titre']);
 	} 
 	$valeur['id_fiche'] = $GLOBALS['_BAZAR_']['id_fiche'];
-	
+
 	$tableau = formulaire_valeurs_template_champs($GLOBALS['_BAZAR_']['template']);
 	for ($i=0; $i<count($tableau); $i++) {
 		$tab = $tableau[$i][0]($formtemplate, $tableau[$i], 'requete', $valeur);
@@ -1327,12 +1328,12 @@ function baz_liste_rss() {
 	$liste='';
 	while ($ligne = $resultat->fetchRow(DB_FETCHMODE_ASSOC)) {
 		$lien_RSS->addQueryString('id_typeannonce', $ligne['bn_id_nature']);
-		$liste .= '<li><a href="'.str_replace('&', '&amp;', $lien_RSS->getURL()).'"><img src="'.BAZ_CHEMIN.'presentation'.DIRECTORY_SEPARATOR.'images'.DIRECTORY_SEPARATOR.'BAZ_rss.png" alt="'.BAZ_RSS.'" /></a>&nbsp;';
+		$liste .= '<li><a href="'.str_replace('&', '&amp;', $lien_RSS->getURL()).'"><img src="tools/bazar/presentation/images/BAZ_rss.png" alt="'.BAZ_RSS.'" /></a>&nbsp;';
 		$liste .= $ligne['bn_label_nature'];
 		$liste .= '</li>'."\n";
 		$lien_RSS->removeQueryString('id_typeannonce');
 	}
-	if ($liste!='') $res .= '<ul class="BAZ_liste">'."\n".'<li><a href="'.str_replace('&', '&amp;', $lien_RSS->getURL()).'"><img src="'.BAZ_CHEMIN.'presentation'.DIRECTORY_SEPARATOR.'images'.DIRECTORY_SEPARATOR.'BAZ_rss.png" alt="'.BAZ_RSS.'" /></a>&nbsp;<strong>Flux RSS de toutes les fiches</strong></li>'."\n".$liste.'</ul>'."\n";
+	if ($liste!='') $res .= '<ul class="BAZ_liste">'."\n".'<li><a href="'.str_replace('&', '&amp;', $lien_RSS->getURL()).'"><img src="tools/bazar/presentation/images/BAZ_rss.png" alt="'.BAZ_RSS.'" /></a>&nbsp;<strong>Flux RSS de toutes les fiches</strong></li>'."\n".$liste.'</ul>'."\n";
 	// Nettoyage de l'url
 	//GLOBALS['_BAZAR_']['url']->removeQueryString(BAZ_VARIABLE_ACTION);
 	return $res;
@@ -1377,8 +1378,8 @@ function baz_formulaire_des_formulaires($mode, $valeursformulaire = '') {
 	$formtemplate->addRule('bn_template', BAZ_CHAMPS_REQUIS.' : '.BAZ_TEMPLATE, 'required', '', 'client');
 	// Nettoyage de l'url avant les return
 	$GLOBALS['_BAZAR_']['url']->removeQueryString(BAZ_VARIABLE_ACTION);
- 	$buttons[] = &HTML_QuickForm::createElement('link', 'annuler', BAZ_ANNULER, str_replace("&amp;", "&", $GLOBALS['_BAZAR_']['url']->getURL()), BAZ_ANNULER, array('class' => 'btn bouton_annuler'));
-	$buttons[] = &HTML_QuickForm::createElement('submit', 'valider', BAZ_VALIDER, array('class' => 'btn bouton_sauver'));
+ 	$buttons[] = &HTML_QuickForm::createElement('link', 'annuler', BAZ_ANNULER, str_replace("&amp;", "&", $GLOBALS['_BAZAR_']['url']->getURL()), BAZ_ANNULER, array('class' => 'btn btn-danger bouton_annuler'));
+	$buttons[] = &HTML_QuickForm::createElement('submit', 'valider', BAZ_VALIDER, array('class' => 'btn btn-success bouton_sauver'));
 	$formtemplate->addGroup($buttons, 'groupe_boutons', null, '&nbsp;', 0);
 	return $formtemplate;
 }
@@ -1483,8 +1484,8 @@ function baz_formulaire_des_listes($mode, $valeursliste = '') {
 	$formtemplate->addElement('html', $html_valeurs_listes);
 	// Nettoyage de l'url avant les return
 	$GLOBALS['_BAZAR_']['url']->removeQueryString(BAZ_VARIABLE_ACTION);
- 	$buttons[] = &HTML_QuickForm::createElement('link', 'annuler', BAZ_ANNULER, str_replace("&amp;", "&", $GLOBALS['_BAZAR_']['url']->getURL()), BAZ_ANNULER, array('class' => 'btn bouton_annuler'));
-	$buttons[] = &HTML_QuickForm::createElement('submit', 'valider', BAZ_VALIDER, array('class' => 'btn bouton_sauver'));
+ 	$buttons[] = &HTML_QuickForm::createElement('link', 'annuler', BAZ_ANNULER, str_replace("&amp;", "&", $GLOBALS['_BAZAR_']['url']->getURL()), BAZ_ANNULER, array('class' => 'btn btn-danger bouton_annuler'));
+	$buttons[] = &HTML_QuickForm::createElement('submit', 'valider', BAZ_VALIDER, array('class' => 'btn btn-success bouton_sauver'));
 	$formtemplate->addGroup($buttons, 'groupe_boutons', null, '&nbsp;', 0);
 	return $formtemplate;
 }
@@ -1552,12 +1553,7 @@ function baz_gestion_formulaire() {
 			return ($resultat->getMessage().$resultat->getDebugInfo()) ;
 		}
 
-		//suppression des fiches associees dans '.BAZ_PREFIXE.'fiche
-		$requete = 'DELETE FROM '.BAZ_PREFIXE.'fiche WHERE bf_ce_nature='.$_GET['idformulaire'];
-		$resultat = $GLOBALS['_BAZAR_']['db']->query($requete) ;
-		if (DB::isError($resultat)) {
-			return ($resultat->getMessage().$resultat->getDebugInfo()) ;
-		}
+		//TODO : suppression des fiches associees au formulaire
 
 		$res .= '<div class="info_box">'.BAZ_FORMULAIRE_ET_FICHES_SUPPRIMES.'</div>'."\n";
 	}
@@ -2367,7 +2363,7 @@ function baz_rechercher($typeannonce = 'toutes', $categorienature = 'toutes') {
 	}
 
 	// Ajout des options si un type de fiche a ete choisie
-	if ( isset($_REQUEST['id_typeannonce']) && $_REQUEST['id_typeannonce'] != 'toutes' && $_REQUEST['id_typeannonce'] != '' && $nb_type_de_fiches!=1 ) {
+	if ( isset($_REQUEST['id_typeannonce']) && $_REQUEST['id_typeannonce'] != 'toutes' && $_REQUEST['id_typeannonce'] != '' ) {
 		$requete_sql =  'SELECT * FROM `'.BAZ_PREFIXE.'nature` WHERE bn_id_nature='.$_REQUEST['id_typeannonce'] ;
 		$nomwikiformulaire = $GLOBALS['wiki']->LoadAll($requete_sql);
 		$tab_nature = $nomwikiformulaire[0];
@@ -2399,7 +2395,7 @@ function baz_rechercher($typeannonce = 'toutes', $categorienature = 'toutes') {
 	$groupe_rech[] = &HTML_QuickForm::createElement('text', 'recherche_mots_cles', '', $option) ;
 
 	//bouton de validation du formulaire
-	$option = array('class'=>'btn bouton_recherche');
+	$option = array('class'=>'btn btn-primary btn-large bouton_recherche');
 	$groupe_rech[] = &HTML_QuickForm::createElement('submit', 'rechercher', BAZ_RECHERCHER, $option);
 
 	$formtemplate->addGroup($groupe_rech, 'groupe_recherche', null, '&nbsp;', 0);
@@ -2438,8 +2434,8 @@ function baz_requete_recherche_fiches($tableau_criteres = '', $tri = '', $id_typ
 	$nb_jointures=0;
 	
 	//si les parametres ne sont pas rentrés, on prend les variables globales
-	if ($id_typeannonce == '') $id_typeannonce = $GLOBALS['_BAZAR_']['id_typeannonce'];
-	if ($categorie_fiche == '') $categorie_fiche = $GLOBALS['_BAZAR_']['categorie_nature'];
+	if ($id_typeannonce == '' && isset($GLOBALS['_BAZAR_']['id_typeannonce'])) $id_typeannonce = $GLOBALS['_BAZAR_']['id_typeannonce'];
+	if ($categorie_fiche == '' && isset($GLOBALS['_BAZAR_']['categorie_nature'])) $categorie_fiche = $GLOBALS['_BAZAR_']['categorie_nature'];
 	
 	//requete pour récupérer toutes les PageWiki étant des fiches bazar
     $requete_pages_wiki_bazar_fiches = 'SELECT DISTINCT resource FROM '.BAZ_PREFIXE.'triples WHERE value = "fiche_bazar" AND property = "http://outils-reseaux.org/_vocabulary/type" ORDER BY resource ASC';
@@ -2732,14 +2728,14 @@ function baz_afficher_flux_RSS() {
 		$id_typeannonce = $_GET['id_typeannonce'];
 	}
 	else {
-		$id_typeannonce = $GLOBALS['_BAZAR_']['id_typeannonce'];
+		$id_typeannonce = '';
 	}
 
 	if (isset($_GET['categorie_fiche'])) {
 		$categorie_fiche = $_GET['categorie_fiche'];
 	}
 	else {
-		$categorie_fiche = $GLOBALS['_BAZAR_']['categorie_nature'];
+		$categorie_fiche = '';
 	}
 
 	if (isset($_GET['nbitem'])) {
