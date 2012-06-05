@@ -68,7 +68,7 @@ foreach ($tableau_resultat as $fiche)
 }
 $js = substr($js,0,-1);
 	
-$GLOBALS['js'] .=  "<script type='text/javascript' src='tools/bazar/libs/fullcalendar/fullcalendar.min.js'></script>
+$GLOBALS['js'] = ((isset($GLOBALS['js'])) ? $GLOBALS['js'] : '').  "<script type='text/javascript' src='tools/bazar/libs/fullcalendar/fullcalendar.min.js'></script>
 <script type='text/javascript'>
 
 	$(document).ready(function() {
