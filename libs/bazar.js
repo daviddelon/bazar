@@ -187,22 +187,6 @@ $(document).ready(function () {
 	//on enleve la fonction doubleclic dans le cas d'une page contenant bazar
 	$("#formulaire, #map, #calendar, .accordion").bind('dblclick', function(e) {return false;});
 
-	//=====================galerie d'images==================================================================	
-	//création des overlay pour les images
-    $("body").append("<div class=\"overlay\" id=\"overlay_bazar\"><div class=\"contentWrap_bazar\"></div></div>");
-
-	$('a.triggerimage[rel="#overlay_bazar"]').overlay({
-		mask:'#999', effect: 'apple',
-		onBeforeLoad: function() {
-
-			// grab wrapper element inside content
-			var wrap = this.getOverlay().find('.contentWrap_bazar');
-
-			// load the page specified in the trigger
-			wrap.html('<img src='+this.getTrigger().attr("href")+' alt="image" />');
-		}
-
-	});
 
 	//permet de gerer des affichages conditionnels, en fonction de balises div
 	$("select[id^='liste']").each( function() {
