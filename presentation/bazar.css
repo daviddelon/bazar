@@ -786,7 +786,7 @@ a.active img {
 }
 
 /*****************************************boutons*********************************************************/
-
+/*
 .btn, .btn:visited, .btn:link {
 	background: #222 url(images/alert-overlay.png) repeat-x; 
 	display: inline-block; 
@@ -823,7 +823,7 @@ a.active img {
 .orange.btn, .orange.btn:visited, .orange.btn:link		{ background-color: #ff5c00; }
 .orange.btn:hover, .orange.btn:active, .orange.btn:focus{ background-color: #d45500; }
 .yellow.btn, .yellow.btn:visited, .yellow.btn:link, #BAZ_menu .onglet_actif a	{ background-color: #ffb515; }
-.yellow.btn:hover, .yellow.btn:active, .yellow.btn:focus, #BAZ_menu a:hover		{ background-color: #fc9200; }
+.yellow.btn:hover, .yellow.btn:active, .yellow.btn:focus, #BAZ_menu a:hover		{ background-color: #fc9200; }*/
 	
 a.prev-tab, button.prev,input.prev {
 clear:left;
