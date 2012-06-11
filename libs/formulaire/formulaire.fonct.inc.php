@@ -72,13 +72,15 @@ function afficher_image($nom_image, $label, $class, $largeur_vignette, $hauteur_
 			}
 			//on renvoit l'image en vignette, avec quand on clique, l'image redimensionnee
 			$url_base = str_replace('wakka.php?wiki=','',$GLOBALS['wiki']->config['base_url']);
-			return  '<a class="triggerimage'.' '.$class.'" rel="#overlay-link" href="'.$url_base.'cache/image_'.$nom_image.'">'."\n".
-					'<img alt="'.$nom_image.'"'.' src="'.$url_base.'cache/vignette_'.$nom_image.'" width="'.$width.'" height="'.$height.'" rel="'.$url_base.'cache/image_'.$nom_image.'" />'."\n".
-					'</a>'."\n";
+                                  return '<img alt="'.$nom_image.'"'.' src="'.$url_base.'cache/vignette_'.$nom_image.'" width="'.$width.'" height="'.$height.'" rel="#'.md5($nom_image).'" />'."\n".
+                                                      '<div class="yeswiki-overlay" style="padding-top:20px;" id="'.md5($nom_image).'"><img alt="'.$nom_image.'"'.' src="'.$url_base.'cache/image_'.$nom_image.'"/></div>'."\n";
+
+
+
 		}
 		else {
 			//on renvoit l'image en vignette, avec quand on clique, l'image originale
-			return  '<a class="triggerimage'.' '.$class.'" rel="#overlay-link" href="'.$url_base.BAZ_CHEMIN_UPLOAD.$nom_image.'">'."\n".
+			return  '<a class="triggerimage'.' '.$class.'" rel="#overlay-image" href="'.$url_base.BAZ_CHEMIN_UPLOAD.$nom_image.'">'."\n".
 					'<img alt="'.$nom_image.'"'.' src="'.$url_base.'cache/vignette_'.$nom_image.'" width="'.$width.'" height="'.$height.'" rel="'.$url_base.'cache/image_'.$nom_image.'" />'."\n".
 					'</a>'."\n";
 		}
@@ -108,6 +110,7 @@ function redimensionner_image($image_src, $image_dest, $largeur, $hauteur) {
 	$imgTrans->targetFile = $image_dest;
 	$imgTrans->resizeToWidth = $largeur;
 	$imgTrans->resizeToHeight = $hauteur;
+    print $largeur;
 	if (!$imgTrans->resize()) {
 		// in case of error, show error code
 		return $imgTrans->error;

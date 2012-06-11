@@ -189,7 +189,7 @@ class imageTransform
 
         $this->error = 0;
 
-        $this->jpegOutputQuality = 75;
+        $this->jpegOutputQuality = 100;
 
         $this->resizeIfGreater = true;
 

@@ -66,7 +66,13 @@ $(document).ready(function () {
 	});
 	
 	
-	
+    // overlay image
+
+ $("img[rel]").overlay(
+ {
+     top: 20 
+  }  );
+
 	//carto google
 	var divcarto = document.getElementById("map" )
 	if (divcarto) {	initialize(); }
