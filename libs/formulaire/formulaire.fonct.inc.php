@@ -617,26 +617,10 @@ function tags(&$formtemplate, $tableau_template, $mode, $valeurs_fiche)
 					$tags_javascript .= 't.add(\''.$tag.'\');'."\n";
 				}
 			}
-		}		
-		
-		/*$formtag = '<script src="tools/tags/libs/GrowingInput.js" type="text/javascript" charset="utf-8"></script>
-		<script src="tools/tags/libs/tags_suggestions.js" type="text/javascript" charset="utf-8"></script>
-		<script type="text/javascript">
-		$(document).ready(function() {
-			// Autocompletion des mots cles	
-			var t = new $.TextboxList(\'#'.$tableau_template[1].'\', {unique:true, inBetweenEditableBits:false, plugins:{autocomplete: {
-				minLength: 1,
-				queryRemote: true,
-				remote: {url: \''.$GLOBALS['wiki']->href('json',$GLOBALS['_BAZAR_']['pagewiki']).'\'}
-			}}});
-			
-			
-			'.$tags_javascript.'		
-		});
-		</script>';
-		$GLOBALS['js'] = ((isset($GLOBALS['js'])) ? $GLOBALS['js'] : '').$formtag."\n";*/
+		}
 
 		// on recupere tous les tags du site
+		$response = array();
 		$tab_tous_les_tags = $GLOBALS['wiki']->GetAllTags();
 		if (is_array($tab_tous_les_tags))
 		{
@@ -648,40 +632,50 @@ function tags(&$formtemplate, $tableau_template, $mode, $valeurs_fiche)
 		sort($response);
 		$tagsexistants = '\''.implode('\',\'', $response).'\'';
 
+
 		$GLOBALS['js'] = ((isset($GLOBALS['js'])) ? $GLOBALS['js'] : '').'
-		<script src="tools/tags/libs/jquery-ui-1.8.16.custom.min.js" type="text/javascript"></script>
-		<script src="tools/tags/libs/tag-it.js" type="text/javascript"></script>	
-		<script type="text/javascript">
+		<script src="tools/tags/libs/jquery-ui-1.8.16.custom.min.js"></script>
+		<script src="tools/tags/libs/tag-it.js"></script>	
+		<script>
 		$(function(){
 	        var tagsexistants = ['.$tagsexistants.'];
 
-		    $(\'#'.$tableau_template[1].'\').tagit({
-			    availableTags: tagsexistants
+		    $(\'.input_tags\').each(function() {
+		    	$(this).tagit({
+				    availableTags: tagsexistants
+				});
 			});
 			
 			//bidouille antispam
 			$(".antispam").attr(\'value\', \'1\');
 		});
 		</script>';
-		
-		
-		$option=array('size'=>$tableau_template[3],'maxlength'=>$tableau_template[4], 'id' => $tableau_template[1], 'class' => 'input_texte microblog_toustags');
+		//echo $GLOBALS['js'];
+
+		//gestion des valeurs par defaut : d'abord on regarde s'il y a une valeur a modifier,
+		//puis s'il y a une variable passee en GET,
+		//enfin on prend la valeur par defaut du formulaire sinon
+		if (isset($valeurs_fiche[$tableau_template[1]])) {
+			$defauts = $valeurs_fiche[$tableau_template[1]];
+		}
+		elseif (isset($_GET[$tableau_template[1]])) {
+			$defauts = stripslashes($_GET[$tableau_template[1]]);
+		} else {
+			$defauts = stripslashes($tableau_template[5]);
+		}
+
+		$option=array('size'=>$tableau_template[3],'maxlength'=>$tableau_template[4], 'id' => $tableau_template[1], 'value' => $defauts, 'class' => 'input_texte input_tags');
 		$bulledaide = '';
 		if (isset($tableau_template[10]) && $tableau_template[10]!='') $bulledaide = ' <img class="tooltip_aide" title="'.htmlentities($tableau_template[10]).'" src="tools/bazar/presentation/images/aide.png" width="16" height="16" alt="image aide" />';
 		$formtemplate->addElement('text', $tableau_template[1], $tableau_template[2].$bulledaide, $option) ;
-		
-		
-		//mots cles caches
-		$formtemplate->addElement('hidden', 'mots_cles_caches', trim($tableau_template[5]));
-		
-		//$formtemplate->applyFilter($tableau_template[1], 'addslashes') ;
+
 	}
 	elseif ( $mode == 'requete' ) {
 		//on supprime les tags existants
 		$GLOBALS['wiki']->DeleteTriple($GLOBALS['_BAZAR_']['id_fiche'], 'http://outils-reseaux.org/_vocabulary/tag', NULL, '', '');
-		//on découpe les tags pour les mettre dans un tableau
-		$liste_tags = ($valeurs_fiche['mots_cles_caches'] ? $valeurs_fiche['mots_cles_caches'].',' : '').$valeurs_fiche[$tableau_template[1]];		
-		$tags = explode(",", mysql_escape_string($liste_tags));
+		
+		//on découpe les tags pour les mettre dans un tableau	
+		$tags = explode(",", mysql_escape_string($valeurs_fiche[$tableau_template[1]]));
 				
 		//on ajoute les tags postés
 		foreach ($tags as $tag) {
@@ -700,15 +694,21 @@ function tags(&$formtemplate, $tableau_template, $mode, $valeurs_fiche)
 			$html = '<div class="BAZ_rubrique">'."\n".
 						'<span class="BAZ_label">'.$tableau_template[2].'&nbsp;:</span>'."\n";
 			$html .= '<div class="BAZ_texte"> ';
-			$tags = explode(',',htmlentities($valeurs_fiche[$tableau_template[1]]));
-			if (is_array($tags)) {
-				$html .= '<ul class="liste_tags_en_ligne">'."\n";
-				foreach ($tags as $tag) {
-					$html .= '<li class="textboxlist-bit-box">'.$tag.'</li>'."\n";
-				}	
-				$html .= '</ul>'."\n";
+			$tabtagsexistants = explode(',',htmlentities($valeurs_fiche[$tableau_template[1]]));
+
+			if (count($tabtagsexistants)>0) {
+				sort($tabtagsexistants);
+				$tagsexistants = '<ul class="tagit ui-widget ui-widget-content ui-corner-all show">'."\n";
+				foreach ($tabtagsexistants as $tag)
+				{
+					$tagsexistants .= '<li class="tagit-tag ui-widget-content ui-state-default ui-corner-all">
+						<a href="'.$GLOBALS['wiki']->href('listpages',$GLOBALS['wiki']->GetPageTag(),'tags='.$tag).'" title="Voir toutes les pages contenant ce mot cl&eacute;">'.$tag.'</a>
+					</li>'."\n";
+				}
+				$tagsexistants .= '</ul>'."\n";
+				$html .= $tagsexistants."\n";
 			}
-			
+
 			$html .= '</div>'."\n".'</div>'."\n";
 		}
 		return $html;
@@ -1069,7 +1069,7 @@ function textelong(&$formtemplate, $tableau_template, $mode, $valeurs_fiche)
 			$symb .= '<span class="symbole_obligatoire">*&nbsp;</span>';
 		}
 		if ($longueurmax != '') $options['maxlength'] = $longueurmax;
-		$longueurmax = ($longueurmax ? '<span class="charsRemaining"> ('.$longueurmax.' caract&egrave;res restants)</span>' : '' );
+		$longueurmax = ($longueurmax ? ' (<span class="charsRemaining">'.$longueurmax.'</span> caract&egrave;res restants)' : '' );
 		$bulledaide = '';
 		if ($bulle_d_aide!='') $bulledaide = ' <img class="tooltip_aide" title="'.htmlentities($bulle_d_aide).'" src="tools/bazar/presentation/images/aide.png" width="16" height="16" alt="image aide" />';
 		$formtexte= new HTML_QuickForm_textarea($identifiant, $symb.$label.$longueurmax.$bulledaide, $options);

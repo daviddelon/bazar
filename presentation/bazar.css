@@ -276,6 +276,9 @@ font-weight:700;
 color:#000;
 }
 
+.BAZ_rubrique {
+margin-top:10px;
+}
 .infos {
 width:70%;
 float:left;
