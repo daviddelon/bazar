@@ -1339,6 +1339,7 @@ function image(&$formtemplate, $tableau_template, $mode, $valeurs_fiche) {
 			
 			//on affiche les infos sur l'effacement du fichier, et on reinitialise la variable pour le fichier pour faire apparaitre le formulaire d'ajout par la suite
 			$info = '<div class="info_box">'.BAZ_FICHIER.$nomimg.BAZ_A_ETE_EFFACE.'</div>'."\n";
+			require_once BAZ_CHEMIN.'libs'.DIRECTORY_SEPARATOR.'HTML/QuickForm/html.php';
 			$formtemplate->addElement(new HTML_QuickForm_html("\n".$info."\n")) ;
 			$valeurs_fiche[$type.$identifiant] = '';
 		}
