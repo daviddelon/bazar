@@ -6,7 +6,7 @@ if (!defined("WIKINI_VERSION"))
 }
 
 if ($this->GetMethod() == "show" || $this->GetMethod() == "bazarframe" || $this->GetMethod() == "edit") {
-	echo '	<script type="text/javascript" src="tools/bazar/libs/bazar.js"></script>'."\n";	
+	echo '	<script src="tools/bazar/libs/bazar.js"></script>'."\n";	
 }
 
 ?>
