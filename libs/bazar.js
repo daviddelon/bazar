@@ -211,10 +211,27 @@ $(document).ready(function () {
 	$('.BAZ_rubrique:hidden').parent().show();
 
 	
+	//============longueur maximale d'un champs textarea
+	var textareas = $('textarea[maxlength].input_textarea');
+
+	//on empeche d'aller au dela de la limite du nombre de caracteres
+	textareas.on("keyup", function(){
+		var $this = $(this);
+		var max = $this.attr('maxlength');
+		var length = $this.val().length;
+		if(length > max){
+			$this.val($this.val().substr(0, max));
+		}
+		$this.parents('.formulaire_ligne').find('.charsRemaining').html((max - length));
+	});
+
+
 	//============bidouille pour que les widgets en flash restent en dessous des éléments en survol===========
 	$("object").append('<param value="opaque" name="wmode">');$("embed").attr('wmode','opaque');
 	
 	
+
+
 	//============validation formulaire=======================================================================
 	//============gestion des dates=======================================================================
 	//traduction francaise
