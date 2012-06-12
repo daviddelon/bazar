@@ -1399,32 +1399,37 @@ function image(&$formtemplate, $tableau_template, $mode, $valeurs_fiche) {
 		}
 	}
 	elseif ( $mode == 'requete' ) {
-		if (isset($_FILES[$type.$identifiant]['name']) && $_FILES[$type.$identifiant]['name']!='') {
-							
-			//on enleve les accents sur les noms de fichiers, et les espaces
-			$nomimage = preg_replace("/&([a-z])[a-z]+;/i","$1", htmlentities($identifiant.$_FILES[$type.$identifiant]['name']));
-			$nomimage = str_replace(' ', '_', $nomimage);
-			$chemin_destination = BAZ_CHEMIN_UPLOAD.$nomimage;
-			//verification de la presence de ce fichier
-			if (!file_exists($chemin_destination)) {
-				move_uploaded_file($_FILES[$type.$identifiant]['tmp_name'], $chemin_destination);
-				chmod ($chemin_destination, 0755);
-				//generation des vignettes
-				if ($hauteur_vignette!='' && $largeur_vignette!='' && !file_exists('cache/vignette_'.$nomimage)) {
-					$adr_img = redimensionner_image($chemin_destination, 'cache/vignette_'.$nomimage, $largeur_vignette, $hauteur_vignette);
-				}
-				//generation des images
-				if ($hauteur_image!='' && $largeur_image!='' && !file_exists('cache/image_'.'_'.$nomimage)) {
-					$adr_img = redimensionner_image($chemin_destination, 'cache/image_'.$nomimage, $largeur_image, $hauteur_image);
-				}
-			}
-			else {
-				echo '<div class="BAZ_error">L\'image '.$nomimage.' existait d&eacute;ja, elle n\'a pas &eacute;t&eacute; remplac&eacute;e.</div>';
-			}
-			return array($type.$identifiant => $nomimage);
-		}
-	}
-	elseif ($mode == 'recherche')
+        if (isset($_FILES[$type.$identifiant]['name']) && $_FILES[$type.$identifiant]['name']!='') {
+
+            //on enleve les accents sur les noms de fichiers, et les espaces
+            $nomimage = preg_replace("/&([a-z])[a-z]+;/i","$1", htmlentities($identifiant.$_FILES[$type.$identifiant]['name']));
+            $nomimage = str_replace(' ', '_', $nomimage);
+            if (preg_match("/(gif|jpeg|png|jpg)$/i",$nomimage)) {
+                    $chemin_destination = BAZ_CHEMIN_UPLOAD.$nomimage;
+                    //verification de la presence de ce fichier
+                    if (!file_exists($chemin_destination)) {
+                        move_uploaded_file($_FILES[$type.$identifiant]['tmp_name'], $chemin_destination);
+                        chmod ($chemin_destination, 0755);
+                        //generation des vignettes
+                        if ($hauteur_vignette!='' && $largeur_vignette!='' && !file_exists('cache/vignette_'.$nomimage)) {
+                            $adr_img = redimensionner_image($chemin_destination, 'cache/vignette_'.$nomimage, $largeur_vignette, $hauteur_vignette);
+                        }
+                        //generation des images
+                        if ($hauteur_image!='' && $largeur_image!='' && !file_exists('cache/image_'.'_'.$nomimage)) {
+                            $adr_img = redimensionner_image($chemin_destination, 'cache/image_'.$nomimage, $largeur_image, $hauteur_image);
+                        }
+                    }
+                    else {
+                        echo '<div class="BAZ_error">L\'image '.$nomimage.' existait d&eacute;ja, elle n\'a pas &eacute;t&eacute; remplac&eacute;e.</div>';
+                    }
+                    }
+             else {
+                    echo '<div class="BAZ_error">Fichier non autoris&eacute;.</div>';
+            }
+            return array($type.$identifiant => $nomimage);
+        }
+    }
+    elseif ($mode == 'recherche')
 	{
 
 	}
