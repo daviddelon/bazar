@@ -276,6 +276,9 @@ font-weight:700;
 color:#000;
 }
 
+.BAZ_rubrique {
+margin-top:10px;
+}
 .infos {
 width:70%;
 float:left;
@@ -1157,6 +1160,7 @@ input[type="submit"].btn.btn-mini {
   *padding-bottom: 1px;
 }
 
+>>>>>>> 4f5d849fd4fc96ce3517d32d4df795b895f30c7c
 	
 a.prev-tab, button.prev,input.prev {
 clear:left;
