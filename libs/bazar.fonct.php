@@ -1465,8 +1465,8 @@ function baz_formulaire_des_listes($mode, $valeursliste = '') {
 							'</div>'."\n".
 							'<div class="clear"></div>'."\n";
 	//on rajoute une variable globale pour mettre le javascript en plus à la fin
-	$GLOBALS['js'] = ((isset($GLOBALS['js'])) ? $GLOBALS['js'] : '').'<script type="text/javascript" src="tools/bazar/libs/jquery-ui-1.8.6.custom.min.js"></script>
-							<script type="text/javascript">
+	$GLOBALS['js'] = ((isset($GLOBALS['js'])) ? $GLOBALS['js'] : '').'<script src="tools/bazar/libs/jquery-ui-1.8.6.custom.min.js"></script>
+							<script>
 							  $(document).ready(function() {
 							    $(".valeur_liste").sortable({
 							      handle : \'.handle\',

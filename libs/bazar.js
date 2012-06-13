@@ -213,8 +213,18 @@ $(document).ready(function () {
 	
 	//============longueur maximale d'un champs textarea
 	var textareas = $('textarea[maxlength].input_textarea');
+	// si les textarea contiennent déja quelque chose, on calcule les caractères restants
+	textareas.each(function(){
+		var $this = $(this);
+		var max = $this.attr('maxlength');
+		var length = $this.val().length;
+		if(length > max){
+			$this.val($this.val().substr(0, max));
+		}
+		$this.parents('.formulaire_ligne').find('.charsRemaining').html((max - length));
+	});
 
-	//on empeche d'aller au dela de la limite du nombre de caracteres
+	// on empeche d'aller au dela de la limite du nombre de caracteres
 	textareas.on("keyup", function(){
 		var $this = $(this);
 		var max = $this.attr('maxlength');
