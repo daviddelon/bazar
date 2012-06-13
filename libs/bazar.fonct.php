@@ -2513,13 +2513,15 @@ function baz_requete_recherche_fiches($tableau_criteres = '', $tri = '', $id_typ
 				$first  = true;
 				foreach ($valcrit as $critere) {
 					if (!$first) $requeteSQL .= ' OR ';
-					$requeteSQL .= '(body REGEXP BINARY \'"'.$nom.'":"[^"]*'.$critere.'[^"]*"\')';
+					//$requeteSQL .= '(body REGEXP BINARY \'"'.$nom.'":"[^"]*'.$critere.'[^"]*"\')'; //  Recherche case sensitive
+					$requeteSQL .= '(body REGEXP \'"'.$nom.'":"[^"]*'.$critere.'[^"]*"\')';
 					$first = false;
 				}	
 				$requeteSQL .= ')';	
 			} 
 			else {
-				$requeteSQL .= ' AND (body REGEXP BINARY \'"'.$nom.'":"[^"]*'.$val.'[^"]*"\')';
+				//$requeteSQL .= ' AND (body REGEXP BINARY \'"'.$nom.'":"[^"]*'.$val.'[^"]*"\')'; // Recherche case sensitive
+				$requeteSQL .= ' AND (body REGEXP \'"'.$nom.'":"[^"]*'.$val.'[^"]*"\')';
 			} 
 		}
 	}	
