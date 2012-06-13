@@ -325,7 +325,7 @@ function baz_afficher_liste_fiches_utilisateur() {
 		$tableau_dernieres_fiches = baz_requete_recherche_fiches('', '', $GLOBALS['_BAZAR_']['id_typeannonce'], $GLOBALS['_BAZAR_']['categorie_nature'], 1, $nomwiki["name"], 10);
         $res .= baz_afficher_liste_resultat($tableau_dernieres_fiches, false);
 	} else  {
-		$res .= '<div class="info_box">'.BAZ_IDENTIFIEZ_VOUS_POUR_VOIR_VOS_FICHES.'</div>'."\n";
+		$res .= '<div class="alert alert-info">'."\n".'<a data-dismiss="alert" class="close" type="button">&times;</a>'.BAZ_IDENTIFIEZ_VOUS_POUR_VOIR_VOS_FICHES.'</div>'."\n";
 	}
 	$GLOBALS['_BAZAR_']['url']->removeQueryString(BAZ_VARIABLE_ACTION);
 	$GLOBALS['_BAZAR_']['url']->addQueryString(BAZ_VARIABLE_VOIR, BAZ_VOIR_SAISIR);
@@ -416,7 +416,7 @@ function baz_afficher_formulaire_import() {
 			$output .= '<div class="formulaire_ligne">'."\n".'<div class="formulaire_label">'."\n".
 					BAZ_FICHIER_CSV_A_IMPORTER.' :</div>'."\n".'<div class="formulaire_input">';
 			$output .= '<input type="file" name="fileimport" id="idfileimport" /><input name="submit_file" type="submit" value="'.BAZ_IMPORTER_CE_FICHIER.'" />'."\n".'</div>'."\n".'</div>'."\n";
-			$output .= '<div class="info_box">'."\n".BAZ_ENCODAGE_CSV."\n".'</div>'."\n";
+			$output .= '<div class="alert alert-info">'."\n".'<a data-dismiss="alert" class="close" type="button">&times;</a>'."\n".BAZ_ENCODAGE_CSV."\n".'</div>'."\n";
 			
 			//on parcourt le template du type de fiche pour fabriquer un csv pour l'exemple
 			$tableau = formulaire_valeurs_template_champs($val_formulaire['bn_template']);
@@ -1287,11 +1287,11 @@ function publier_fiche($valid) {
 	if ( baz_a_le_droit( 'valider_fiche' ) ) {
 		if ($valid==0) {
 			$requete = 'UPDATE '.BAZ_PREFIXE.'fiche SET  bf_statut_fiche=2 WHERE bf_id_fiche="'.$_GET['id_fiche'].'"' ;
-			echo '<div class="info_box">'.BAZ_FICHE_PAS_VALIDEE.'</div>'."\n";
+			echo '<div class="alert alert-success">'."\n".'<a data-dismiss="alert" class="close" type="button">&times;</a>'.BAZ_FICHE_PAS_VALIDEE.'</div>'."\n";
 		}
 		else {
 			$requete = 'UPDATE '.BAZ_PREFIXE.'fiche SET  bf_statut_fiche=1 WHERE bf_id_fiche="'.$_GET['id_fiche'].'"' ;
-			echo '<div class="info_box">'.BAZ_FICHE_VALIDEE.'</div>'."\n";
+			echo '<div class="alert alert-success">'."\n".'<a data-dismiss="alert" class="close" type="button">&times;</a>'.BAZ_FICHE_VALIDEE.'</div>'."\n";
 		}
 
 		// ====================Mise a jour de la table '.BAZ_PREFIXE.'fiche====================
@@ -1527,7 +1527,7 @@ function baz_gestion_formulaire() {
 		if (DB::isError($resultat)) {
 			return ($resultat->getMessage().$resultat->getDebugInfo()) ;
 		}
-		$res .= '<div class="info_box">'.BAZ_NOUVEAU_FORMULAIRE_ENREGISTRE.'</div>'."\n";
+		$res .= '<div class="alert alert-success">'."\n".'<a data-dismiss="alert" class="close" type="button">&times;</a>'.BAZ_NOUVEAU_FORMULAIRE_ENREGISTRE.'</div>'."\n";
 
 	//il y a des donnees pour modifier un formulaire
 	} elseif (isset($_GET['action_formulaire']) && $_GET['action_formulaire']=='modif_v' && baz_a_le_droit('saisie_formulaire') ) {
@@ -1542,7 +1542,7 @@ function baz_gestion_formulaire() {
 		if (DB::isError($resultat)) {
 			return ($resultat->getMessage().$resultat->getDebugInfo()) ;
 		}
-		$res .= '<div class="info_box">'.BAZ_FORMULAIRE_MODIFIE.'</div>'."\n";
+		$res .= '<div class="alert alert-success">'."\n".'<a data-dismiss="alert" class="close" type="button">&times;</a>'.BAZ_FORMULAIRE_MODIFIE.'</div>'."\n";
 
 	// il y a un id de formulaire à supprimer
 	} elseif (isset($_GET['action_formulaire']) && $_GET['action_formulaire']=='delete' && baz_a_le_droit('saisie_formulaire')) {
@@ -1555,12 +1555,12 @@ function baz_gestion_formulaire() {
 
 		//TODO : suppression des fiches associees au formulaire
 
-		$res .= '<div class="info_box">'.BAZ_FORMULAIRE_ET_FICHES_SUPPRIMES.'</div>'."\n";
+		$res .= '<div class="alert alert-success">'."\n".'<a data-dismiss="alert" class="close" type="button">&times;</a>'.BAZ_FORMULAIRE_ET_FICHES_SUPPRIMES.'</div>'."\n";
 	}
 
 	// affichage de la liste des templates à modifier ou supprimer (on l'affiche dans tous les cas, sauf cas de modif de formulaire)
 	if (!isset($_GET['action_formulaire']) || ($_GET['action_formulaire']!='modif' && $_GET['action_formulaire']!='new') ) {
-		$res .= '<div class="info_box">'.BAZ_INTRO_MODIFIER_FORMULAIRE.'</div>'."\n";
+		$res .= '<div class="alert alert-info">'."\n".'<a data-dismiss="alert" class="close" type="button">&times;</a>'.BAZ_INTRO_MODIFIER_FORMULAIRE.'</div>'."\n";
 
 		//requete pour obtenir l'id et le label des types d'annonces
 		$requete = 'SELECT bn_id_nature, bn_label_nature, bn_type_fiche '.
@@ -1651,7 +1651,7 @@ function baz_gestion_listes() {
 		//on cree un triple pour spécifier que la page wiki créée est une liste
 		$GLOBALS["wiki"]->InsertTriple($nomwikiliste, 'http://outils-reseaux.org/_vocabulary/type', 'liste', '', '');
 	
-		$res .= '<div class="info_box">'.BAZ_NOUVELLE_LISTE_ENREGISTREE.'</div>'."\n";
+		$res .= '<div class="alert alert-success">'."\n".'<a data-dismiss="alert" class="close" type="button">&times;</a>'.BAZ_NOUVELLE_LISTE_ENREGISTREE.'</div>'."\n";
 
 	//il y a des donnees pour modifier une liste
 	} elseif (isset($_GET['action_listes']) && $_GET['action_listes']=='modif_v' && baz_a_le_droit('saisie_liste') ) {
@@ -1686,7 +1686,7 @@ function baz_gestion_listes() {
 		//on sauve les valeurs d'une liste dans une PageWiki, pour garder l'historique
 		$GLOBALS["wiki"]->SavePage($_POST['NomWiki'], json_encode($valeur));
 	
-		$res .= '<div class="info_box">'.BAZ_LISTE_MODIFIEE.'</div>'."\n";
+		$res .= '<div class="alert alert-success">'."\n".'<a data-dismiss="alert" class="close" type="button">&times;</a>'.BAZ_LISTE_MODIFIEE.'</div>'."\n";
 
 	// il y a un id de liste à supprimer
 	} elseif (isset($_GET['action_listes']) && $_GET['action_listes']=='delete' && baz_a_le_droit('saisie_liste')) {
@@ -1695,12 +1695,12 @@ function baz_gestion_listes() {
 			. 'WHERE resource = "' . addslashes($_GET['idliste']) . '" ';
 		$GLOBALS["wiki"]->Query($sql);
 		
-		$res .= '<div class="info_box">'.BAZ_LISTES_SUPPRIMEES.'</div>'."\n";
+		$res .= '<div class="alert alert-success">'."\n".'<a data-dismiss="alert" class="close" type="button">&times;</a>'.BAZ_LISTES_SUPPRIMEES.'</div>'."\n";
 	}
 
 	// affichage de la liste des templates à modifier ou supprimer (on l'affiche dans tous les cas, sauf cas de modif de formulaire)
 	if (!isset($_GET['action_listes']) || ($_GET['action_listes']!='modif' && $_GET['action_listes']!='new') ) {
-		$res .= '<div class="info_box">'.BAZ_INTRO_MODIFIER_LISTE.'</div>'."\n";
+		$res .= '<div class="alert alert-info">'."\n".'<a data-dismiss="alert" class="close" type="button">&times;</a>'.BAZ_INTRO_MODIFIER_LISTE.'</div>'."\n";
 
 		//requete pour obtenir l'id et le label des types d'annonces
 		$requete = 'SELECT resource FROM '.$GLOBALS['wiki']->config['table_prefix'].'triples WHERE property="http://outils-reseaux.org/_vocabulary/type" AND value="liste" ORDER BY resource';
@@ -2607,7 +2607,7 @@ function baz_afficher_liste_resultat($tableau_fiches, $info_nb = true) {
 	$res = '';
 	$fiches['info_res'] = '';
 	if ($info_nb) {
-		$fiches['info_res'] .= '<div class="info_box">'.BAZ_IL_Y_A;
+		$fiches['info_res'] .= '<div class="alert alert-info">'."\n".BAZ_IL_Y_A;
 		$nb_result = count($tableau_fiches);
 		if ($nb_result<=1) {
 			$fiches['info_res'] .= $nb_result.' '.BAZ_FICHE_CORRESPONDANTE.'</div>'."\n";
