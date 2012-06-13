@@ -2179,12 +2179,12 @@ function listefiches(&$formtemplate, $tableau_template, $mode, $valeurs_fiche)
 
 function bookmarklet(&$formtemplate, $tableau_template, $mode, $valeurs_fiche) {	
 	if ($mode == 'html') {
-		if ($GLOBALS['wiki']->GetMethod()=='/bazarframe') {
+		if ($GLOBALS['wiki']->GetMethod()=='bazarframe') {
 			return '<a class="btn btn-danger pull-right" href="javascript:window.close();"><i class="icon-remove icon-white"></i>&nbsp;Fermer cette fen&ecirc;tre</a>';
 		}
 	}
 	elseif ($mode == 'saisie') {
-		if ($GLOBALS['wiki']->GetMethod()!='/bazarframe') {
+		if ($GLOBALS['wiki']->GetMethod()!='bazarframe') {
 			$url_bookmarklet = clone($GLOBALS['_BAZAR_']['url']);
 			$url_bookmarklet->removeQueryString('id_fiche');
 			$url_bookmarklet->addQueryString('vue', BAZ_VOIR_SAISIR);
