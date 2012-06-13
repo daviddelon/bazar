@@ -2,7 +2,7 @@
 /*
 bazarframe.php
 
-Copyright 2009  Florian SCHMITT
+Copyright 2010  Florian SCHMITT
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation; either version 2 of the License, or
@@ -24,52 +24,49 @@ if (!defined("WIKINI_VERSION"))
 	die ("acc&egrave;s direct interdit");
 }
 
-//header('Content-type: text/html; charset=UTF-8');
 
-if ($HasAccessRead=$this->HasAccess("read"))
-{
-	if ($this->page)
-	{
-		//javascript pour gerer les liens (ouvrir vers l'extérieur) dans les iframes
-		$scripts_iframe = '<script type="text/javascript">
-		$(document).ready(function () {
-			$("body").css({
-							\'background-color\' : \'transparent\',
-							\'background-image\' : \'none\',
-							\'text-align\' : \'left\',
-							\'width\' : \'auto\',
-							\'min-width\' : \'auto\',
-						});
-			
-			$("a[href^=\'http://\']:not(a[href$=\'/slide_show\'])").click(function() {
-				if (window.location != window.parent.location)
+if ($this->HasAccess("read")) {
+	// on récupère les entêtes html mais pas ce qu'il y a dans le body
+	$header =  explode('<body',$this->Header());
+	echo $header[0]."<body>\n<div class=\"page-widget\">\n";
+	
+	//affichage de la page formatée juste avec le bazar
+	echo $this->Format('{{bazar'.
+	(isset($_GET['vue']) ? ' vue="'.$_GET['vue'].'"' : '').
+	(isset($_GET['action']) ? ' action="'.$_GET['action'].'"' : '').
+	(isset($_GET['id_typeannonce']) ? ' id_typeannonce="'.$_GET['id_typeannonce'].'"' : '').
+	'" voirmenu="0"}}');
+	echo "</div><!-- end div.page-widget -->";
+	
+	//javascript pour gerer les liens (ouvrir vers l'extérieur) dans les iframes
+	$scripts_iframe = '<script>
+	$(document).ready(function () {
+		$("html").css({\'overflow-y\': \'auto\'});
+		$("body").css({
+						\'background-color\' : \'transparent\',
+						\'background-image\' : \'none\',
+						\'text-align\' : \'left\',
+						\'width\' : \'auto\',
+						\'min-width\' : \'0\',
+					});
+		
+		$("a[href^=\'http://\']:not(a[href$=\'/slide_show\'])").click(function() {
+			if (window.location != window.parent.location)
+			{
+				if (!($(this).hasClass("bouton_annuler")))
 				{
-					if (!($(this).hasClass("bouton_annuler")))
-					{
-						window.open($(this).attr("href"));
-						return false;
-					}
+					window.open($(this).attr("href"));
+					return false;
 				}
-			});			
-		});
-		</script>';		
-		$head = explode('<body',$this->Header());
-		
-		echo $head[0].'<body>';
-
-		// display page
-		echo $this->Format('{{bazar'.
-		($_GET['vue'] ? ' vue="'.$_GET['vue'].'"' : '').
-		($_GET['action'] ? ' action="'.$_GET['action'].'"' : '').
-		($_GET['voirmenu'] ? ' voirmenu="'.$_GET['voirmenu'].'"' : ' voirmenu="0"').
-		($_GET['id_typeannonce'] ? ' id_typeannonce="'.$_GET['id_typeannonce'].'"' : '').
-		'"}}');
-		
-		$footer = explode('<script type="text/javascript"src="tools/templates/libs/',$this->Footer());
-		$footer = '<script type="text/javascript"src="tools/templates/libs/'.$footer[1];
-		$footer = str_replace('</body>', $scripts_iframe.'</body>', $footer);
-		
-		echo $footer;
-	}
+			}
+		});			
+	});
+	</script>';		
+	$GLOBALS['js'] = ((isset($GLOBALS['js'])) ? $GLOBALS['js'] : '').$scripts_iframe ;
+	
+	//on récupère juste les javascripts et la fin des balises body et html
+	$footer =  preg_replace('/^.+<script/Us', '<script', $this->Footer());
+	echo $footer;
 }
+
 ?>

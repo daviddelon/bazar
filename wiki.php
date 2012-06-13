@@ -83,9 +83,10 @@ if (preg_match('`^' . '(' . "[A-Za-z0-9]+" . ')/(' . "[A-Za-z0-9_-]" . '*)' . '$
 elseif (preg_match('`^' . "[A-Za-z0-9]+" . '$`', $wikireq)) {
 	$GLOBALS['_BAZAR_']['pagewiki'] = $wikireq;
 }
+$methode = ($method == 'bazarframe') ? '/bazarframe' : '';
 
 // Variable d'url
-$GLOBALS['_BAZAR_']['url'] = new Net_URL($wakkaConfig['base_url'].$GLOBALS['_BAZAR_']['pagewiki']);
+$GLOBALS['_BAZAR_']['url'] = new Net_URL($wakkaConfig['base_url'].$GLOBALS['_BAZAR_']['pagewiki'].$methode);
 
 // Connection a la base de donnee
 $dsn='mysql://'.$wakkaConfig['mysql_user'].':'.$wakkaConfig['mysql_password'].'@'.$wakkaConfig['mysql_host'].'/'.$wakkaConfig['mysql_database'];
@@ -259,9 +260,9 @@ define ('BAZ_VAR_URL_LANGUE', 'lang') ; //Nom de la variable GET qui sera passee
 
 //code pour l'inclusion des langues NE PAS MODIFIER
 if (BAZ_VAR_URL_LANGUE != '' && isset (${BAZ_VAR_URL_LANGUE})) {
-    include_once BAZ_CHEMIN.'langues'.DIRECTORY_SEPARATOR.'baz_langue_'.${BAZ_VAR_URL_LANGUE}.'.inc.php';
+    include_once BAZ_CHEMIN.'lang'.DIRECTORY_SEPARATOR.'bazar_'.${BAZ_VAR_URL_LANGUE}.'.inc.php';
 } else {
-    include_once BAZ_CHEMIN.'langues'.DIRECTORY_SEPARATOR.'baz_langue_'.BAZ_LANGUE_PAR_DEFAUT.'.inc.php';
+    include_once BAZ_CHEMIN.'lang'.DIRECTORY_SEPARATOR.'bazar_'.BAZ_LANGUE_PAR_DEFAUT.'.inc.php';
 }
 
 // Option concernant la division des resultats en pages
