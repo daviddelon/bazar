@@ -72,13 +72,15 @@ function afficher_image($nom_image, $label, $class, $largeur_vignette, $hauteur_
 			}
 			//on renvoit l'image en vignette, avec quand on clique, l'image redimensionnee
 			$url_base = str_replace('wakka.php?wiki=','',$GLOBALS['wiki']->config['base_url']);
-			return  '<a class="triggerimage'.' '.$class.'" rel="#overlay-link" href="'.$url_base.'cache/image_'.$nom_image.'">'."\n".
-					'<img alt="'.$nom_image.'"'.' src="'.$url_base.'cache/vignette_'.$nom_image.'" width="'.$width.'" height="'.$height.'" rel="'.$url_base.'cache/image_'.$nom_image.'" />'."\n".
-					'</a>'."\n";
+                                  return '<img alt="'.$nom_image.'"'.' src="'.$url_base.'cache/vignette_'.$nom_image.'" width="'.$width.'" height="'.$height.'" rel="#'.md5($nom_image).'" />'."\n".
+                                                      '<div class="yeswiki-overlay" style="padding-top:20px;" id="'.md5($nom_image).'"><img alt="'.$nom_image.'"'.' src="'.$url_base.'cache/image_'.$nom_image.'"/></div>'."\n";
+
+
+
 		}
 		else {
 			//on renvoit l'image en vignette, avec quand on clique, l'image originale
-			return  '<a class="triggerimage'.' '.$class.'" rel="#overlay-link" href="'.$url_base.BAZ_CHEMIN_UPLOAD.$nom_image.'">'."\n".
+			return  '<a class="triggerimage'.' '.$class.'" rel="#overlay-image" href="'.$url_base.BAZ_CHEMIN_UPLOAD.$nom_image.'">'."\n".
 					'<img alt="'.$nom_image.'"'.' src="'.$url_base.'cache/vignette_'.$nom_image.'" width="'.$width.'" height="'.$height.'" rel="'.$url_base.'cache/image_'.$nom_image.'" />'."\n".
 					'</a>'."\n";
 		}
@@ -108,6 +110,7 @@ function redimensionner_image($image_src, $image_dest, $largeur, $hauteur) {
 	$imgTrans->targetFile = $image_dest;
 	$imgTrans->resizeToWidth = $largeur;
 	$imgTrans->resizeToHeight = $hauteur;
+    print $largeur;
 	if (!$imgTrans->resize()) {
 		// in case of error, show error code
 		return $imgTrans->error;
@@ -1336,6 +1339,7 @@ function image(&$formtemplate, $tableau_template, $mode, $valeurs_fiche) {
 			
 			//on affiche les infos sur l'effacement du fichier, et on reinitialise la variable pour le fichier pour faire apparaitre le formulaire d'ajout par la suite
 			$info = '<div class="info_box">'.BAZ_FICHIER.$nomimg.BAZ_A_ETE_EFFACE.'</div>'."\n";
+			require_once BAZ_CHEMIN.'libs'.DIRECTORY_SEPARATOR.'HTML/QuickForm/html.php';
 			$formtemplate->addElement(new HTML_QuickForm_html("\n".$info."\n")) ;
 			$valeurs_fiche[$type.$identifiant] = '';
 		}
@@ -1396,32 +1400,37 @@ function image(&$formtemplate, $tableau_template, $mode, $valeurs_fiche) {
 		}
 	}
 	elseif ( $mode == 'requete' ) {
-		if (isset($_FILES[$type.$identifiant]['name']) && $_FILES[$type.$identifiant]['name']!='') {
-							
-			//on enleve les accents sur les noms de fichiers, et les espaces
-			$nomimage = preg_replace("/&([a-z])[a-z]+;/i","$1", htmlentities($identifiant.$_FILES[$type.$identifiant]['name']));
-			$nomimage = str_replace(' ', '_', $nomimage);
-			$chemin_destination = BAZ_CHEMIN_UPLOAD.$nomimage;
-			//verification de la presence de ce fichier
-			if (!file_exists($chemin_destination)) {
-				move_uploaded_file($_FILES[$type.$identifiant]['tmp_name'], $chemin_destination);
-				chmod ($chemin_destination, 0755);
-				//generation des vignettes
-				if ($hauteur_vignette!='' && $largeur_vignette!='' && !file_exists('cache/vignette_'.$nomimage)) {
-					$adr_img = redimensionner_image($chemin_destination, 'cache/vignette_'.$nomimage, $largeur_vignette, $hauteur_vignette);
-				}
-				//generation des images
-				if ($hauteur_image!='' && $largeur_image!='' && !file_exists('cache/image_'.'_'.$nomimage)) {
-					$adr_img = redimensionner_image($chemin_destination, 'cache/image_'.$nomimage, $largeur_image, $hauteur_image);
-				}
-			}
-			else {
-				echo '<div class="BAZ_error">L\'image '.$nomimage.' existait d&eacute;ja, elle n\'a pas &eacute;t&eacute; remplac&eacute;e.</div>';
-			}
-			return array($type.$identifiant => $nomimage);
-		}
-	}
-	elseif ($mode == 'recherche')
+        if (isset($_FILES[$type.$identifiant]['name']) && $_FILES[$type.$identifiant]['name']!='') {
+
+            //on enleve les accents sur les noms de fichiers, et les espaces
+            $nomimage = preg_replace("/&([a-z])[a-z]+;/i","$1", htmlentities($identifiant.$_FILES[$type.$identifiant]['name']));
+            $nomimage = str_replace(' ', '_', $nomimage);
+            if (preg_match("/(gif|jpeg|png|jpg)$/i",$nomimage)) {
+                    $chemin_destination = BAZ_CHEMIN_UPLOAD.$nomimage;
+                    //verification de la presence de ce fichier
+                    if (!file_exists($chemin_destination)) {
+                        move_uploaded_file($_FILES[$type.$identifiant]['tmp_name'], $chemin_destination);
+                        chmod ($chemin_destination, 0755);
+                        //generation des vignettes
+                        if ($hauteur_vignette!='' && $largeur_vignette!='' && !file_exists('cache/vignette_'.$nomimage)) {
+                            $adr_img = redimensionner_image($chemin_destination, 'cache/vignette_'.$nomimage, $largeur_vignette, $hauteur_vignette);
+                        }
+                        //generation des images
+                        if ($hauteur_image!='' && $largeur_image!='' && !file_exists('cache/image_'.'_'.$nomimage)) {
+                            $adr_img = redimensionner_image($chemin_destination, 'cache/image_'.$nomimage, $largeur_image, $hauteur_image);
+                        }
+                    }
+                    else {
+                        echo '<div class="BAZ_error">L\'image '.$nomimage.' existait d&eacute;ja, elle n\'a pas &eacute;t&eacute; remplac&eacute;e.</div>';
+                    }
+                    }
+             else {
+                    echo '<div class="BAZ_error">Fichier non autoris&eacute;.</div>';
+            }
+            return array($type.$identifiant => $nomimage);
+        }
+    }
+    elseif ($mode == 'recherche')
 	{
 
 	}
