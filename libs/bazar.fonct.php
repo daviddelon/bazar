@@ -796,18 +796,18 @@ function baz_formulaire($mode, $url = '', $valeurs = '') {
 	//contruction du squelette du formulaire
 	$formtemplate = new HTML_QuickForm('formulaire', 'post', preg_replace ('/&amp;/', '&', ($url ? $url : $lien_formulaire->getURL())) );
 	$squelette = &$formtemplate->defaultRenderer();
-   	$squelette->setFormTemplate("\n".'<form {attributes} novalidate="novalidate">'."\n".'{content}'."\n".'</form>'."\n");
-    $squelette->setElementTemplate( '<div class="formulaire_ligne">'."\n".
-									'<div class="formulaire_label">'."\n".'<!-- BEGIN required --><span class="symbole_obligatoire">*&nbsp;</span><!-- END required -->'."\n".'{label} :</div>'."\n".
-    							'<div class="formulaire_input"> '."\n".'{element}'."\n".
+   	$squelette->setFormTemplate("\n".'<form {attributes} class="form-horizontal" novalidate="novalidate">'."\n".'{content}'."\n".'</form>'."\n");
+    $squelette->setElementTemplate( '<div class="control-group">'."\n".
+									'<div class="control-label">'."\n".'<!-- BEGIN required --><span class="symbole_obligatoire">*&nbsp;</span><!-- END required -->'."\n".'{label} :</div>'."\n".
+    							'<div class="controls"> '."\n".'{element}'."\n".
                                     '<!-- BEGIN error --><span class="erreur">{error}</span><!-- END error -->'."\n".
                                     '</div>'."\n".'</div>'."\n");
    	$squelette->setElementTemplate( '<div class="formulaire_ligne">'."\n".'<div class="liste_a_cocher"><strong>{label}&nbsp;{element}</strong>'."\n".
                                     '<!-- BEGIN required --><span class="symbole_obligatoire">&nbsp;*</span><!-- END required -->'."\n".'</div>'."\n".'</div>'."\n", 'accept_condition');
     	$squelette->setElementTemplate( '<div class="groupebouton">{label}{element}</div>'."\n", 'groupe_boutons');
-    	$squelette->setElementTemplate( '<div class="formulaire_ligne">'."\n".
-									'<div class="formulaire_label_select">'."\n".'{label} :</div>'."\n".
-									'<div class="formulaire_select"> '."\n".'{element}'."\n".'</div>'."\n".
+    	$squelette->setElementTemplate( '<div class="control-group">'."\n".
+									'<div class="control-label">'."\n".'{label} :</div>'."\n".
+									'<div class="controls"> '."\n".'{element}'."\n".'</div>'."\n".
 									'</div>', 'select');
     	$squelette->setRequiredNoteTemplate("\n".'<div class="symbole_obligatoire">* {requiredNote}</div>'."\n");
 	//Traduction de champs requis

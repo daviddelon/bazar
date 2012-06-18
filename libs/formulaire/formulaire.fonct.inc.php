@@ -262,11 +262,11 @@ function liste(&$formtemplate, $tableau_template, $mode, $valeurs_fiche)
 			$bulledaide = ' <img class="tooltip_aide" title="'.htmlentities($tableau_template[10]).'" src="tools/bazar/presentation/images/aide.png" width="16" height="16" alt="image aide" />';
 		}
 			
-		$select_html = '<div class="formulaire_ligne">'."\n".'<div class="formulaire_label">'."\n";
+		$select_html = '<div class="control-group">'."\n".'<div class="control-label">'."\n";
 		if (isset($tableau_template[8]) && $tableau_template[8]==1) {
 			$select_html .= '<span class="symbole_obligatoire">*&nbsp;</span>'."\n";
 		}
-		$select_html .= $tableau_template[2].$bulledaide.' : </div>'."\n".'<div class="formulaire_input">'."\n".'<select';		
+		$select_html .= $tableau_template[2].$bulledaide.' : </div>'."\n".'<div class="controls">'."\n".'<select';		
 		
 		$select_attributes = '';
 		
@@ -528,11 +528,11 @@ function jour(&$formtemplate, $tableau_template, $mode, $valeurs_fiche)
 			$bulledaide = ' <img class="tooltip_aide" title="'.htmlentities($tableau_template[10]).'" src="tools/bazar/presentation/images/aide.png" width="16" height="16" alt="image aide" />';
 		}
 			
-		$date_html = '<div class="formulaire_ligne">'."\n".'<div class="formulaire_label">'."\n";
+		$date_html = '<div class="control-group">'."\n".'<div class="control-label">'."\n";
 		if (isset($tableau_template[8]) && $tableau_template[8]==1) {
 			$date_html .= '<span class="symbole_obligatoire">*&nbsp;</span>'."\n";
 		}
-		$date_html .= $tableau_template[2].$bulledaide.' : </div>'."\n".'<div class="formulaire_input">'."\n".'<input type="date" name="'.$tableau_template[1].'" ';		
+		$date_html .= $tableau_template[2].$bulledaide.' : </div>'."\n".'<div class="controls">'."\n".'<input type="date" name="'.$tableau_template[1].'" ';		
 		
 		
 		$date_html .= ' class="bazar-date input_texte" id="'.$tableau_template[1].'"';
@@ -758,10 +758,10 @@ function texte(&$formtemplate, $tableau_template, $mode, $valeurs_fiche)
 		//par defaut il s'agit d'input html de type "text" (on precise si cela n'a pas ete entre)
 		if ($type_input == '') $type_input = 'text';
 		
-		$input_html  = '<div class="formulaire_ligne">'."\n".'<div class="formulaire_label">';
+		$input_html  = '<div class="control-group">'."\n".'<div class="control-label">';
 		$input_html .= ($obligatoire == 1) ? '<span class="symbole_obligatoire">*&nbsp;</span>' : '';
 		$input_html .= $label.$bulledaide.' : </div>'."\n";
-		$input_html .= '<div class="formulaire_input">'."\n";
+		$input_html .= '<div class="controls">'."\n";
 		$input_html .= '<input type="'.$type_input.'"';
 		$input_html .= ($defauts != '') ? ' value="'.$defauts.'"' : '';
 		$input_html .= ' name="'.$identifiant.'" class="input_texte" id="'.$identifiant.'"';
@@ -985,10 +985,10 @@ function champs_mail(&$formtemplate, $tableau_template, $mode, $valeurs_fiche)
 		//par defaut il s'agit d'input html de type "text" (on precise si cela n'a pas ete entre)
 		if ($type_input == '') $type_input = 'email';
 		
-		$input_html  = '<div class="formulaire_ligne">'."\n".'<div class="formulaire_label">';
+		$input_html  = '<div class="control-group">'."\n".'<div class="control-label">';
 		$input_html .= ($obligatoire == 1) ? '<span class="symbole_obligatoire">*&nbsp;</span>' : '';
 		$input_html .= $label.$bulledaide.' : </div>'."\n";
-		$input_html .= '<div class="formulaire_input">'."\n";
+		$input_html .= '<div class="controls">'."\n";
 		$input_html .= '<input type="'.$type_input.'"';
 		$input_html .= ($defauts != '') ? ' value="'.$defauts.'"' : '';
 		$input_html .= ' name="'.$identifiant.'" class="input_texte" id="'.$identifiant.'"';
@@ -1064,7 +1064,6 @@ function textelong(&$formtemplate, $tableau_template, $mode, $valeurs_fiche)
 	list($type, $identifiant, $label, $nb_colonnes, $nb_lignes, $valeur_par_defaut, $longueurmax, $formatage , $obligatoire, $apparait_recherche, $bulle_d_aide) = $tableau_template;
 	if ( $mode == 'saisie' )
 	{
-		$options = array('id' => $identifiant, 'class' => 'input_textarea');
 		//gestion du champs obligatoire
 		$symb = '';
 		if (isset($obligatoire) && $obligatoire==1) {
@@ -1075,6 +1074,9 @@ function textelong(&$formtemplate, $tableau_template, $mode, $valeurs_fiche)
 		$longueurmax = ($longueurmax ? ' (<span class="charsRemaining">'.$longueurmax.'</span> caract&egrave;res restants)' : '' );
 		$bulledaide = '';
 		if ($bulle_d_aide!='') $bulledaide = ' <img class="tooltip_aide" title="'.htmlentities($bulle_d_aide).'" src="tools/bazar/presentation/images/aide.png" width="16" height="16" alt="image aide" />';
+		
+		$options = array('id' => $identifiant, 'class' => 'input_textarea'.($formatage == 'wiki' ? ' wiki-textarea' : ''));
+
 		$formtexte= new HTML_QuickForm_textarea($identifiant, $symb.$label.$longueurmax.$bulledaide, $options);
 		$formtexte->setCols($nb_colonnes);
 		$formtexte->setRows($nb_lignes);
@@ -1176,10 +1178,10 @@ function lien_internet(&$formtemplate, $tableau_template, $mode, $valeurs_fiche)
 		//par defaut il s'agit d'input html de type "text" (on precise si cela n'a pas ete entre)
 		if ($type_input == '') $type_input = 'url';
 		
-		$input_html  = '<div class="formulaire_ligne">'."\n".'<div class="formulaire_label">';
+		$input_html  = '<div class="control-group">'."\n".'<div class="control-label">';
 		$input_html .= ($obligatoire == 1) ? '<span class="symbole_obligatoire">*&nbsp;</span>' : '';
 		$input_html .= $label.$bulledaide.' : </div>'."\n";
-		$input_html .= '<div class="formulaire_input">'."\n";
+		$input_html .= '<div class="controls">'."\n";
 		$input_html .= '<input type="'.$type_input.'"';
 		$input_html .= ($defauts != 'http://') ? ' value="'.$defauts.'"' : ' placeholder="'.$defauts.'"';
 		$input_html .= ' name="'.$identifiant.'" class="input_texte" id="'.$identifiant.'"';
@@ -1237,9 +1239,9 @@ function fichier(&$formtemplate, $tableau_template, $mode, $valeurs_fiche)
 				$lien_supprimer = $GLOBALS['wiki']->href( 'edit', $GLOBALS['wiki']->GetPageTag() );
 				$lien_supprimer .= '&delete_file='.$valeurs_fiche[$type.$identifiant];
 
-				$html = '<div class="formulaire_ligne">
-					<div class="formulaire_label">'.$label.' : </div>
-					<div class="formulaire_input">
+				$html = '<div class="control-group">
+					<div class="control-label">'.$label.' : </div>
+					<div class="controls">
 					<a href="'.BAZ_CHEMIN_UPLOAD.$valeurs_fiche[$type.$identifiant].'" target="_blank">'.$valeurs_fiche[$type.$identifiant].'</a>'."\n".
 					'<a href="'.str_replace('&', '&amp;', $lien_supprimer).'" onclick="javascript:return confirm(\''.BAZ_CONFIRMATION_SUPPRESSION_FICHIER.'\');" >'.BAZ_SUPPRIMER.'</a><br />
 					</div>
@@ -1810,11 +1812,11 @@ function listefiche(&$formtemplate, $tableau_template, $mode, $valeurs_fiche)
 			$bulledaide = ' <img class="tooltip_aide" title="'.htmlentities($tableau_template[10]).'" src="tools/bazar/presentation/images/aide.png" width="16" height="16" alt="image aide" />';
 		}
 			
-		$select_html = '<div class="formulaire_ligne">'."\n".'<div class="formulaire_label">'."\n";
+		$select_html = '<div class="control-group">'."\n".'<div class="control-label">'."\n";
 		if (isset($tableau_template[8]) && $tableau_template[8]==1) {
 			$select_html .= '<span class="symbole_obligatoire">*&nbsp;</span>'."\n";
 		}
-		$select_html .= $tableau_template[2].$bulledaide.' : </div>'."\n".'<div class="formulaire_input">'."\n".'<select';		
+		$select_html .= $tableau_template[2].$bulledaide.' : </div>'."\n".'<div class="controls">'."\n".'<select';		
 		
 		$select_attributes = '';
 		
