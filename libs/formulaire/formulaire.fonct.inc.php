@@ -72,15 +72,15 @@ function afficher_image($nom_image, $label, $class, $largeur_vignette, $hauteur_
 			}
 			//on renvoit l'image en vignette, avec quand on clique, l'image redimensionnee
 			$url_base = str_replace('wakka.php?wiki=','',$GLOBALS['wiki']->config['base_url']);
-                                  return '<img alt="'.$nom_image.'"'.' src="'.$url_base.'cache/vignette_'.$nom_image.'" width="'.$width.'" height="'.$height.'" rel="#'.md5($nom_image).'" />'."\n".
-                                                      '<div class="yeswiki-overlay" style="padding-top:20px;" id="'.md5($nom_image).'"><img alt="'.$nom_image.'"'.' src="'.$url_base.'cache/image_'.$nom_image.'"/></div>'."\n";
+			return 	'<a class="triggerimage'.' '.$class.'" rel="#overlay-link" href="'.$url_base.'cache/image_'.$nom_image.'">'."\n".
+					'<img alt="'.$nom_image.'"'.' src="'.$url_base.'cache/vignette_'.$nom_image.'" width="'.$width.'" height="'.$height.'" />'."\n".'</a>'."\n";
 
 
 
 		}
 		else {
 			//on renvoit l'image en vignette, avec quand on clique, l'image originale
-			return  '<a class="triggerimage'.' '.$class.'" rel="#overlay-image" href="'.$url_base.BAZ_CHEMIN_UPLOAD.$nom_image.'">'."\n".
+			return  '<a class="triggerimage'.' '.$class.'" rel="#overlay-link" href="'.$url_base.BAZ_CHEMIN_UPLOAD.$nom_image.'">'."\n".
 					'<img alt="'.$nom_image.'"'.' src="'.$url_base.'cache/vignette_'.$nom_image.'" width="'.$width.'" height="'.$height.'" rel="'.$url_base.'cache/image_'.$nom_image.'" />'."\n".
 					'</a>'."\n";
 		}
