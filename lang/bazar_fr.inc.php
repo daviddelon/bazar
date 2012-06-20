@@ -159,6 +159,7 @@ define ('URL_LIEN_REQUIS', 'L\'adresse URL est requise');
 define ('BAZ_PAS_DE_FICHES_UTILISATEUR_TROUVEE', 'Pas de fiche utilisateur associ&eacute;e &agrave; ce compte.');
 define ('IMAGE_VALIDE_REQUIS','Ajouter une image &agrave; cette fiche est obligatoire');
 define ('BAZ_A_ETE_EFFACE', ' a été effacé.');
+define ('BAZ_PAS_DE_FICHES_SAUVEES_EN_VOTRE_NOM', 'Vous n\'avez aucune fiche enregistr&eacute;e pour l\'instant.');
 
 //================ Calendrier Bazar =======================================
 define ('BAZ_AFFICHE_TITRES_COMPLETS', 'Afficher les titres complets des &eacute;v&eacute;nements');

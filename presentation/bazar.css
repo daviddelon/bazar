@@ -712,80 +712,6 @@ a.active img {
 	border:1px solid #666;
 }
 
-/* "next image" and "prev image" links */
-#gallery .next, #gallery .prev {
-
-	/* absolute positioning relative to the overlay */
-	position:absolute;
-	top:40%;
-	border:1px solid #666;
-	cursor:pointer;
-	display:block;
-	padding:10px 20px;
-	color:#fff;
-	font-size:11px;
-
-	/* upcoming CSS3 features */
-	-moz-border-radius:5px;
-	-webkit-border-radius:5px;
-}
-
-#gallery .prev {
-	left:0;
-	border-left:0;
-	-moz-border-radius-topleft:0;
-	-moz-border-radius-bottomleft:0;
-	-webkit-border-bottom-left-radius:0;
-	-webkit-border-top-left-radius:0;
-}
-
-#gallery .next {
-	right:0;
-	border-right:0;
-	-moz-border-radius-topright:0;
-	-moz-border-radius-bottomright:0;
-	-webkit-border-bottom-right-radius:0;
-	-webkit-border-top-right-radius:0;
-}
-
-#gallery .next:hover, #gallery .prev:hover {
-	text-decoration:underline;
-	background-color:#000;
-}
-
-/* when there is no next or previous link available this class is added */
-#gallery .disabled {
-	visibility:hidden;
-}
-
-/* the "information box" */
-#gallery .info {
-	position:absolute;
-	bottom:0;
-	left:0;
-	padding:10px 15px;
-	color:#fff;
-	font-size:11px;
-	border-top:1px solid #666;
-}
-
-#gallery .info strong {
-	display:block;
-}
-
-/* progress indicator (animated gif). should be initially hidden */
-#gallery .progress {
-	position:absolute;
-	top:45%;
-	left:50%;
-	display:none;
-}
-
-/* everybody should know about RGBA colors. */
-#gallery .next, #gallery .prev, #gallery .info {
-	background:#333 !important;
-	background:rgba(0, 0, 0, 0.6) url(images/h80.png) repeat-x;
-}
 
 /*****************************************boutons*********************************************************/
 
@@ -1160,17 +1086,6 @@ input[type="submit"].btn.btn-mini {
   *padding-bottom: 1px;
 }
 
->>>>>>> 4f5d849fd4fc96ce3517d32d4df795b895f30c7c
-	
-a.prev-tab, button.prev,input.prev {
-clear:left;
-float:left;
-}
-
-a.next-tab, button.next,input.next {
-clear:right;
-float:right;
-}
 
 .bouton_sauver, .bouton_annuler {
 margin-right:10px;

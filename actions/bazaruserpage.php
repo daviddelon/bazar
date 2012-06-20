@@ -29,7 +29,7 @@ if ( $nomwiki ) {
 		echo baz_voir_fiche(1, $results[0]["tag"]).'<br /><br />';
 	}
 	else {
-		echo '<div class="info_box">'.BAZ_PAS_DE_FICHES_UTILISATEUR_TROUVEE.'</div>';
+		echo '<div class="alert">'.BAZ_PAS_DE_FICHES_UTILISATEUR_TROUVEE.'</div>';
 	}
 	
 	echo '<h2 class="titre_mes_fiches">'.BAZ_VOS_FICHES.'</h2>'."\n";
@@ -37,7 +37,7 @@ if ( $nomwiki ) {
 	if (count($tableau_fiches)>0) {
 		echo baz_afficher_liste_resultat($tableau_fiches, false);
 	} else {
-		echo '<div class="info_box">'.BAZ_PAS_DE_FICHES_SAUVEES_EN_VOTRE_NOM.'</div>'."\n";
+		echo '<div class="alert">'.BAZ_PAS_DE_FICHES_SAUVEES_EN_VOTRE_NOM.'</div>'."\n";
 	}
 }
 
