@@ -100,6 +100,7 @@ define ('BAZ_MODIFIER_LA_FICHE', 'Modifier la fiche') ;
 define ('BAZ_SUPPRIMER', 'Supprimer') ;
 define ('BAZ_SUPPRIMER_IMAGE', 'Supprimer l\'image') ;
 define ('BAZ_CONFIRMATION_SUPPRESSION_IMAGE', 'Etes vous sûrs de vouloir supprimer cette image?');
+define ('BAZ_DROIT_INSUFFISANT', 'Op&eacute;ration permise au propri&eacutetaire de la fiche ou &agrave; un administrateur uniquement');
 define ('BAZ_TITRE_SAISIE_FICHE', 'Saisir une fiche : ');
 define ('BAZ_CHOIX_TYPE_FICHE', 'Choisissez le type de fiche que vous souhaitez d&eacute;poser:') ;
 define ('BAZ_CONFIRMATION_SUPPRESSION', 'Etes-vous s&ucirc;r de vouloir supprimer cette fiche ?') ;
