@@ -2029,7 +2029,12 @@ function baz_a_le_droit( $demande = 'saisie_fiche', $id = '' ) {
 	else {
 		if ($demande == 'supp_fiche') {
 			// seuls admins et createur peuvent effacer une fiche
-			return (is_array($nomwiki) && $id == $nomwiki['name'] || $id == '' );
+			if (is_array($nomwiki) && $id == $nomwiki['name'] || $id == '' ) {
+               return true; 
+            }
+            else { 
+                return false;
+            }
 		}
 		if ($demande == 'modif_fiche') {
 			// pour la modif d'une fiche : ouvert à tous
