@@ -57,50 +57,50 @@ if (version_compare(phpversion(), '5.0') < 0) {
  * @return   void
  */
 function afficher_image($nom_image, $label, $class, $largeur_vignette, $hauteur_vignette, $largeur_image, $hauteur_image) {
-    //faut il creer la vignette?
-    if ($hauteur_vignette!='' && $largeur_vignette!='')	{
-        //la vignette n'existe pas, on la genere
-        if (!file_exists('cache/vignette_'.$nom_image)) {
-            $adr_img = redimensionner_image(BAZ_CHEMIN_UPLOAD.$nom_image, 'cache/vignette_'.$nom_image, $largeur_vignette, $hauteur_vignette);
-        }
-        list($width, $height, $type, $attr) = getimagesize('cache/vignette_'.$nom_image);
-        //faut il redimensionner l'image?
-        if ($hauteur_image!='' && $largeur_image!='') {
-            //l'image redimensionnee n'existe pas, on la genere
-            if (!file_exists('cache/image_'.$nom_image)) {
-                $adr_img = redimensionner_image(BAZ_CHEMIN_UPLOAD.$nom_image, 'cache/image_'.$nom_image, $largeur_image, $hauteur_image);
-            }
-            //on renvoit l'image en vignette, avec quand on clique, l'image redimensionnee
-            $url_base = str_replace('wakka.php?wiki=','',$GLOBALS['wiki']->config['base_url']);
-            return '<img alt="'.$nom_image.'"'.' src="'.$url_base.'cache/vignette_'.$nom_image.'" width="'.$width.'" height="'.$height.'" rel="#'.md5($nom_image).'" />'."\n".
-                '<div class="yeswiki-overlay" style="padding-top:20px;" id="'.md5($nom_image).'"><img alt="'.$nom_image.'"'.' src="'.$url_base.'cache/image_'.$nom_image.'"/></div>'."\n";
+	//faut il creer la vignette?
+	if ($hauteur_vignette!='' && $largeur_vignette!='')	{
+		//la vignette n'existe pas, on la genere
+		if (!file_exists('cache/vignette_'.$nom_image)) {
+			$adr_img = redimensionner_image(BAZ_CHEMIN_UPLOAD.$nom_image, 'cache/vignette_'.$nom_image, $largeur_vignette, $hauteur_vignette);
+		}
+		list($width, $height, $type, $attr) = getimagesize('cache/vignette_'.$nom_image);
+		//faut il redimensionner l'image?
+		if ($hauteur_image!='' && $largeur_image!='') {
+			//l'image redimensionnee n'existe pas, on la genere
+			if (!file_exists('cache/image_'.$nom_image)) {
+				$adr_img = redimensionner_image(BAZ_CHEMIN_UPLOAD.$nom_image, 'cache/image_'.$nom_image, $largeur_image, $hauteur_image);
+			}
+			//on renvoit l'image en vignette, avec quand on clique, l'image redimensionnee
+			$url_base = str_replace('wakka.php?wiki=','',$GLOBALS['wiki']->config['base_url']);
+			return 	'<a class="triggerimage'.' '.$class.'" rel="#overlay-link" href="'.$url_base.'cache/image_'.$nom_image.'">'."\n".
+					'<img alt="'.$nom_image.'"'.' src="'.$url_base.'cache/vignette_'.$nom_image.'" width="'.$width.'" height="'.$height.'" />'."\n".'</a>'."\n";
 
 
 
-        }
-        else {
-            //on renvoit l'image en vignette, avec quand on clique, l'image originale
-            return  '<a class="triggerimage'.' '.$class.'" rel="#overlay-image" href="'.$url_base.BAZ_CHEMIN_UPLOAD.$nom_image.'">'."\n".
-                '<img alt="'.$nom_image.'"'.' src="'.$url_base.'cache/vignette_'.$nom_image.'" width="'.$width.'" height="'.$height.'" rel="'.$url_base.'cache/image_'.$nom_image.'" />'."\n".
-                '</a>'."\n";
-        }
-    }
-    //pas de vignette, mais faut il redimensionner l'image?
-    else if ($hauteur_image!='' && $largeur_image!='') {
-        //l'image redimensionnee n'existe pas, on la genere
-        if (!file_exists('cache/image_'.$nom_image)) {
-            $adr_img = redimensionner_image(BAZ_CHEMIN_UPLOAD.$nom_image, 'cache/image_'.$nom_image, $largeur_image, $hauteur_image);
-        }
-        //on renvoit l'image redimensionnee
-        list($width, $height, $type, $attr) = getimagesize('cache/image_'.$nom_image);
-        return  '<img class="'.$class.'" alt="'.$nom_image.'"'.' src="cache/image_'.$nom_image.'" width="'.$width.'" height="'.$height.'" />'."\n";
-
-    }
-    //on affiche l'image originale sinon
-    else {
-        list($width, $height, $type, $attr) = getimagesize(BAZ_CHEMIN_UPLOAD.$nom_image);
-        return  '<img class="'.$class.'" alt="'.$nom_image.'"'.' src="'.BAZ_CHEMIN_UPLOAD.$nom_image.'" width="'.$width.'" height="'.$height.'" />'."\n";
-    }
+		}
+		else {
+			//on renvoit l'image en vignette, avec quand on clique, l'image originale
+			return  '<a class="triggerimage'.' '.$class.'" rel="#overlay-link" href="'.$url_base.BAZ_CHEMIN_UPLOAD.$nom_image.'">'."\n".
+					'<img alt="'.$nom_image.'"'.' src="'.$url_base.'cache/vignette_'.$nom_image.'" width="'.$width.'" height="'.$height.'" rel="'.$url_base.'cache/image_'.$nom_image.'" />'."\n".
+					'</a>'."\n";
+		}
+	}
+	//pas de vignette, mais faut il redimensionner l'image?
+	else if ($hauteur_image!='' && $largeur_image!='') {
+		//l'image redimensionnee n'existe pas, on la genere
+		if (!file_exists('cache/image_'.$nom_image)) {
+			$adr_img = redimensionner_image(BAZ_CHEMIN_UPLOAD.$nom_image, 'cache/image_'.$nom_image, $largeur_image, $hauteur_image);
+		}
+		//on renvoit l'image redimensionnee
+		list($width, $height, $type, $attr) = getimagesize('cache/image_'.$nom_image);
+		return  '<img class="'.$class.'" alt="'.$nom_image.'"'.' src="cache/image_'.$nom_image.'" width="'.$width.'" height="'.$height.'" />'."\n";
+		
+	}
+	//on affiche l'image originale sinon
+	else {
+		list($width, $height, $type, $attr) = getimagesize(BAZ_CHEMIN_UPLOAD.$nom_image);
+		return  '<img class="'.$class.'" alt="'.$nom_image.'"'.' src="'.BAZ_CHEMIN_UPLOAD.$nom_image.'" width="'.$width.'" height="'.$height.'" />'."\n";
+	}
 }
 
 function redimensionner_image($image_src, $image_dest, $largeur, $hauteur) {

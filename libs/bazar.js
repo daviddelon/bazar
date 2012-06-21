@@ -49,8 +49,6 @@ $(document).ready(function () {
 	//antispam javascript
 	$("input[name=antispam]").val('1');
 	
-	
-	
 	//formulaire des formulaires
 	$(".ajout_champs_formulaire").overlay({
 		expose:			'black',
@@ -64,14 +62,6 @@ $(document).ready(function () {
 		$(".ajout_champs_formulaire").overlay().close(); 
 		return false;
 	});
-	
-	
-    // overlay image
-
- $("img[rel]").overlay(
- {
-     top: 20 
-  }  );
 
 	//carto google
 	var divcarto = document.getElementById("map" )
