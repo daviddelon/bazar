@@ -398,8 +398,8 @@ function baz_afficher_formulaire_import() {
 		
 		//s'il y a plus d'un choix possible, on propose 
 		if ($resultat->numRows()>=1) {
-			$output .= '<div class="formulaire_ligne">'."\n".'<div class="formulaire_label">'."\n".
-						BAZ_TYPE_FICHE.' :</div>'."\n".'<div class="formulaire_input">';
+			$output .= '<div class="control-group">'."\n".'<div class="control-label">'."\n".
+						BAZ_TYPE_FICHE.' :</div>'."\n".'<div class="controls">';
 			$output .= '<select name="id_type_fiche" onchange="javascript:this.form.submit();">'."\n";
 			while ($ligne = $resultat->fetchRow(DB_FETCHMODE_ASSOC)) {
 				$output .= '<option value="'.$ligne['bn_id_nature'].'"'.(($id_type_fiche == $ligne['bn_id_nature']) ? ' selected="selected"' : '').'>'.$ligne['bn_label_nature'].'</option>'."\n";
@@ -413,8 +413,8 @@ function baz_afficher_formulaire_import() {
 		
 		if ($id_type_fiche != '') {
 			$val_formulaire = baz_valeurs_type_de_fiche($id_type_fiche);
-			$output .= '<div class="formulaire_ligne">'."\n".'<div class="formulaire_label">'."\n".
-					BAZ_FICHIER_CSV_A_IMPORTER.' :</div>'."\n".'<div class="formulaire_input">';
+			$output .= '<div class="control-group">'."\n".'<div class="control-label">'."\n".
+					BAZ_FICHIER_CSV_A_IMPORTER.' :</div>'."\n".'<div class="controls">';
 			$output .= '<input type="file" name="fileimport" id="idfileimport" /><input name="submit_file" type="submit" value="'.BAZ_IMPORTER_CE_FICHIER.'" />'."\n".'</div>'."\n".'</div>'."\n";
 			$output .= '<div class="alert alert-info">'."\n".'<a data-dismiss="alert" class="close" type="button">&times;</a>'."\n".BAZ_ENCODAGE_CSV."\n".'</div>'."\n";
 			
@@ -469,8 +469,8 @@ function baz_afficher_formulaire_export() {
 	
 	//s'il y a plus d'un choix possible, on propose 
 	if ($resultat->numRows()>=1) {
-		$output .= '<div class="formulaire_ligne">'."\n".'<div class="formulaire_label">'."\n".
-					BAZ_TYPE_FICHE.' :</div>'."\n".'<div class="formulaire_input">';
+		$output .= '<div class="control-group">'."\n".'<div class="control-label">'."\n".
+					BAZ_TYPE_FICHE.' :</div>'."\n".'<div class="controls">';
 		$output .= '<select name="id_type_fiche" onchange="javascript:this.form.submit();">'."\n";
 		
 		//si l'on n'a pas déjà choisit de fiche, on démarre sur l'option CHOISIR, vide
@@ -802,7 +802,7 @@ function baz_formulaire($mode, $url = '', $valeurs = '') {
     							'<div class="controls"> '."\n".'{element}'."\n".
                                     '<!-- BEGIN error --><span class="erreur">{error}</span><!-- END error -->'."\n".
                                     '</div>'."\n".'</div>'."\n");
-   	$squelette->setElementTemplate( '<div class="formulaire_ligne">'."\n".'<div class="liste_a_cocher"><strong>{label}&nbsp;{element}</strong>'."\n".
+   	$squelette->setElementTemplate( '<div class="control-group">'."\n".'<div class="liste_a_cocher"><strong>{label}&nbsp;{element}</strong>'."\n".
                                     '<!-- BEGIN required --><span class="symbole_obligatoire">&nbsp;*</span><!-- END required -->'."\n".'</div>'."\n".'</div>'."\n", 'accept_condition');
     	$squelette->setElementTemplate( '<div class="groupebouton">{label}{element}</div>'."\n", 'groupe_boutons');
     	$squelette->setElementTemplate( '<div class="control-group">'."\n".
@@ -882,8 +882,8 @@ function baz_formulaire($mode, $url = '', $valeurs = '') {
 				$buttons[] = &HTML_QuickForm::createElement('link', 'annuler', BAZ_ANNULER, str_replace("&amp;", "&", $GLOBALS['_BAZAR_']['url']->getURL()), BAZ_ANNULER, array('class' => 'btn btn-danger bouton_annuler'));
 				$buttons[] = &HTML_QuickForm::createElement('submit', 'valider', BAZ_VALIDER, array('class' => 'btn btn-success bouton_sauver'));
 				$formtemplate->addGroup($buttons, 'groupe_boutons', null, '&nbsp;', 0);
-				$squelette->setElementTemplate( '<div class="formulaire_ligne">'."\n".
-									'<div class="formulaire_input"> '."\n".'{element}'."\n".
+				$squelette->setElementTemplate( '<div class="control-group">'."\n".
+									'<div class="controls"> '."\n".'{element}'."\n".
 									'<!-- BEGIN error --><span class="erreur">{error}</span><!-- END error -->'."\n".
 									'</div>'."\n".'</div>'."\n");
 
@@ -1352,10 +1352,10 @@ function baz_formulaire_des_formulaires($mode, $valeursformulaire = '') {
 	$GLOBALS['_BAZAR_']['url']->removeQueryString('action_formulaire');
 	$squelette =& $formtemplate->defaultRenderer();
 	$squelette->setFormTemplate("\n".'<form {attributes}>'."\n".'{content}'."\n".'</form>'."\n");
-    $squelette->setElementTemplate( '<div class="formulaire_ligne">'."\n".
-									'<div class="formulaire_label">'."\n".'{label}'.
+    $squelette->setElementTemplate( '<div class="control-group">'."\n".
+									'<div class="control-label">'."\n".'{label}'.
     		                        '<!-- BEGIN required --><span class="symbole_obligatoire">&nbsp;*</span><!-- END required -->'."\n".
-    								' </div>'."\n".'<div class="formulaire_input"> '."\n".'{element}'."\n".
+    								' </div>'."\n".'<div class="controls"> '."\n".'{element}'."\n".
                                     '<!-- BEGIN error --><span class="erreur">{error}</span><!-- END error -->'."\n".
                                     '</div>'."\n".'</div>'."\n");
 	$squelette->setElementTemplate( '<div class="groupebouton">{label}{element}</div>'."\n", 'groupe_boutons');
@@ -1418,10 +1418,10 @@ function baz_formulaire_des_listes($mode, $valeursliste = '') {
 	$GLOBALS['_BAZAR_']['url']->removeQueryString('action_listes');
 	$squelette =& $formtemplate->defaultRenderer();
 	$squelette->setFormTemplate("\n".'<form {attributes}>'."\n".'{content}'."\n".'</form>'."\n");
-    $squelette->setElementTemplate( '<div class="formulaire_ligne">'."\n".
-									'<div class="formulaire_label">'."\n".'{label}'.
+    $squelette->setElementTemplate( '<div class="control-group">'."\n".
+									'<div class="control-label">'."\n".'{label}'.
     		                        '<!-- BEGIN required --><span class="symbole_obligatoire">&nbsp;*</span><!-- END required -->'."\n".
-    								' </div>'."\n".'<div class="formulaire_input"> '."\n".'{element}'."\n".
+    								' </div>'."\n".'<div class="controls"> '."\n".'{element}'."\n".
                                     '<!-- BEGIN error --><span class="erreur">{error}</span><!-- END error -->'."\n".
                                     '</div>'."\n".'</div>'."\n");
 	$squelette->setElementTemplate( '<div class="groupebouton">{label}{element}</div>'."\n", 'groupe_boutons');
@@ -1435,9 +1435,9 @@ function baz_formulaire_des_listes($mode, $valeursliste = '') {
 	if (isset($_GET['idliste'])) $formtemplate->addElement('hidden', 'NomWiki', $_GET['idliste']);
 	$formtemplate->addElement('text', 'titre_liste', BAZ_NOM_LISTE, array('class' => 'input_texte'));
 	$formtemplate->addRule('titre_liste', BAZ_CHAMPS_REQUIS.' : '.BAZ_NOM_LISTE, 'required', '', 'client');
-	$html_valeurs_listes =  '<div class="formulaire_ligne">'."\n".
-							'<div class="formulaire_label">'.BAZ_VALEURS_LISTE.'</div>'."\n".
-							'<ul class="valeur_liste formulaire_input">'."\n";
+	$html_valeurs_listes =  '<div class="control-group">'."\n".
+							'<div class="control-label">'.BAZ_VALEURS_LISTE.'</div>'."\n".
+							'<ul class="valeur_liste controls">'."\n";
 	if (is_array($valeursliste)) {
 		$i = 0;
 		foreach($valeursliste as $id => $label) {
@@ -2322,18 +2322,18 @@ function baz_rechercher($typeannonce = 'toutes', $categorienature = 'toutes') {
 	$formtemplate = new HTML_QuickForm('formulaire', 'post', $lien_formulaire) ;
 
 	$squelette =& $formtemplate->defaultRenderer();
-	$squelette->setFormTemplate("\n".'<form {attributes}>'."\n".'{content}'."\n".'</form>'."\n");
-	$squelette->setElementTemplate( '<div class="formulaire_ligne">'."\n".
-									'<div class="formulaire_label">'."\n".'<!-- BEGIN required --><span class="symbole_obligatoire">*&nbsp;</span><!-- END required -->'."\n".'{label} :</div>'."\n".
-								'<div class="formulaire_input"> '."\n".'{element}'."\n".
+	$squelette->setFormTemplate("\n".'<form {attributes} class="form-horizontal">'."\n".'{content}'."\n".'</form>'."\n");
+	$squelette->setElementTemplate( '<div class="control-group">'."\n".
+									'<div class="control-label">'."\n".'<!-- BEGIN required --><span class="symbole_obligatoire">*&nbsp;</span><!-- END required -->'."\n".'{label} :</div>'."\n".
+								'<div class="controls"> '."\n".'{element}'."\n".
 								'<!-- BEGIN error --><span class="erreur">{error}</span><!-- END error -->'."\n".
 								'</div>'."\n".'</div>'."\n");
-	$squelette->setElementTemplate( '<div class="formulaire_ligne">'."\n".'<div class="liste_a_cocher"><strong>{label}&nbsp;{element}</strong>'."\n".
+	$squelette->setElementTemplate( '<div class="control-group">'."\n".'<div class="liste_a_cocher"><strong>{label}&nbsp;{element}</strong>'."\n".
 								'<!-- BEGIN required --><span class="symbole_obligatoire">&nbsp;*</span><!-- END required -->'."\n".'</div>'."\n".'</div>'."\n", 'accept_condition');
-	$squelette->setElementTemplate( '<div class="grouperecherche">{label}{element}</div>'."\n", 'groupe_recherche');
-	$squelette->setElementTemplate( '<div class="formulaire_ligne">'."\n".
-									'<div class="formulaire_label_select">'."\n".'{label} :</div>'."\n".
-									'<div class="formulaire_select"> '."\n".'{element}'."\n".'</div>'."\n".
+	$squelette->setElementTemplate( '<div class="control-group">{label}{element}</div>'."\n", 'groupe_recherche');
+	$squelette->setElementTemplate( '<div class="control-group">'."\n".
+									'<div class="control-label">'."\n".'{label} :</div>'."\n".
+									'<div class="controls"> '."\n".'{element}'."\n".'</div>'."\n".
 									'</div>', 'select');
 	$squelette->setRequiredNoteTemplate("\n".'<div class="symbole_obligatoire">* {requiredNote}</div>'."\n");
 
@@ -2396,12 +2396,20 @@ function baz_rechercher($typeannonce = 'toutes', $categorienature = 'toutes') {
 	}
 
 	//champs texte pour entrer les mots cles
-	$option = array('maxlength'=>255, 'class'=>'boite_recherche', 'value' => BAZ_MOT_CLE, 'onfocus'=>'if (this.value==\''.BAZ_MOT_CLE.'\') {this.value=\'\';}');
-	$groupe_rech[] = &HTML_QuickForm::createElement('text', 'recherche_mots_cles', '', $option) ;
-
+	$option = array('maxlength'=>255, 'class'=>'', 'placeholder' => BAZ_MOT_CLE);
+	//$groupe_rech[] = &HTML_QuickForm::createElement('text', 'recherche_mots_cles', '<div class="input-prepend"><span class="add-on">@</span>', $option) ;
+	$groupe_rech[] = &HTML_QuickForm::createElement('html', '<div class="control-group">
+		<label class="control-label"></label>
+		<div class="controls">
+			<div class="input-prepend">
+				<span class="add-on"><i class="icon-search"></i></span><input type="text" value="" name="recherche_mots_cles" placeholder="'.BAZ_MOT_CLE.'" maxlength="255">
+			</div>
+			<input type="submit" value="'.BAZ_RECHERCHER.'" name="rechercher" class="btn btn-primary" />
+		</div>
+	</div>');
 	//bouton de validation du formulaire
-	$option = array('class'=>'btn btn-primary btn-large bouton_recherche');
-	$groupe_rech[] = &HTML_QuickForm::createElement('submit', 'rechercher', BAZ_RECHERCHER, $option);
+	//$option = array('class'=>'btn btn-primary');
+	//$groupe_rech[] = &HTML_QuickForm::createElement('submit', 'rechercher', BAZ_RECHERCHER, $option);
 
 	$formtemplate->addGroup($groupe_rech, 'groupe_recherche', null, '&nbsp;', 0);
 
