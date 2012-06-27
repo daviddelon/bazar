@@ -110,7 +110,6 @@ function redimensionner_image($image_src, $image_dest, $largeur, $hauteur) {
     $imgTrans->targetFile = $image_dest;
     $imgTrans->resizeToWidth = $largeur;
     $imgTrans->resizeToHeight = $hauteur;
-    print $largeur;
     if (!$imgTrans->resize()) {
         // in case of error, show error code
         return $imgTrans->error;
@@ -1011,9 +1010,9 @@ function champs_mail(&$formtemplate, $tableau_template, $mode, $valeurs_fiche)
 		$html = '';
 		if (isset($valeurs_fiche[$tableau_template[1]]) && $valeurs_fiche[$tableau_template[1]]!='')
 		{
-			$html = '<div class="BAZ_rubrique  BAZ_rubrique_'.$GLOBALS['_BAZAR_']['class'].'">'."\n".
-					'<span class="BAZ_label BAZ_label_'.$GLOBALS['_BAZAR_']['class'].'">'.$tableau_template[2].'&nbsp;:</span>'."\n";
-			$html .= '<span class="BAZ_texte BAZ_texte_'.$GLOBALS['_BAZAR_']['class'].'"><a href="mailto:'.$valeurs_fiche[$tableau_template[1]].'" class="BAZ_lien_mail">';
+			$html = '<div class="BAZ_rubrique">'."\n".
+					'<span class="BAZ_label">'.$tableau_template[2].'&nbsp;:</span>'."\n";
+			$html .= '<span class="BAZ_texte"><a href="mailto:'.$valeurs_fiche[$tableau_template[1]].'" class="BAZ_lien_mail">';
 			$html .= $valeurs_fiche[$tableau_template[1]].'</a></span>'."\n".'</div>'."\n";
 		}
 		return $html;
