@@ -110,7 +110,6 @@ function redimensionner_image($image_src, $image_dest, $largeur, $hauteur) {
     $imgTrans->targetFile = $image_dest;
     $imgTrans->resizeToWidth = $largeur;
     $imgTrans->resizeToHeight = $hauteur;
-    print $largeur;
     if (!$imgTrans->resize()) {
         // in case of error, show error code
         return $imgTrans->error;
