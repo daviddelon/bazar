@@ -1323,7 +1323,7 @@ a.caldisabled {
 	background-color:#333;
 	color:#fff;
 }
-
+/*
 .error {
 z-index:10005;
 background:#FEF1EC url(images/error.png) no-repeat 3px center;
@@ -1342,7 +1342,7 @@ width:0;
 height:0;
 border:7px solid;
 border-color:#CD0A0A transparent transparent;
-
+*/
 /* positioning */
 position:absolute;
 bottom:-15px;

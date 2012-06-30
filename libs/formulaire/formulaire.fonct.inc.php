@@ -110,7 +110,6 @@ function redimensionner_image($image_src, $image_dest, $largeur, $hauteur) {
     $imgTrans->targetFile = $image_dest;
     $imgTrans->resizeToWidth = $largeur;
     $imgTrans->resizeToHeight = $hauteur;
-    print $largeur;
     if (!$imgTrans->resize()) {
         // in case of error, show error code
         return $imgTrans->error;
@@ -863,28 +862,34 @@ function utilisateur_wikini(&$formtemplate, $tableau_template, $mode, $valeurs_f
                         {
                         if (!isset($valeurs_fiche['nomwiki']))
                         {
-                        $nomwiki = genere_nom_wiki($valeurs_fiche[$tableau_template[1]]);
-                        $requeteinsertionuserwikini = 'INSERT INTO '.$GLOBALS['wiki']->config["table_prefix"]."users SET ".
-                        "signuptime = now(), ".
-                        "name = '".mysql_escape_string($nomwiki)."', ".
-                        "email = '".mysql_escape_string($valeurs_fiche[$tableau_template[2]])."', ".
-                        "password = md5('".mysql_escape_string($valeurs_fiche['mot_de_passe_wikini'])."')";
-                        $resultat = $GLOBALS['_BAZAR_']['db']->query($requeteinsertionuserwikini) ;
-                        if (DB::isError($resultat)) {
-                            echo ($resultat->getMessage().$resultat->getDebugInfo()) ;
-                        }
+                       		if ($GLOBALS['wiki']->IsWikiName($valeurs_fiche[$tableau_template[1]])) {
+	                        	$nomwiki = $valeurs_fiche[$tableau_template[1]];
+	                        }
+	                        else {
+	                        	$nomwiki = genere_nom_wiki($valeurs_fiche[$tableau_template[1]]);
+	                        }
+	                        $requeteinsertionuserwikini = 'INSERT INTO '.$GLOBALS['wiki']->config["table_prefix"]."users SET ".
+	                        "signuptime = now(), ".
+	                        "name = '".mysql_escape_string($nomwiki)."', ".
+	                        "email = '".mysql_escape_string($valeurs_fiche[$tableau_template[2]])."', ".
+	                        "password = md5('".mysql_escape_string($valeurs_fiche['mot_de_passe_wikini'])."')";
+	                        $resultat = $GLOBALS['_BAZAR_']['db']->query($requeteinsertionuserwikini) ;
+	                        if (DB::isError($resultat)) {
+	                            echo ($resultat->getMessage().$resultat->getDebugInfo()) ;
+	                        }
 
-                        //envoi mail nouveau mot de passe
-                        $lien = str_replace("/wakka.php?wiki=","",$GLOBALS['wiki']->config["base_url"]);
-                        $objetmail = '['.str_replace("http://","",$lien).'] Vos nouveaux identifiants sur le site '.$GLOBALS['wiki']->config["wakka_name"];
-                        $messagemail = "Bonjour!\n\nVotre inscription sur le site a ete finalisee, dorenavant vous pouvez vous identifier avec les informations suivantes :\n\nVotre identifiant NomWiki : ".$nomwiki."\n\nVotre mot de passe : ". $valeurs_fiche['mot_de_passe_wikini'] . "\n\nA tres bientot ! \n\n";
-                        $headers =   'From: '.BAZ_ADRESSE_MAIL_ADMIN . "\r\n" .
-                            'Reply-To: '.BAZ_ADRESSE_MAIL_ADMIN . "\r\n" .
-                            'X-Mailer: PHP/' . phpversion();
-                        mail($valeurs_fiche['bf_mail'], remove_accents($objetmail), $messagemail, $headers);
-                        return array('nomwiki' => $nomwiki);
-
-                        } elseif (isset($valeurs_fiche['mot_de_passe_wikini'])) {
+	                        //envoi mail nouveau mot de passe
+	                        $lien = str_replace("/wakka.php?wiki=","",$GLOBALS['wiki']->config["base_url"]);
+	                        $objetmail = '['.str_replace("http://","",$lien).'] Vos nouveaux identifiants sur le site '.$GLOBALS['wiki']->config["wakka_name"];
+	                        $messagemail = "Bonjour!\n\nVotre inscription sur le site a ete finalisee, dorenavant vous pouvez vous identifier avec les informations suivantes :\n\nVotre identifiant NomWiki : ".$nomwiki."\n\nVotre mot de passe : ". $valeurs_fiche['mot_de_passe_wikini'] . "\n\nA tres bientot ! \n\n";
+	                        $headers =   'From: '.BAZ_ADRESSE_MAIL_ADMIN . "\r\n" .
+	                            'Reply-To: '.BAZ_ADRESSE_MAIL_ADMIN . "\r\n" .
+	                            'X-Mailer: PHP/' . phpversion();
+	                        mail($valeurs_fiche['bf_mail'], remove_accents($objetmail), $messagemail, $headers);
+	                        return array('nomwiki' => $nomwiki);
+	                        
+                        } 
+                        elseif (isset($valeurs_fiche['mot_de_passe_wikini'])) {
                             $requetemodificationuserwikini = 'UPDATE '.$GLOBALS['wiki']->config["table_prefix"]."users SET ".
                                 "email = '".mysql_escape_string($valeurs_fiche['bf_mail'])."', ".
                                 " WHERE name=\"".$valeurs_fiche['nomwiki']."\"";
