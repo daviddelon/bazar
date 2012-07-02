@@ -156,9 +156,10 @@ margin:2px 0;
 padding:2px 0 2px 20px;
 }
 .ajout_label_liste {
-clear:both;
+font-weight: normal;
+/*clear:both;
 display:block;
-margin:0 0 0 290px;
+margin:0 0 0 290px;*/
 }
 
 .groupebouton {
@@ -712,80 +713,6 @@ a.active img {
 	border:1px solid #666;
 }
 
-/* "next image" and "prev image" links */
-#gallery .next, #gallery .prev {
-
-	/* absolute positioning relative to the overlay */
-	position:absolute;
-	top:40%;
-	border:1px solid #666;
-	cursor:pointer;
-	display:block;
-	padding:10px 20px;
-	color:#fff;
-	font-size:11px;
-
-	/* upcoming CSS3 features */
-	-moz-border-radius:5px;
-	-webkit-border-radius:5px;
-}
-
-#gallery .prev {
-	left:0;
-	border-left:0;
-	-moz-border-radius-topleft:0;
-	-moz-border-radius-bottomleft:0;
-	-webkit-border-bottom-left-radius:0;
-	-webkit-border-top-left-radius:0;
-}
-
-#gallery .next {
-	right:0;
-	border-right:0;
-	-moz-border-radius-topright:0;
-	-moz-border-radius-bottomright:0;
-	-webkit-border-bottom-right-radius:0;
-	-webkit-border-top-right-radius:0;
-}
-
-#gallery .next:hover, #gallery .prev:hover {
-	text-decoration:underline;
-	background-color:#000;
-}
-
-/* when there is no next or previous link available this class is added */
-#gallery .disabled {
-	visibility:hidden;
-}
-
-/* the "information box" */
-#gallery .info {
-	position:absolute;
-	bottom:0;
-	left:0;
-	padding:10px 15px;
-	color:#fff;
-	font-size:11px;
-	border-top:1px solid #666;
-}
-
-#gallery .info strong {
-	display:block;
-}
-
-/* progress indicator (animated gif). should be initially hidden */
-#gallery .progress {
-	position:absolute;
-	top:45%;
-	left:50%;
-	display:none;
-}
-
-/* everybody should know about RGBA colors. */
-#gallery .next, #gallery .prev, #gallery .info {
-	background:#333 !important;
-	background:rgba(0, 0, 0, 0.6) url(images/h80.png) repeat-x;
-}
 
 /*****************************************boutons*********************************************************/
 
@@ -1160,17 +1087,6 @@ input[type="submit"].btn.btn-mini {
   *padding-bottom: 1px;
 }
 
->>>>>>> 4f5d849fd4fc96ce3517d32d4df795b895f30c7c
-	
-a.prev-tab, button.prev,input.prev {
-clear:left;
-float:left;
-}
-
-a.next-tab, button.next,input.next {
-clear:right;
-float:right;
-}
 
 .bouton_sauver, .bouton_annuler {
 margin-right:10px;
@@ -1231,18 +1147,19 @@ padding:3px;
 
 .BAZ_texte {display:inline;} 
 .titre_lien {display:block;font-size:1.4em;}
-.valeur_liste {width:350px;float:left;}
+.valeur_liste {}
 .liste_ligne {}
 .input_liste_id {display:inline; margin:0 2px; width:40px;}
 .input_liste_label {display:inline; margin:0; width:250px;}
 ul.valeur_liste, ul.valeur_formulaire { padding:0; margin:0;}
 ul.valeur_liste li, ul.valeur_formulaire li {list-style-type:none; padding:0; margin:3px 0;}
 .handle {
-background:url("images/arrow.png") no-repeat left center transparent;
 cursor:move;
-padding:2px 0 2px 18px;
+/*background:url("images/arrow.png") no-repeat left center transparent;
+padding:2px 0 2px 18px;*/
 }
-.valeur_formulaire .handle {left:20px;position:absolute;}
+
+/*.valeur_formulaire .handle {left:20px;position:absolute;}*/
 .valeur_formulaire .formulaire_ligne {background:#EAEAEA; border:1px solid #CCC; padding:5px 0;}
 #champs_formulaire {
 	
@@ -1408,7 +1325,7 @@ a.caldisabled {
 	background-color:#333;
 	color:#fff;
 }
-
+/*
 .error {
 z-index:10005;
 background:#FEF1EC url(images/error.png) no-repeat 3px center;
@@ -1427,7 +1344,7 @@ width:0;
 height:0;
 border:7px solid;
 border-color:#CD0A0A transparent transparent;
-
+*/
 /* positioning */
 position:absolute;
 bottom:-15px;
