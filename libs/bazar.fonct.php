@@ -1417,14 +1417,14 @@ function baz_formulaire_des_listes($mode, $valeursliste = '') {
 	$formtemplate = new HTML_QuickForm('formulaire', 'post', preg_replace ('/&amp;/', '&', $GLOBALS['_BAZAR_']['url']->getURL()) );
 	$GLOBALS['_BAZAR_']['url']->removeQueryString('action_listes');
 	$squelette =& $formtemplate->defaultRenderer();
-	$squelette->setFormTemplate("\n".'<form {attributes}>'."\n".'{content}'."\n".'</form>'."\n");
+	$squelette->setFormTemplate("\n".'<form {attributes} class="form-horizontal">'."\n".'{content}'."\n".'</form>'."\n");
     $squelette->setElementTemplate( '<div class="control-group">'."\n".
 									'<div class="control-label">'."\n".'{label}'.
     		                        '<!-- BEGIN required --><span class="symbole_obligatoire">&nbsp;*</span><!-- END required -->'."\n".
     								' </div>'."\n".'<div class="controls"> '."\n".'{element}'."\n".
                                     '<!-- BEGIN error --><span class="erreur">{error}</span><!-- END error -->'."\n".
                                     '</div>'."\n".'</div>'."\n");
-	$squelette->setElementTemplate( '<div class="groupebouton">{label}{element}</div>'."\n", 'groupe_boutons');
+	$squelette->setElementTemplate( '<div class="form-actions">{label}{element}</div>'."\n", 'groupe_boutons');
  	$squelette->setRequiredNoteTemplate("\n".'<div class="symbole_obligatoire">* {requiredNote}</div>'."\n");
  	
 	//traduction de champs requis
@@ -1443,29 +1443,28 @@ function baz_formulaire_des_listes($mode, $valeursliste = '') {
 		foreach($valeursliste as $id => $label) {
 			$i++;
 			$html_valeurs_listes .= 
-								'<li class="liste_ligne" id="row'.$i.'">'.
-								'<a href="#" title="D&eacute;placer l\'&eacute;l&eacute;me,t" class="handle"></a>'.
+								'<li class="liste_ligne input-prepend input-append" id="row'.$i.'">'.
+								'<span href="#" title="D&eacute;placer l\'&eacute;l&eacute;me,t" class="handle add-on"><i class="icon-move"></i></span>'.
 								'<input type="text" name="id['.$i.']" value="'.htmlspecialchars($id).'" class="input_liste_id" />'.
 								'<input type="text" name="label['.$i.']" value="'.htmlspecialchars($label).'" class="input_liste_label" />'.
 								'<input type="hidden" name="ancienid['.$i.']" value="'.htmlspecialchars($id).'" class="input_liste_id" />'.
 								'<input type="hidden" name="ancienlabel['.$i.']" value="'.htmlspecialchars($label).'" class="input_liste_label" />'.
-								'<a href="#" class="BAZ_lien_supprimer suppression_label_liste"></a>'.
+								'<a href="#" class="suppression_label_liste add-on"><i class="icon-trash"></i></a>'.
 								'</li>'."\n";
 		}
 	} else {
-		$html_valeurs_listes .= '<li class="liste_ligne" id="row1">'.
-								'<a href="#" title="D&eacute;placer l\'&eacute;l&eacute;me,t" class="handle"></a>'.
+		$html_valeurs_listes .= '<li class="liste_ligne input-prepend input-append" id="row1">'.
+								'<span href="#" title="D&eacute;placer l\'&eacute;l&eacute;me,t" class="handle add-on"><i class="icon-move"></i></span>'.
 								'<input type="text" name="id[1]" class="input_liste_id" />'.
 								'<input type="text" name="label[1]" class="input_liste_label" />'.
-								'<a href="#" class="BAZ_lien_supprimer suppression_label_liste"></a>'.
+								'<a href="#" class="suppression_label_liste add-on"><i class="icon-trash"></i></a>'.
 								'</li>'."\n";
 	}
 						
-	$html_valeurs_listes .= '</ul><a href="#" class="ajout_label_liste" title="'.BAZ_AJOUTER_LABEL_LISTE.'">'.BAZ_AJOUTER_LABEL_LISTE.'</a>'."\n".
-							'</div>'."\n".
-							'<div class="clear"></div>'."\n";
+	$html_valeurs_listes .= '</ul><a href="#" class="ajout_label_liste btn controls" title="'.BAZ_AJOUTER_LABEL_LISTE.'"><i class="icon-plus"></i>&nbsp;'.BAZ_AJOUTER_LABEL_LISTE.'</a>'."\n".
+							'</div>'."\n";
 	//on rajoute une variable globale pour mettre le javascript en plus à la fin
-	$GLOBALS['js'] = ((isset($GLOBALS['js'])) ? $GLOBALS['js'] : '').'<script src="tools/bazar/libs/jquery-ui-1.8.6.custom.min.js"></script>
+	$GLOBALS['js'] = ((isset($GLOBALS['js'])) ? $GLOBALS['js'] : '').'<script src="tools/bazar/libs/jquery-ui-1.8.21.custom.min.js"></script>
 							<script>
 							  $(document).ready(function() {
 							    $(".valeur_liste").sortable({
@@ -1484,9 +1483,9 @@ function baz_formulaire_des_listes($mode, $valeursliste = '') {
 	$formtemplate->addElement('html', $html_valeurs_listes);
 	// Nettoyage de l'url avant les return
 	$GLOBALS['_BAZAR_']['url']->removeQueryString(BAZ_VARIABLE_ACTION);
- 	$buttons[] = &HTML_QuickForm::createElement('link', 'annuler', BAZ_ANNULER, str_replace("&amp;", "&", $GLOBALS['_BAZAR_']['url']->getURL()), BAZ_ANNULER, array('class' => 'btn btn-danger bouton_annuler'));
 	$buttons[] = &HTML_QuickForm::createElement('submit', 'valider', BAZ_VALIDER, array('class' => 'btn btn-success bouton_sauver'));
-	$formtemplate->addGroup($buttons, 'groupe_boutons', null, '&nbsp;', 0);
+ 	$buttons[] = &HTML_QuickForm::createElement('link', 'annuler', BAZ_ANNULER, str_replace("&amp;", "&", $GLOBALS['_BAZAR_']['url']->getURL()), BAZ_ANNULER, array('class' => 'btn btn-danger bouton_annuler'));	
+	$formtemplate->addGroup($buttons, 'groupe_boutons', null, '', 0);
 	return $formtemplate;
 }
 
@@ -1746,11 +1745,9 @@ function baz_gestion_listes() {
 		if ($liste!='') $res .= '<ul class="BAZ_liste">'."\n".$liste.'</ul>'."\n";
 
 		//ajout du lien pour creer un nouveau formulaire
-		if (baz_a_le_droit('saisie_liste')) {
-			$lien_formulaire=clone($GLOBALS['_BAZAR_']['url']);
-			$lien_formulaire->addQueryString('action_listes', 'new');
-			$res .= '<a class="BAZ_lien_nouveau" href="'.str_replace('&','&amp;',$lien_formulaire->getURL()).'">'.BAZ_NOUVELLE_LISTE.'</a>'."\n";
-		}
+		$lien_formulaire=clone($GLOBALS['_BAZAR_']['url']);
+		$lien_formulaire->addQueryString('action_listes', 'new');
+		$res .= '<a class="btn btn-primary" href="'.str_replace('&','&amp;',$lien_formulaire->getURL()).'"><i class="icon-plus icon-white"></i>&nbsp;'.BAZ_NOUVELLE_LISTE.'</a>'."\n";
 
 	}
 	return $res;
