@@ -1411,82 +1411,56 @@ function baz_valeurs_formulaire($idformulaire) {
 *   @return  Object    le code HTML
 */
 function baz_formulaire_des_listes($mode, $valeursliste = '') {
-	$GLOBALS['_BAZAR_']['url']->addQueryString('action_listes', $mode);
-	
-	//contruction du squelette du formulaire
-	$formtemplate = new HTML_QuickForm('formulaire', 'post', preg_replace ('/&amp;/', '&', $GLOBALS['_BAZAR_']['url']->getURL()) );
-	$GLOBALS['_BAZAR_']['url']->removeQueryString('action_listes');
-	$squelette =& $formtemplate->defaultRenderer();
-	$squelette->setFormTemplate("\n".'<form {attributes} class="form-horizontal">'."\n".'{content}'."\n".'</form>'."\n");
-    $squelette->setElementTemplate( '<div class="control-group">'."\n".
-									'<div class="control-label">'."\n".'{label}'.
-    		                        '<!-- BEGIN required --><span class="symbole_obligatoire">&nbsp;*</span><!-- END required -->'."\n".
-    								' </div>'."\n".'<div class="controls"> '."\n".'{element}'."\n".
-                                    '<!-- BEGIN error --><span class="erreur">{error}</span><!-- END error -->'."\n".
-                                    '</div>'."\n".'</div>'."\n");
-	$squelette->setElementTemplate( '<div class="form-actions">{label}{element}</div>'."\n", 'groupe_boutons');
- 	$squelette->setRequiredNoteTemplate("\n".'<div class="symbole_obligatoire">* {requiredNote}</div>'."\n");
- 	
-	//traduction de champs requis
-	$formtemplate->setRequiredNote(BAZ_CHAMPS_REQUIS) ;
-	$formtemplate->setJsWarnings(BAZ_ERREUR_SAISIE,BAZ_VEUILLEZ_CORRIGER);
-	
+
 	//champs du formulaire
-	if (isset($_GET['idliste'])) $formtemplate->addElement('hidden', 'NomWiki', $_GET['idliste']);
-	$formtemplate->addElement('text', 'titre_liste', BAZ_NOM_LISTE, array('class' => 'input_texte'));
-	$formtemplate->addRule('titre_liste', BAZ_CHAMPS_REQUIS.' : '.BAZ_NOM_LISTE, 'required', '', 'client');
+	if (isset($_GET['idliste'])) {
+		$tab_formulaire['NomWiki'] = $_GET['idliste'];
+	}
+
 	$html_valeurs_listes =  '<div class="control-group">'."\n".
-							'<div class="control-label">'.BAZ_VALEURS_LISTE.'</div>'."\n".
-							'<ul class="valeur_liste controls">'."\n";
+						'<label class="control-label">'.BAZ_VALEURS_LISTE.'</label>'."\n".
+						'<ul class="valeur_liste controls">'."\n";
 	if (is_array($valeursliste)) {
+		$tab_formulaire['titre_liste'] = $valeursliste['titre_liste'];
+		$elements = $valeursliste['label'];
 		$i = 0;
-		foreach($valeursliste as $id => $label) {
+		foreach($elements as $id => $label) {
 			$i++;
-			$html_valeurs_listes .= 
-								'<li class="liste_ligne input-prepend input-append" id="row'.$i.'">'.
-								'<span href="#" title="D&eacute;placer l\'&eacute;l&eacute;me,t" class="handle add-on"><i class="icon-move"></i></span>'.
-								'<input type="text" name="id['.$i.']" value="'.htmlspecialchars($id).'" class="input_liste_id" />'.
-								'<input type="text" name="label['.$i.']" value="'.htmlspecialchars($label).'" class="input_liste_label" />'.
-								'<input type="hidden" name="ancienid['.$i.']" value="'.htmlspecialchars($id).'" class="input_liste_id" />'.
-								'<input type="hidden" name="ancienlabel['.$i.']" value="'.htmlspecialchars($label).'" class="input_liste_label" />'.
-								'<a href="#" class="suppression_label_liste add-on"><i class="icon-trash"></i></a>'.
-								'</li>'."\n";
+			$html_valeurs_listes .=
+				'<li class="liste_ligne input-prepend input-append" id="row'.$i.'">'.
+				'<a title="'.BAZ_DEPLACER_L_ELEMENT.'" class="handle-listitems add-on"><i class="icon-move"></i></a>'.
+				'<input required type="text" placeholder="'.BAZ_KEY.'" name="id['.$i.']" value="'.htmlspecialchars($id).'" class="input-mini" />'.
+				'<input required type="text" placeholder="'.BAZ_TEXT.'" name="label['.$i.']" value="'.htmlspecialchars($label).'" />'.
+				'<input type="hidden" name="ancienid['.$i.']" value="'.htmlspecialchars($id).'" />'.
+				'<input type="hidden" name="ancienlabel['.$i.']" value="'.htmlspecialchars($label).'" />'.
+				'<a class="add-on suppression_label_liste"><i class="icon-trash"></i></a>'.
+				'</li>'."\n";
 		}
 	} else {
 		$html_valeurs_listes .= '<li class="liste_ligne input-prepend input-append" id="row1">'.
-								'<span href="#" title="D&eacute;placer l\'&eacute;l&eacute;me,t" class="handle add-on"><i class="icon-move"></i></span>'.
-								'<input type="text" name="id[1]" class="input_liste_id" />'.
-								'<input type="text" name="label[1]" class="input_liste_label" />'.
-								'<a href="#" class="suppression_label_liste add-on"><i class="icon-trash"></i></a>'.
+								'<a title="'.BAZ_DEPLACER_L_ELEMENT.'" class="handle-listitems add-on"><i class="icon-move"></i></a>'.
+								'<input required type="text" placeholder="'.BAZ_KEY.'" name="id[1]" class="input-mini" />'.
+								'<input required type="text" placeholder="'.BAZ_TEXT.'" name="label[1]" />'.
+								'<a class="add-on suppression_label_liste"><i class="icon-trash"></i></a>'.
 								'</li>'."\n";
 	}
-						
-	$html_valeurs_listes .= '</ul><a href="#" class="ajout_label_liste btn controls" title="'.BAZ_AJOUTER_LABEL_LISTE.'"><i class="icon-plus"></i>&nbsp;'.BAZ_AJOUTER_LABEL_LISTE.'</a>'."\n".
-							'</div>'."\n";
-	//on rajoute une variable globale pour mettre le javascript en plus à la fin
+
+	$html_valeurs_listes .= '</ul>'."\n".
+							'<a class="controls btn btn-primary ajout_label_liste" title="'.BAZ_AJOUTER_LABEL_LISTE.'"><i class="icon-plus icon-white"></i>&nbsp;'.BAZ_AJOUTER_LABEL_LISTE.'</a>'."\n".'</div>'."\n";
+							
+	//on rajoute une variable globale pour mettre le javascript en plus a la fin
 	$GLOBALS['js'] = ((isset($GLOBALS['js'])) ? $GLOBALS['js'] : '').'<script src="tools/bazar/libs/jquery-ui-1.8.21.custom.min.js"></script>
-							<script>
-							  $(document).ready(function() {
-							    $(".valeur_liste").sortable({
-							      handle : \'.handle\',
-							      update : function () {
-									$("#formulaire .valeur_liste input.input_liste_label[name^=\'label\']").each(function(i) {
-										$(this).attr(\'name\', \'label[\'+(i+1)+\']\').
-										prev(\'input.input_liste_id\').attr(\'name\', \'id[\'+(i+1)+\']\').
-										parent(\'.liste_ligne\').attr(\'id\', \'row\'+(i+1)).
-										find("input:hidden").attr(\'name\', \'ancienlabel[\'+(i+1)+\']\');
-									});
-							      }
-							    });
-							});
-							</script>'."\n";
-	$formtemplate->addElement('html', $html_valeurs_listes);
-	// Nettoyage de l'url avant les return
-	$GLOBALS['_BAZAR_']['url']->removeQueryString(BAZ_VARIABLE_ACTION);
-	$buttons[] = &HTML_QuickForm::createElement('submit', 'valider', BAZ_VALIDER, array('class' => 'btn btn-success bouton_sauver'));
- 	$buttons[] = &HTML_QuickForm::createElement('link', 'annuler', BAZ_ANNULER, str_replace("&amp;", "&", $GLOBALS['_BAZAR_']['url']->getURL()), BAZ_ANNULER, array('class' => 'btn btn-danger bouton_annuler'));	
-	$formtemplate->addGroup($buttons, 'groupe_boutons', null, '', 0);
-	return $formtemplate;
+	<script src="tools/bazar/libs/bazar.edit_lists.js"></script>'."\n";
+	$tab_formulaire['valeurs_listes'] = $html_valeurs_listes;
+	
+	$tab_formulaire['form_link'] = $GLOBALS['wiki']->href('', $GLOBALS['wiki']->GetPageTag(),
+			BAZ_VARIABLE_VOIR.'='.BAZ_VOIR_LISTES.'&action='.$mode.(isset($_GET['idliste']) ? '&idliste='.$_GET['idliste'] : ''));
+	$tab_formulaire['cancel_link'] = $GLOBALS['wiki']->href('', $GLOBALS['wiki']->GetPageTag(), BAZ_VARIABLE_VOIR.'='.BAZ_VOIR_LISTES);
+
+	include_once('tools/bazar/libs/squelettephp.class.php');
+	$formlistes = new SquelettePhp('tools/bazar/presentation/templates/form_edit_lists.tpl.html');
+	$formlistes->set($tab_formulaire);
+	return $formlistes->analyser();
 }
 
 
@@ -1614,20 +1588,167 @@ function baz_gestion_formulaire() {
 *   @return  string    le code HTML
 */
 function baz_gestion_listes() {
-	$res= '<h2>'.BAZ_MODIFIER_LISTES.'</h2>'."\n";
 
+	$res = '';
+	
+	//titre
+	$res .= '<h2 class="baz_title titre_gestion_liste">'.BAZ_GESTION_LISTES.'</h2>'."\n";
+
+		// affichage de la liste des templates a modifier ou supprimer (dans le cas ou il n'y a pas d'action selectionnee)
+	if (!isset($_GET['action'])) {
+		//requete pour obtenir l'id et le label des types d'annonces
+		$requete = 'SELECT resource FROM '.$GLOBALS['wiki']->config['table_prefix'].'triples WHERE property="http://outils-reseaux.org/_vocabulary/type" AND value="liste" ORDER BY resource';
+		$resultat = $GLOBALS['wiki']->LoadAll($requete) ;
+
+		$liste = array();
+		foreach ($resultat as $ligne) {
+			$valeursliste = baz_valeurs_liste($ligne['resource']);
+
+			$liste[$valeursliste['titre_liste']] = '<li>';
+			
+			if ($GLOBALS['wiki']->HasAccess('write', $ligne['resource']))  {
+				$liste[$valeursliste['titre_liste']] .= '<a class="BAZ_lien_supprimer" href="'.$GLOBALS['wiki']->href('',$GLOBALS['wiki']->GetPageTag(), 
+						BAZ_VARIABLE_VOIR.'='.BAZ_VOIR_LISTES.'&amp;'.BAZ_VARIABLE_ACTION.'='.BAZ_ACTION_SUPPRIMER_LISTE.'&amp;idliste='.$ligne['resource']).'"  onclick="javascript:return confirm(\''.BAZ_CONFIRM_SUPPRIMER_LISTE.' ?\');"></a>'."\n";
+			}
+
+			$elements_liste = '';
+			foreach ($valeursliste['label'] as $val) {
+				$elements_liste .= '<option>'.$val.'</option>';
+			}
+			if ($elements_liste != '') {
+				$affichage_liste = '&nbsp;- '.BAZ_VALEURS_LISTE.' :&nbsp;<select id="liste_'.$ligne['resource'].'">'."\n".
+				'<option>'.BAZ_CHOISIR.'</option>'."\n".
+				$elements_liste."\n".
+				'</select>'."\n";
+			} else {
+				$affichage_liste = '';
+			}
+			if ($GLOBALS['wiki']->HasAccess('write', $ligne['resource']))  {
+				$liste[$valeursliste['titre_liste']] .= '<a class="BAZ_lien_modifier" href="'.$GLOBALS['wiki']->href('', $GLOBALS['wiki']->GetPageTag(),
+						BAZ_VARIABLE_VOIR.'='.BAZ_VOIR_LISTES.'&amp;'.BAZ_VARIABLE_ACTION.'='.BAZ_ACTION_MODIFIER_LISTE.'&amp;idliste='.$ligne['resource']).'">'.
+						$valeursliste['titre_liste'].'</a>'.$affichage_liste."\n";
+			} else {
+				$liste[$valeursliste['titre_liste']] .= $valeursliste['titre_liste'].$affichage_liste."\n";
+			}
+
+			$liste[$valeursliste['titre_liste']] .= '</li>'."\n";
+		}
+
+		if (count($liste)>0) {
+			ksort($liste);
+			$res .= '<ul class="BAZ_liste">'."\n";
+			foreach($liste as $listederoulante) {
+				$res .= $listederoulante;
+			}
+			$res .= '</ul>'."\n";
+		} else {
+			$res .= '<div class="alert alert-info">'."\n".'<a data-dismiss="alert" class="close" type="button">&times;</a>'.BAZ_INTRO_AJOUT_LISTE.'</div>'."\n";
+		}	
+
+		//ajout du lien pour creer une nouvelle liste
+		$lien_formulaire = $GLOBALS['wiki']->href('', $GLOBALS['wiki']->GetPageTag(), BAZ_VARIABLE_VOIR.'='.BAZ_VOIR_LISTES.'&amp;'.BAZ_VARIABLE_ACTION.'='.BAZ_ACTION_NOUVELLE_LISTE);
+		$res .= '<a href="'.$lien_formulaire.'" class="btn btn-primary"><i class="icon-plus icon-white"></i>&nbsp;'.BAZ_NOUVELLE_LISTE.'</a>'."\n";
+	}
+
+	// il y a une liste a modifier
+	elseif ($_GET['action']==BAZ_ACTION_MODIFIER_LISTE) {
+		//recuperation des informations de la liste
+		$valeursliste = baz_valeurs_liste($_GET['idliste']);
+		$res .= baz_formulaire_des_listes(BAZ_ACTION_MODIFIER_LISTE_V, $valeursliste);
+	}
+	
+	//il y a une nouvelle liste a saisir
+	elseif ($_GET['action']==BAZ_ACTION_NOUVELLE_LISTE) {
+		$res .= baz_formulaire_des_listes(BAZ_ACTION_NOUVELLE_LISTE_V);
+	}
+	
+	//il y a des donnees pour ajouter une nouvelle liste
+	elseif ($_GET['action']==BAZ_ACTION_NOUVELLE_LISTE_V) {
+		unset($_POST["valider"]);
+		$nomwikiliste = genere_nom_wiki('Liste '.$_POST['titre_liste']);
+		
+		//on supprime les valeurs vides et on encode en utf-8 pour reussir a encoder en json
+		$i = 1;
+		$valeur["label"] = array();
+		foreach ($_POST["label"] as $label) {
+			if (($label!=NULL || $label!='') && ($_POST["id"][$i]!=NULL || $_POST["id"][$i]!='')) {
+				$valeur["label"][$_POST["id"][$i]] = $label;
+				$i++;
+			}
+		}
+		$valeur["label"] = array_map("utf8_encode", $valeur["label"]);
+		$valeur["titre_liste"] = utf8_encode($_POST["titre_liste"]);
+
+		//on sauve les valeurs d'une liste dans une PageWiki, pour garder l'historique
+		$GLOBALS["wiki"]->SavePage($nomwikiliste, json_encode($valeur));
+		//on cree un triple pour specifier que la PageWiki creee est une liste
+		$GLOBALS["wiki"]->InsertTriple($nomwikiliste, 'http://outils-reseaux.org/_vocabulary/type', 'liste', '', '');
+		
+		//on redirige vers la page contenant toutes les listes, et on confirme par message la bonne saisie de la liste
+		$GLOBALS["wiki"]->SetMessage(BAZ_NOUVELLE_LISTE_ENREGISTREE);
+		$GLOBALS["wiki"]->Redirect($GLOBALS["wiki"]->href('',$GLOBALS['wiki']->GetPageTag(), BAZ_VARIABLE_VOIR.'='.BAZ_VOIR_LISTES, false));
+	}
+	
+	//il y a des donnees pour modifier une liste
+	elseif ($_GET['action']==BAZ_ACTION_MODIFIER_LISTE_V && $GLOBALS['wiki']->HasAccess('write', $_POST['NomWiki']) ) {
+		unset($_POST["valider"]);
+		//on supprime les valeurs vides et on encode en utf-8 pour reussir a encoder en json
+		$i = 1;
+		$valeur["label"] = array();
+		foreach ($_POST["label"] as $label) {
+			if (($label!=NULL || $label!='') && ($_POST["id"][$i]!=NULL || $_POST["id"][$i]!='')) {
+				$valeur["label"][$_POST["id"][$i]] = $label;
+				$i++;
+			}
+		}
+		$valeur["label"] = array_map("utf8_encode", $valeur["label"]);
+		$valeur["titre_liste"] = utf8_encode($_POST["titre_liste"]);
+
+		/* ----------------- TODO: gerer les suppressions de valeurs dans les fiches associees pour garantir l'integrite des donnees
+		//on verifie si les valeurs des listes ont changees afin de garder de l'integrite de la base des fiches
+		foreach ($_POST["ancienlabel"] as $key => $value) {
+			//si la valeur de la liste a ete changee, on repercute les changements pour les fiches contenant cette valeur
+			if ( isset($_POST["label"][$key]) && $value != $_POST["label"][$key] ) {
+				//TODO: fonction baz_modifier_metas_liste($_POST['NomWiki'], $value, $_POST['label'][$key]);
+			}
+		}
+
+		//on supprime les valeurs des listes supprimees des fiches possedants ces valeurs
+		foreach ($_POST["a_effacer_ancienlabel"] as $key => $value) {
+			//TODO: fonction baz_effacer_metas_liste($_POST['NomWiki'], $value);
+		}
+		--------------------- */
+
+		//on sauve les valeurs d'une liste dans une PageWiki, pour garder l'historique
+		$GLOBALS["wiki"]->SavePage($_POST['NomWiki'], json_encode($valeur));
+
+		//on redirige vers la page contenant toutes les listes, et on confirme par message la bonne modification de la liste
+		$GLOBALS["wiki"]->SetMessage(BAZ_LISTE_MODIFIEE);
+		$GLOBALS["wiki"]->Redirect($GLOBALS["wiki"]->href('',$GLOBALS['wiki']->GetPageTag(), BAZ_VARIABLE_VOIR.'='.BAZ_VOIR_LISTES, false));
+	}
+	
+	// il y a un id de liste a supprimer
+	elseif ($_GET['action']==BAZ_ACTION_SUPPRIMER_LISTE && $GLOBALS['wiki']->HasAccess('write', $_GET['idliste'])) {
+		$GLOBALS["wiki"]->DeleteOrphanedPage($_GET['idliste']);
+		$sql = 'DELETE FROM ' . $GLOBALS['wiki']->config["table_prefix"] . 'triples '
+			. 'WHERE resource = "' . addslashes($_GET['idliste']) . '" ';
+		$GLOBALS["wiki"]->Query($sql);
+
+		//on redirige vers la page contenant toutes les listes, et on confirme par message la bonne suppression de la liste
+		$GLOBALS["wiki"]->SetMessage(BAZ_LISTES_SUPPRIMEES);
+		$GLOBALS["wiki"]->Redirect($GLOBALS["wiki"]->href('',$GLOBALS['wiki']->GetPageTag(), BAZ_VARIABLE_VOIR.'='.BAZ_VOIR_LISTES, false));
+	}
+
+/*
 	// il y a un formulaire a modifier
 	if (isset($_GET['action_listes']) && $_GET['action_listes']=='modif') {
 		//recuperation des informations de la liste
 		$valeursliste = baz_valeurs_liste($_GET['idliste']);
-		$formulaire = baz_formulaire_des_listes('modif_v', $valeursliste["label"]);		
-		$formulaire->setDefaults(array("titre_liste" => $valeursliste['titre_liste']));
-		$res .= $formulaire->toHTML();
+		$res .=  baz_formulaire_des_listes('modif_v', $valeursliste);		
 
 	//il y a une nouvelle liste a saisir
 	} elseif (isset($_GET['action_listes']) && $_GET['action_listes']=='new') {
-		$formulaire = baz_formulaire_des_listes('new_v');
-		$res .= $formulaire->toHTML();
+		$res .= baz_formulaire_des_listes('new_v');
 
 	//il y a des donnees pour ajouter une nouvelle liste
 	} elseif (isset($_GET['action_listes']) && $_GET['action_listes']=='new_v') {
@@ -1680,7 +1801,7 @@ function baz_gestion_listes() {
 		foreach ($_POST["a_effacer_ancienlabel"] as $key => $value) {
 			//TODO: fonction baz_effacer_metas_liste($_POST['NomWiki'], $value);
 		}
-		--------------------- */
+
 			
 		//on sauve les valeurs d'une liste dans une PageWiki, pour garder l'historique
 		$GLOBALS["wiki"]->SavePage($_POST['NomWiki'], json_encode($valeur));
@@ -1696,10 +1817,9 @@ function baz_gestion_listes() {
 		
 		$res .= '<div class="alert alert-success">'."\n".'<a data-dismiss="alert" class="close" type="button">&times;</a>'.BAZ_LISTES_SUPPRIMEES.'</div>'."\n";
 	}
-
+   /*
 	// affichage de la liste des templates à modifier ou supprimer (on l'affiche dans tous les cas, sauf cas de modif de formulaire)
 	if (!isset($_GET['action_listes']) || ($_GET['action_listes']!='modif' && $_GET['action_listes']!='new') ) {
-		$res .= '<div class="alert alert-info">'."\n".'<a data-dismiss="alert" class="close" type="button">&times;</a>'.BAZ_INTRO_MODIFIER_LISTE.'</div>'."\n";
 
 		//requete pour obtenir l'id et le label des types d'annonces
 		$requete = 'SELECT resource FROM '.$GLOBALS['wiki']->config['table_prefix'].'triples WHERE property="http://outils-reseaux.org/_vocabulary/type" AND value="liste" ORDER BY resource';
@@ -1742,14 +1862,18 @@ function baz_gestion_listes() {
 
 			$liste .='</li>'."\n";
 		}
-		if ($liste!='') $res .= '<ul class="BAZ_liste">'."\n".$liste.'</ul>'."\n";
+		if ($liste!='') {
+			$res .= '<ul class="BAZ_liste">'."\n".$liste.'</ul>'."\n";
+		}
+		else {
+			$res .= '<div class="alert alert-info">'."\n".'<a data-dismiss="alert" class="close" type="button">&times;</a>'.BAZ_INTRO_AJOUT_LISTE.'</div>'."\n";
+		}
 
-		//ajout du lien pour creer un nouveau formulaire
-		$lien_formulaire=clone($GLOBALS['_BAZAR_']['url']);
-		$lien_formulaire->addQueryString('action_listes', 'new');
-		$res .= '<a class="btn btn-primary" href="'.str_replace('&','&amp;',$lien_formulaire->getURL()).'"><i class="icon-plus icon-white"></i>&nbsp;'.BAZ_NOUVELLE_LISTE.'</a>'."\n";
+		// ajout du lien pour creer une nouvelle liste
+		$lien_formulaire = $GLOBALS['wiki']->href('', $GLOBALS['wiki']->GetPageTag(), BAZ_VARIABLE_VOIR.'='.BAZ_VOIR_LISTES.'&amp;'.BAZ_VARIABLE_ACTION.'='.BAZ_ACTION_NOUVELLE_LISTE);
+		$res .= '<a href="'.$lien_formulaire.'" class="btn btn-primary"><i class="icon-plus icon-white"></i>&nbsp;'.BAZ_NOUVELLE_LISTE.'</a>'."\n";
 
-	}
+	}*/
 	return $res;
 }
 
@@ -2683,7 +2807,7 @@ function baz_afficher_liste_resultat($tableau_fiches, $info_nb = true) {
 	}
 	include_once('tools/bazar/libs/squelettephp.class.php');
 	$template = (isset($_GET['template']) ? $_GET['template'] : BAZ_TEMPLATE_LISTE_DEFAUT);
-	$squelcomment = new SquelettePhp('tools/bazar/presentation/squelettes/'.$template);
+	$squelcomment = new SquelettePhp('tools/bazar/presentation/templates/'.$template);
 	$squelcomment->set($fiches);
 	$res .= $squelcomment->analyser();
 	

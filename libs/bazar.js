@@ -4,33 +4,6 @@
  * javascript and query tools for Bazar
  * 
  * */
-
-function addFormField() {
-	var nb = $("#formulaire .valeur_liste input.input_liste_label[name^='label']").length + 1;
-	$("#formulaire .valeur_liste").append('<li class="liste_ligne" id="row'+nb+'">'+
-			'<a href="#" title="D&eacute;placer l\'&eacute;l&eacute;me,t" class="handle"></a>'+
-			'<input type="text" name="id['+nb+']" class="input_liste_id" />' +
-			'<input type="text" name="label['+nb+']" class="input_liste_label" />' +
-			'<a href="#" class="BAZ_lien_supprimer suppression_label_liste"></a>'+
-			'</li>');
-	$("#formulaire input.input_liste_id[name='id["+nb+"]']").focus();
-}
-
-function removeFormField(id) {
-	var nb = $("#formulaire .valeur_liste input.input_liste_label[name^='label']").length;
-	if (nb > 1) {
-		var nom = 'a_effacer_' + $(id).find("input:hidden").attr('name');
-		$(id).find("input:hidden").attr('name', nom).appendTo("#formulaire");
-		$(id).remove();
-		$("#formulaire .valeur_liste input.input_liste_label[name^='label']").each(function(i) {
-			$(this).attr('name', 'label['+(i+1)+']').
-			parent('.liste_ligne').attr('id', 'row'+(i+1)).
-			find("input:hidden").attr('name', 'ancienlabel['+(i+1)+']');
-		});
-	} else {
-		alert('Le dernier élément ne peut être supprimé.');
-	}
-}
  
  
 $(document).ready(function () {
@@ -375,10 +348,6 @@ $(document).ready(function () {
 		}
 	});
 
-	
-	//pour la gestion des listes, on peut rajouter dynamiquement des champs
-	$('.ajout_label_liste').live('click', function() {addFormField();return false;});
-	$('.suppression_label_liste').live('click', function() {removeFormField('#'+$(this).parent('.liste_ligne').attr('id'));return false;});
 
 	$('#formulaire').removeAttr('onsubmit');
 

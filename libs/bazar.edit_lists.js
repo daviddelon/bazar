@@ -16,7 +16,6 @@
  * | License along with this library; if not, write to the Free Software                                  |
  * | Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA                            |
  * +------------------------------------------------------------------------------------------------------+
- * CVS : $Id: bazar.edit_lists.js,v 1.10 2011/10/12 14:19:03 mrflos Exp $
  *
  * javascript for editing lists
  *
@@ -30,7 +29,7 @@
 $(document).ready(function () {
 	// on rend les listes déplacables
 	$(".valeur_liste").sortable({
-		handle : '.handle_liste',
+		handle : '.handle-listitems',
 		update : function () {
 			$("#bazar_form_lists .valeur_liste input[name^='label']").each(function(i) {
 				$(this).attr('name', 'label['+(i+1)+']').
@@ -42,31 +41,33 @@ $(document).ready(function () {
 	});
 
 	// pour la gestion des listes, on peut rajouter dynamiquement des champs
-	$('.ajout_label_liste').live('click', function() {	
+	$('.ajout_label_liste').on('click', function() {	
 		var nb = $("#bazar_form_lists .valeur_liste input[name^='label']").length + 1;	
-		$("#bazar_form_lists .valeur_liste").append('<li class="liste_ligne" id="row'+nb+'">'+
-				'<a href="#" title="D&eacute;placer l\'&eacute;l&eacute;ment" class="handle_liste"></a>'+
-				'<input required type="text" placeholder="Clé" name="id['+nb+']" class="span1" />' +
-				'<input required type="text" placeholder="Valeur" name="label['+nb+']" class="span3" />' +
-				'<a href="#" class="BAZ_lien_supprimer suppression_label_liste"></a>'+
-				'</li>');
-		//$("#bazarform input.input_liste_id[name='id["+nb+"]']").focus();	
+		$("#bazar_form_lists .valeur_liste").append('<li id="row'+nb+'" class="liste_ligne input-prepend input-append">'+
+			'<a title="D&eacute;placer l\'&eacute;l&eacute;ment" class="handle-listitems add-on"><i class="icon-move"></i></a>'+
+			'<input required type="text" placeholder="Cl&eacute;" name="id['+nb+']" class="input-mini" />' +
+			'<input required type="text" placeholder="Texte" name="label['+nb+']" />' +
+			'<a class="add-on suppression_label_liste"><i class="icon-trash"></i></a>'+
+			'</li>');
+		$("#bazar_form_lists input[name='id["+nb+"]']").focus();	
 		return false;
 	});
 	
 	// on supprime un champs pour une liste
-	$('.suppression_label_liste').live('click', function() {
+	$('#bazar_form_lists ul.valeur_liste').on('click', '.suppression_label_liste', function() {
 		var id = '#'+$(this).parent('.liste_ligne').attr('id');
 		var nb = $("#bazar_form_lists .valeur_liste input[name^='label']").length;
 		if (nb > 1) {
-			var nom = 'a_effacer_' + $(id).find("input:hidden").attr('name');
-			$(id).find("input:hidden").attr('name', nom).appendTo("#bazar_form_lists");
-			$(id).remove();
-			$("#bazar_form_lists .valeur_liste input[name^='label']").each(function(i) {
-				$(this).attr('name', 'label['+(i+1)+']').
-				parent('.liste_ligne').attr('id', 'row'+(i+1)).
-				find("input:hidden").attr('name', 'ancienlabel['+(i+1)+']');
-			});
+			if (confirm('Confirmez-vous la suppression de cette valeur dans la liste ?')) {
+				var nom = 'a_effacer_' + $(id).find("input:hidden").attr('name');
+				$(id).find("input:hidden").attr('name', nom).appendTo("#bazar_form_lists");
+				$(id).remove();
+				$("#bazar_form_lists .valeur_liste input[name^='label']").each(function(i) {
+					$(this).attr('name', 'label['+(i+1)+']').
+					parent('.liste_ligne').attr('id', 'row'+(i+1)).
+					find("input:hidden").attr('name', 'ancienlabel['+(i+1)+']');
+				});
+			}
 		} else {
 			alert('Le dernier élément ne peut être supprimé.');
 		}
@@ -74,20 +75,7 @@ $(document).ready(function () {
 	});
 	
 	// initialise le validateur
-	$('.bouton_save_list').click(function() {
-		var validateur = $("#bazar_form_lists").validator({
-			lang: 'fr',
-			offset: [-12, 0],
-			position: 'center right',
-			message: '<div></div>',
-			speed: 0,
-			messageClass: 'error form-message'
-		});	
-		if (validateur.data("validator").checkValidity() == false) {
-			//On zoome sur les champs obligatoires
-			$('html, body').animate({
-				scrollTop: $("div.form-message:first").offset().top -50
-			}, 400);
-		}
+	$('.btn-save-list').click(function() {
+
 	});
 });

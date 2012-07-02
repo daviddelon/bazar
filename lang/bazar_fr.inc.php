@@ -41,9 +41,9 @@ define ('BAZ_VALEURS_LISTE', 'Valeurs de la liste');
 define ('BAZ_AJOUTER_LABEL_LISTE', 'Ajouter une nouvelle valeur &agrave; la liste');
 define ('BAZ_AJOUTER_CHAMPS_FORMULAIRE', 'Ajouter un nouveau champs au formulaire');
 define ('BAZ_MODIFIER_FORMULAIRES', 'Gestion des formulaires');
-define ('BAZ_MODIFIER_LISTES', 'Gestion des listes');
+define ('BAZ_GESTION_LISTES', 'Gestion des listes');
 define ('BAZ_INTRO_MODIFIER_FORMULAIRE', 'Pour &eacute;diter un formulaire, cliquez sur son nom ou sur l\'icone avec le crayon.<br />Pour supprimer un formulaire, cliquez sur l\'icone de la corbeille.<br /> Pour cr&eacute;er un nouveau formulaire, cliquez sur le lien en dessous de cette liste.');
-define ('BAZ_INTRO_MODIFIER_LISTE',  'Pour &eacute;diter une liste, cliquez sur son nom ou sur l\'icone avec le crayon.<br />Pour supprimer une liste, cliquez sur l\'icone de la corbeille.<br /> Pour cr&eacute;er une nouvelle liste, cliquez sur le lien avec un signe plus en bas de page.');
+define ('BAZ_INTRO_AJOUT_LISTE',  '<strong>Pas de liste cr&eacute;&eacute;e pour l\'instant.</strong><br />Vous pouvez cr&eacute;er une nouvelle liste manuellement (cliquez sur le bouton avec un signe plus),<br />ou importer les listes d\'un YesWiki existant (comme http://yeswiki.net).');
 define ('BAZ_CONFIRM_SUPPRIMER_FORMULAIRE', 'Attention! Toutes les donn&eacute;es enregistr&eacute;es seront perdues.. Etes-vous s&ucirc;rs de vouloir supprimer ce type de formulaire et toutes ses fiches associ&eacute;es');
 define ('BAZ_CONFIRM_SUPPRIMER_LISTE', 'Attention! Toutes les donn&eacute;es enregistr&eacute;es seront perdues.. Etes-vous s&ucirc;rs de vouloir supprimer cette liste et toutes ses donn&eacute;es associ&eacute;es');
 define ('BAZ_NOUVEAU_FORMULAIRE', 'Saisir un nouveau formulaire');
@@ -161,6 +161,11 @@ define ('BAZ_PAS_DE_FICHES_UTILISATEUR_TROUVEE', 'Pas de fiche utilisateur assoc
 define ('IMAGE_VALIDE_REQUIS','Ajouter une image &agrave; cette fiche est obligatoire');
 define ('BAZ_A_ETE_EFFACE', ' a été effacé.');
 define ('BAZ_PAS_DE_FICHES_SAUVEES_EN_VOTRE_NOM', 'Vous n\'avez aucune fiche enregistr&eacute;e pour l\'instant.');
+define ('BAZ_DEPLACER_L_ELEMENT','D&eacute;placer l\'&eacute;l&eacute;ment');
+define ('BAZ_LIST_NAME', 'Nom de la liste');
+define ('BAZ_SAVE', 'Enregistrer');
+define ('BAZ_KEY', 'Cl&eacute;');
+define ('BAZ_TEXT', 'Texte');
 
 //================ Calendrier Bazar =======================================
 define ('BAZ_AFFICHE_TITRES_COMPLETS', 'Afficher les titres complets des &eacute;v&eacute;nements');

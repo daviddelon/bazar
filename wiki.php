@@ -190,16 +190,22 @@ define ('BAZ_ACTION_NOUVEAU', 'saisir_fiche') ;
 define ('BAZ_ACTION_NOUVEAU_V', 'sauver_fiche') ;  // Creation apres validation
 define ('BAZ_ACTION_MODIFIER', 'modif_fiche') ;
 define ('BAZ_ACTION_MODIFIER_V', 'modif_sauver_fiche') ; // Modification apres validation
+define ('BAZ_ACTION_NOUVELLE_LISTE', 'saisir_liste') ;
+define ('BAZ_ACTION_NOUVELLE_LISTE_V', 'sauver_liste') ;  // Creation apres validation
+define ('BAZ_ACTION_MODIFIER_LISTE', 'modif_liste') ;
+define ('BAZ_ACTION_MODIFIER_LISTE_V', 'modif_sauver_liste') ; // Modification apres validation
+define ('BAZ_ACTION_SUPPRIMER_LISTE', 'supprimer_liste') ;
 define ('BAZ_ACTION_SUPPRESSION', 'supprimer') ;
 define ('BAZ_ACTION_PUBLIER', 'publier') ; // Valider la fiche
 define ('BAZ_ACTION_PAS_PUBLIER', 'pas_publier') ; // Invalider la fiche
 define ('BAZ_LISTE_RSS', 'rss'); // Tous les flux  depend de s'abonner
 define ('BAZ_VOIR_FLUX_RSS', 'affiche_rss'); // Un flux
+define ('BAZ_OBTENIR_TOUTES_LES_LISTES_ET_TYPES_DE_FICHES', 'listes_et_fiches');
 
 
 // Constante pour l'envoi automatique de mail aux admins
 define ('BAZ_ENVOI_MAIL_ADMIN', false);
-define ('BAZ_ADRESSE_MAIL_ADMIN', 'admin@ecorem.fr');
+define ('BAZ_ADRESSE_MAIL_ADMIN', 'admin@domaine.fr');
 
 
 //==================================== LES FLUX RSS==================================

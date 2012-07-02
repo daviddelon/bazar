@@ -12,8 +12,8 @@ display:block;
 text-align:right;
 }
 
-.symbole_obligatoire {
-color:red;
+.required_symbol {
+color:#E9322D;
 }
 
 .BAZ_liste {
@@ -60,7 +60,7 @@ padding:0;
 
 .boite_recherche {
 display:inline;
-background:#FFF url(images/recherche.png) no-repeat scroll 1px center;
+background:#FFF url(../images/recherche.png) no-repeat scroll 1px center;
 border:1px solid #CCC;
 font-size:13px;
 margin:0 10px 0 0;
@@ -92,7 +92,7 @@ padding:3px;
 margin:10px 0;
 }
 .BAZ_info {
-background:#FBF9EE url(images/info.png) no-repeat 3px center;
+background:#FBF9EE url(../images/info.png) no-repeat 3px center;
 border:1px solid #FCEFA1;
 color:#444;
 font-size:0.9em;
@@ -103,7 +103,7 @@ padding:7px 7px 6px 36px;
 border-radius:4px;
 }
 .BAZ_error {
-background:#FEF1EC url(images/error.png) no-repeat 3px center;
+background:#FEF1EC url(../images/error.png) no-repeat 3px center;
 border:1px solid #CD0A0A;
 color:#CD0A0A;
 font-size:0.9em;
@@ -122,33 +122,33 @@ padding:0;
 }
 
 .BAZ_lien_valider {
-background:transparent url(images/valide.png) no-repeat center left;
+background:transparent url(../images/valide.png) no-repeat center left;
 padding: 2px 0 2px 18px;
 }
 
 .BAZ_lien_invalider {
-background:transparent url(images/invalide.png) no-repeat center left;
+background:transparent url(../images/invalide.png) no-repeat center left;
 padding: 2px 0 2px 18px;
 }
 
 .BAZ_lien_voir {
-background:transparent url(images/voir.png) no-repeat 4px center;
+background:transparent url(../images/voir.png) no-repeat 4px center;
 padding: 0 0 0 3px !important;
 }
 
 .BAZ_lien_modifier {
-background:transparent url(images/edit.png) no-repeat center left;
+background:transparent url(../images/edit.png) no-repeat center left;
 }
 
 .BAZ_lien_supprimer {
-background:transparent url(images/delete.gif) no-repeat center left;
+background:transparent url(../images/delete.gif) no-repeat center left;
 }
 
 .BAZ_liste li .BAZ_lien_supprimer,
 .BAZ_liste li .BAZ_lien_modifier {display:inline; padding-left:20px; height:20px}
 
 .BAZ_lien_nouveau, .ajout_fiche, .ajout_label_liste, .ajout_champs_formulaire {
-background:transparent url(images/add.png) no-repeat center left;
+background:transparent url(../images/add.png) no-repeat center left;
 border:0;
 font-weight:700;
 display:block;
@@ -171,7 +171,7 @@ display:none;
 }
 
 div.yeswiki-overlay div.close {
-background-image:url(images/overlay_close.png);
+background-image:url(../images/overlay_close.png);
 position:absolute;
 right:5px;
 top:5px;
@@ -427,7 +427,7 @@ cursor:pointer;
 
 #dynatooltip, #dynatooltipiframe {
 display:none;
-background:transparent url(images/white_arrow.png);
+background:transparent url(../images/white_arrow.png);
 font-size:11px;
 height:90px;
 width:180px;
@@ -699,7 +699,7 @@ a.active img {
 
 /* close button positioned on upper right corner */
 .yeswiki-overlay .close{
-	background-image:url(images/overlay_close.png);
+	background-image:url(../images/overlay_close.png);
 	position:absolute;
 	right:-15px;
 	top:-15px;
@@ -1088,7 +1088,7 @@ input[type="submit"].btn.btn-mini {
 }
 
 
-.bouton_sauver, .bouton_annuler {
+.bouton_sauver, .btn-save-list, .bouton_annuler {
 margin-right:10px;
 }
 
@@ -1119,7 +1119,7 @@ padding:3px;
 	margin:0 0 1px 0;
 	padding:5px 15px;
 	cursor:pointer;
-	background: #222 url(images/alert-overlay.png) repeat-x; 
+	background: #222 url(../images/alert-overlay.png) repeat-x; 
 	color: #fff; 
 	text-decoration: none;
 	-moz-border-radius: 5px; 
@@ -1147,18 +1147,14 @@ padding:3px;
 
 .BAZ_texte {display:inline;} 
 .titre_lien {display:block;font-size:1.4em;}
-.valeur_liste {}
+/*.valeur_liste {}
 .liste_ligne {}
 .input_liste_id {display:inline; margin:0 2px; width:40px;}
 .input_liste_label {display:inline; margin:0; width:250px;}
-ul.valeur_liste, ul.valeur_formulaire { padding:0; margin:0;}
+ul.valeur_liste, ul.valeur_formulaire { padding:0; margin:0;}*/
 ul.valeur_liste li, ul.valeur_formulaire li {list-style-type:none; padding:0; margin:3px 0;}
-.handle {
-cursor:move;
-/*background:url("images/arrow.png") no-repeat left center transparent;
-padding:2px 0 2px 18px;*/
-}
-
+.handle-listitems {cursor:move;}
+.suppression_label_liste {cursor:pointer;}
 /*.valeur_formulaire .handle {left:20px;position:absolute;}*/
 .valeur_formulaire .formulaire_ligne {background:#EAEAEA; border:1px solid #CCC; padding:5px 0;}
 #champs_formulaire {
@@ -1184,7 +1180,7 @@ padding:2px 0 2px 18px;*/
 
 .apple_overlay {display:none;}
 
-.link-csv-file {background:url(images/csv-file.png) no-repeat left center; display:block; font-size:20px; padding:5px 0 5px 35px; margin:10px 0;}
+.link-csv-file {background:url(../images/csv-file.png) no-repeat left center; display:block; font-size:20px; padding:5px 0 5px 35px; margin:10px 0;}
 
 /* For the details, see: http://flowplayer.org/tools/dateinput/index.html#skinning */
 
@@ -1227,13 +1223,13 @@ padding:2px 0 2px 18px;*/
 	display:block;
 	width:20px;
 	height:20px;
-	background:transparent url(images/prev.gif) no-repeat scroll center center;
+	background:transparent url(../images/prev.gif) no-repeat scroll center center;
 	float:left;
 	cursor:pointer;
 }
 
 #calnext {
-	background-image:url(images/next.gif);
+	background-image:url(../images/next.gif);
 	float:right;
 }
 
@@ -1328,7 +1324,7 @@ a.caldisabled {
 /*
 .error {
 z-index:10005;
-background:#FEF1EC url(images/error.png) no-repeat 3px center;
+background:#FEF1EC url(../images/error.png) no-repeat 3px center;
 border:1px solid #CD0A0A;
 color:#CD0A0A;
 font-size:0.9em;
