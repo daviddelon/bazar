@@ -21,24 +21,16 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
 // Vérification de sécurité
-if (!defined("WIKINI_VERSION"))
-{
-	die ("acc&egrave;s direct interdit");
+if (!defined("WIKINI_VERSION")) {
+    die ("acc&egrave;s direct interdit");
 }
 
-if ($this->HasAccess("read"))
-{
-	if (!$this->page)
-	{
-		return;
-	}
-	else
-	{
-		echo '<div class="page">'."\n".utf8_encode($this->Format($this->page["body"]))."\n".'</div>'."\n";
-	}
+if ($this->HasAccess("read")) {
+    if (!$this->page) {
+        return;
+    } else {
+        echo '<div class="page">'."\n".utf8_encode($this->Format($this->page["body"]))."\n".'</div>'."\n";
+    }
+} else {
+    return;
 }
-else
-{
-	return;
-}
-?>

@@ -19,20 +19,15 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
 // Vérification de sécurité
-if (!defined("WIKINI_VERSION"))
-{
-	die ("acc&egrave;s direct interdit");
+if (!defined("WIKINI_VERSION")) {
+    die ("acc&egrave;s direct interdit");
 }
 
 header('Content-type: text/xml; charset=UTF-8');
 
-if ($HasAccessRead=$this->HasAccess("read"))
-{
-	if ($this->page)
-	{
-		// display rss
-		echo baz_afficher_flux_RSS() ;
-	}
+if ($HasAccessRead=$this->HasAccess("read")) {
+    if ($this->page) {
+        // display rss
+        echo baz_afficher_flux_RSS() ;
+    }
 }
-?>
-

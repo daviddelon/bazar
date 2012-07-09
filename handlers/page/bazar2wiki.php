@@ -18,7 +18,6 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-
 //CE HANDLER SYNCHRONISE LES FICHES BAZAR SOUHAITEES AVEC LA TABLE users DU WIKINI,
 //IL CREE DES NOUVEAUX UTILISATEURS WIKI SI LE NOM WIKI N'EXISTE PAS,
 //IL MODIFIE LE MAIL ET LES MOTS DE PASSE DES NOMS WIKI EXISTANT DEJA
@@ -26,50 +25,45 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 
 // Vérification de sécurité
-if (!defined("WIKINI_VERSION"))
-{
-	die ("acc&egrave;s direct interdit");
+if (!defined("WIKINI_VERSION")) {
+    die ("acc&egrave;s direct interdit");
 }
 
-if ($this->UserIsInGroup('admins'))
-{
-	//PARAMETRES A CHANGER EN FONCTION DU SITE
-	//numéros d'identifiants des types de fiches correspondant à un annuaire dans bazar
-	$idtemplatebazar = '9,15';
-	//mot de passe générique associé à tous les comptes
-	$motdepasse = 'reema';
-	//message envoyé par mail pour le changement de mot de passe
-	$lien = str_replace("/wakka.php?wiki=","",$this->config["base_url"]);
-	$objetmail = '['.str_replace("http://","",$lien).'] Vos nouveaux identifiants sur le site '.$this->config["wakka_name"];
-		
-	$sql = 'SELECT bf_titre, bf_mail FROM '.BAZ_PREFIXE.'fiche WHERE bf_ce_nature IN ('.$idtemplatebazar.') AND (bf_id_fiche=793 OR bf_id_fiche=804)';
-	$tab = $this->LoadAll($sql);
-	foreach ($tab as $ligne) {
-		$nomwiki = genere_nom_wiki($ligne['bf_titre']);
-		echo 'BAZAR : '.$ligne['bf_titre'].' - '.$ligne['bf_mail'].'<br />';
-		if ($existingUser = $this->LoadUser($nomwiki))
-		{
-			$requete = "update ".$this->config["table_prefix"]."users set ".
-			"email = '".mysql_escape_string($ligne['bf_mail'])."', ".
-			"password = md5('".mysql_escape_string($motdepasse)."') ".
-			"where name = '".$nomwiki."' limit 1";
-		}
-		else 
-		{
-			$requete =  "insert into ".$this->config["table_prefix"]."users set ".
-						"signuptime = now(), ".
-						"name = '".mysql_escape_string($nomwiki)."', ".
-						"email = '".mysql_escape_string($ligne['bf_mail'])."', ".
-						"password = md5('".mysql_escape_string($motdepasse)."')";
-		}					
-		$this->Query($requete);
-		
-		//on ajoute le nom wiki comme createur de sa fiche
-		$requtilisateur = "UPDATE '.BAZ_PREFIXE.'fiche SET bf_ce_utilisateur=\"".mysql_escape_string($nomwiki)."\" WHERE bf_mail=\"".$ligne['bf_mail']."\"";
-		$this->Query($requtilisateur);
-		
-		//envoi du mail
-		$messagemail = "Bonjour à tous,
+if ($this->UserIsInGroup('admins')) {
+    //PARAMETRES A CHANGER EN FONCTION DU SITE
+    //numéros d'identifiants des types de fiches correspondant à un annuaire dans bazar
+    $idtemplatebazar = '9,15';
+    //mot de passe générique associé à tous les comptes
+    $motdepasse = 'reema';
+    //message envoyé par mail pour le changement de mot de passe
+    $lien = str_replace("/wakka.php?wiki=","",$this->config["base_url"]);
+    $objetmail = '['.str_replace("http://","",$lien).'] Vos nouveaux identifiants sur le site '.$this->config["wakka_name"];
+
+    $sql = 'SELECT bf_titre, bf_mail FROM '.BAZ_PREFIXE.'fiche WHERE bf_ce_nature IN ('.$idtemplatebazar.') AND (bf_id_fiche=793 OR bf_id_fiche=804)';
+    $tab = $this->LoadAll($sql);
+    foreach ($tab as $ligne) {
+        $nomwiki = genere_nom_wiki($ligne['bf_titre']);
+        echo 'BAZAR : '.$ligne['bf_titre'].' - '.$ligne['bf_mail'].'<br />';
+        if ($existingUser = $this->LoadUser($nomwiki)) {
+            $requete = "update ".$this->config["table_prefix"]."users set ".
+            "email = '".mysql_escape_string($ligne['bf_mail'])."', ".
+            "password = md5('".mysql_escape_string($motdepasse)."') ".
+            "where name = '".$nomwiki."' limit 1";
+        } else {
+            $requete =  "insert into ".$this->config["table_prefix"]."users set ".
+                        "signuptime = now(), ".
+                        "name = '".mysql_escape_string($nomwiki)."', ".
+                        "email = '".mysql_escape_string($ligne['bf_mail'])."', ".
+                        "password = md5('".mysql_escape_string($motdepasse)."')";
+        }
+        $this->Query($requete);
+
+        //on ajoute le nom wiki comme createur de sa fiche
+        $requtilisateur = "UPDATE '.BAZ_PREFIXE.'fiche SET bf_ce_utilisateur=\"".mysql_escape_string($nomwiki)."\" WHERE bf_mail=\"".$ligne['bf_mail']."\"";
+        $this->Query($requtilisateur);
+
+        //envoi du mail
+        $messagemail = "Bonjour à tous,
 Toute l'équipe est heureuse de vous faire part de la mise en ligne du nouveau site internet coopératif du REEMA. Ce site arbore de nouvelles couleurs et de nouvelles fonctionnalités pour donner encore plus de vie à l'éducation à la montagne sur le massif alpin !
 Voir le site à cette adresse : ".str_replace("/wakka.php?wiki=","",$this->config["base_url"])."
 1- Un site coopératif pour l'éducation à la montagne
@@ -112,15 +106,13 @@ Ce site a été réalisé par l'équipe d'Outils-Réseaux :
 - Jessica Deschamps, graphiste
 - Laurent Marseault : animateur, formateur, consultant
 Merci à eux pour leur travail !";
-		echo 'WIKINI : '.$requete.'<br />'.'<strong>'.$objetmail.'</strong><br />'.nl2br($messagemail).'<hr />';
-		
-		$headers =   'From: '.BAZ_ADRESSE_MAIL_ADMIN . "\r\n" .
-				     'Reply-To: '.BAZ_ADRESSE_MAIL_ADMIN . "\r\n" .
-				     'X-Mailer: PHP/' . phpversion();
-		mail($ligne['bf_mail'], remove_accents($objetmail), $messagemail, $headers);
-	}
-	echo '<br /><br /><a href="'.$this->href().'">Cliquez ici pour retourner au wikini</a>';	
-}
-else die ('Seuls les admins peuvent lancer cette op&eacute;ration.<br /><br />
-			<a href="'.$this->href().'">Cliquez ici pour retourner au wikini</a>');
-?>
+        echo 'WIKINI : '.$requete.'<br />'.'<strong>'.$objetmail.'</strong><br />'.nl2br($messagemail).'<hr />';
+
+        $headers =   'From: '.BAZ_ADRESSE_MAIL_ADMIN . "\r\n" .
+                     'Reply-To: '.BAZ_ADRESSE_MAIL_ADMIN . "\r\n" .
+                     'X-Mailer: PHP/' . phpversion();
+        mail($ligne['bf_mail'], remove_accents($objetmail), $messagemail, $headers);
+    }
+    echo '<br /><br /><a href="'.$this->href().'">Cliquez ici pour retourner au wikini</a>';
+} else die ('Seuls les admins peuvent lancer cette op&eacute;ration.<br /><br />
+            <a href="'.$this->href().'">Cliquez ici pour retourner au wikini</a>');

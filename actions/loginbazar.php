@@ -32,89 +32,72 @@ if (!defined("WIKINI_VERSION")) {
         die ("acc&egrave;s direct interdit");
 }
 
-
 //Lecture des parametres de l'action
 $urllogin = $this->GetParameter("page");
-if (empty($urllogin))
-{
-	$urllogin=$this->href("", "BazaR", "");
-}
-else
-{
-	$urllogin=$this->href("", $urllogin, "");
+if (empty($urllogin)) {
+    $urllogin=$this->href("", "BazaR", "");
+} else {
+    $urllogin=$this->href("", $urllogin, "");
 }
 
 if (!isset($_REQUEST["action"])) $_REQUEST["action"] = '';
-if ($_REQUEST["action"] == "logout")
-{
-	$this->LogoutUser();
-	$this->SetMessage("Vous &ecirc;tes maintenant d&eacute;connect&eacute; !");
-	$this->Redirect($this->href());
+if ($_REQUEST["action"] == "logout") {
+    $this->LogoutUser();
+    $this->SetMessage("Vous &ecirc;tes maintenant d&eacute;connect&eacute; !");
+    $this->Redirect($this->href());
 }
 
-if ($user = $this->GetUser())
-{
-	$sql= "SELECT bf_id_fiche FROM '.BAZ_PREFIXE.'fiche WHERE bf_ce_nature IN (9,15) AND bf_mail ='".mysql_escape_string($user['email'])."' LIMIT 1";
-	$bazar = $this->LoadSingle($sql);
-	if ($bazar) $id= $bazar['bf_id_fiche'];
-	
-	// user is logged in; display config form
-	include_once('tools/bazar/libs/squelettephp.class.php');
-	$squel = new SquelettePhp('tools/bazar/presentation/squelettes/iden_loggue.tpl.html');
-	$squel->set(array(
-		"id"=>$id,
-		"nom"=>$user['name'],
-		"urllogin"=>$urllogin,
-		"urldepart"=>$this->href()
-	));
-	echo $squel->analyser();
-}
-else
-{
-	// user is not logged in
-	
-	// is user trying to log in or register?
-	if ($_REQUEST["action"] == "login")
-	{
-		// if user name already exists, check password
-		if ($existingUser = $this->LoadUser($_POST["name"]))
-		{
-			// check password
-			if ($existingUser["password"] == md5($_POST["password"]))
-			{
-				$this->SetUser($existingUser, 0);
-				SetCookie("name", $existingUser["name"],0, $this->CookiePath);
-				SetCookie("password", $existingUser["password"],0, $this->CookiePath);
-				$sql= "SELECT bf_id_fiche FROM '.BAZ_PREFIXE.'fiche WHERE bf_ce_nature IN (9,15) AND bf_mail ='".mysql_escape_string($existingUser['email'])."' LIMIT 1";
-				$bazar = $this->LoadSingle($sql);
-				if ($bazar) $id= $bazar['bf_id_fiche'];
-				$this->Redirect($urllogin.'&id_fiche='.$id.'&action=voir_fiche');
-			}
-			else
-			{
-				$this->SetMessage("Erreur identification : mauvais mot de passe.");
-				$this->Redirect($this->href());
-			}
-		}
-		else
-		{
-			$this->SetMessage("Erreur identification : NomWiki inconnu.");
-			$this->Redirect($this->href());
-		}
-	}
-	elseif ($_REQUEST['action'] == 'checklogged')
-	{
-		$this->SetMessage("Erreur identification : vous devez accepter les cookies pour pouvoir vous connecter.");
-		$this->Redirect($this->href());
-	}
+if ($user = $this->GetUser()) {
+    $sql= "SELECT bf_id_fiche FROM '.BAZ_PREFIXE.'fiche WHERE bf_ce_nature IN (9,15) AND bf_mail ='".mysql_escape_string($user['email'])."' LIMIT 1";
+    $bazar = $this->LoadSingle($sql);
+    if ($bazar) $id= $bazar['bf_id_fiche'];
 
-	include_once('tools/bazar/libs/squelettephp.class.php');	
-	$squel = new SquelettePhp('tools/bazar/presentation/squelettes/iden_form.tpl.html');
-	$squel->set(array(
-		"urllogin"=>$urllogin,
-		"urldepart"=>$this->href(),
-		"name"=>isset($_POST["name"])?$_POST["name"]:''
-	));
-	echo $squel->analyser();
+    // user is logged in; display config form
+    include_once 'tools/bazar/libs/squelettephp.class.php';
+    $squel = new SquelettePhp('tools/bazar/presentation/squelettes/iden_loggue.tpl.html');
+    $squel->set(array(
+        "id"=>$id,
+        "nom"=>$user['name'],
+        "urllogin"=>$urllogin,
+        "urldepart"=>$this->href()
+    ));
+    echo $squel->analyser();
+} else {
+    // user is not logged in
+
+    // is user trying to log in or register?
+    if ($_REQUEST["action"] == "login") {
+        // if user name already exists, check password
+        if ($existingUser = $this->LoadUser($_POST["name"])) {
+            // check password
+            if ($existingUser["password"] == md5($_POST["password"])) {
+                $this->SetUser($existingUser, 0);
+                SetCookie("name", $existingUser["name"],0, $this->CookiePath);
+                SetCookie("password", $existingUser["password"],0, $this->CookiePath);
+                $sql= "SELECT bf_id_fiche FROM '.BAZ_PREFIXE.'fiche WHERE bf_ce_nature IN (9,15) AND bf_mail ='".mysql_escape_string($existingUser['email'])."' LIMIT 1";
+                $bazar = $this->LoadSingle($sql);
+                if ($bazar) $id= $bazar['bf_id_fiche'];
+                $this->Redirect($urllogin.'&id_fiche='.$id.'&action=voir_fiche');
+            } else {
+                $this->SetMessage("Erreur identification : mauvais mot de passe.");
+                $this->Redirect($this->href());
+            }
+        } else {
+            $this->SetMessage("Erreur identification : NomWiki inconnu.");
+            $this->Redirect($this->href());
+        }
+    } elseif ($_REQUEST['action'] == 'checklogged') {
+        $this->SetMessage("Erreur identification : vous devez accepter les cookies pour pouvoir vous connecter.");
+        $this->Redirect($this->href());
+    }
+
+    include_once 'tools/bazar/libs/squelettephp.class.php';
+    $squel = new SquelettePhp('tools/bazar/presentation/squelettes/iden_form.tpl.html');
+    $squel->set(array(
+        "urllogin"=>$urllogin,
+        "urldepart"=>$this->href(),
+        "name"=>isset($_POST["name"])?$_POST["name"]:''
+    ));
+    echo $squel->analyser();
 }
 ?>

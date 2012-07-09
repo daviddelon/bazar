@@ -27,32 +27,30 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 // Vérification de sécurité
-if (!defined("WIKINI_VERSION"))
-{
-	die ("acc&egrave;s direct interdit");
+if (!defined("WIKINI_VERSION")) {
+    die ("acc&egrave;s direct interdit");
 }
 
 echo $this->Header();
 echo '<h1>Export</h1>'."\n";
 
 if (isset($_POST['submit_export'])) {
-	echo "export!";
+    echo "export!";
 
 } else {
-	echo $this->FormOpen('export'); 
-	$requete = "SELECT DISTINCT tag FROM ".$this->config["table_prefix"]."pages WHERE latest = 'Y' and comment_on = '' ORDER BY tag";	
-	$tab = $this->LoadAll($requete);
-	
-	if (is_array($tab)) {
-		foreach ($tab as $nompage) {
-			echo '<input type="checkbox" id="chk_'.$nompage['tag'].'" name="page_a_exporter" value="'.$nompage['tag'].'"><label for="chk_'.$nompage['tag'].'">&nbsp;'.
-			$nompage['tag'].'&nbsp;<a class="voirpage" target="_blank" title="Voir la page '.$nompage['tag'].'" href="'.$this->href('htmlutf8', $nompage['tag']).'" rel="#overlay-action">(voir)</a>'.
-			'</label><br />'."\n";
-		}	
-	}
-	echo '<input name="submit_export" type="submit" value="Exporter les pages sélectionnées" />'."\n";
-	echo $this->FormClose();
+    echo $this->FormOpen('export');
+    $requete = "SELECT DISTINCT tag FROM ".$this->config["table_prefix"]."pages WHERE latest = 'Y' and comment_on = '' ORDER BY tag";
+    $tab = $this->LoadAll($requete);
+
+    if (is_array($tab)) {
+        foreach ($tab as $nompage) {
+            echo '<input type="checkbox" id="chk_'.$nompage['tag'].'" name="page_a_exporter" value="'.$nompage['tag'].'"><label for="chk_'.$nompage['tag'].'">&nbsp;'.
+            $nompage['tag'].'&nbsp;<a class="voirpage" target="_blank" title="Voir la page '.$nompage['tag'].'" href="'.$this->href('htmlutf8', $nompage['tag']).'" rel="#overlay-action">(voir)</a>'.
+            '</label><br />'."\n";
+        }
+    }
+    echo '<input name="submit_export" type="submit" value="Exporter les pages sélectionnées" />'."\n";
+    echo $this->FormClose();
 }
 
 echo $this->Footer();
-?>

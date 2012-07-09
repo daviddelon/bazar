@@ -36,16 +36,13 @@
 // +------------------------------------------------------------------------------------------------------+
 */
 
-if (!defined("WIKINI_VERSION"))
-{
+if (!defined("WIKINI_VERSION")) {
         die ("acc&egrave;s direct interdit");
 }
-
 
 // +------------------------------------------------------------------------------------------------------+
 // |                                            ENTETE du PROGRAMME                                       |
 // +------------------------------------------------------------------------------------------------------+
-
 
 //error_reporting(E_ALL & ~E_DEPRECATED);
 
@@ -54,11 +51,11 @@ define ('BAZ_CHEMIN', 'tools'.DIRECTORY_SEPARATOR.'bazar'.DIRECTORY_SEPARATOR);
 define ('BAZ_CHEMIN_UPLOAD', 'files'.DIRECTORY_SEPARATOR);
 
 //bouh! c'est pas propre! c'est a cause de PEAR et de ses includes
-set_include_path(BAZ_CHEMIN.'libs'.DIRECTORY_SEPARATOR.PATH_SEPARATOR.get_include_path());
+set_include_path(BAZ_CHEMIN.'libs'.DIRECTORY_SEPARATOR.'vendor'.DIRECTORY_SEPARATOR.PATH_SEPARATOR.get_include_path());
 
 //librairies PEAR
-require_once BAZ_CHEMIN.'libs'.DIRECTORY_SEPARATOR.'DB.php' ;
-require_once BAZ_CHEMIN.'libs'.DIRECTORY_SEPARATOR.'Net'.DIRECTORY_SEPARATOR.'URL.php' ;
+require_once BAZ_CHEMIN.'libs'.DIRECTORY_SEPARATOR.'vendor'.DIRECTORY_SEPARATOR.'DB.php' ;
+require_once BAZ_CHEMIN.'libs'.DIRECTORY_SEPARATOR.'vendor'.DIRECTORY_SEPARATOR.'Net'.DIRECTORY_SEPARATOR.'URL.php' ;
 
 //principales fonctions de bazar
 require_once BAZ_CHEMIN.'libs'.DIRECTORY_SEPARATOR.'bazar.fonct.php';
@@ -78,10 +75,9 @@ $wikireq = preg_replace("/^\//", "", $wikireq);
 
 // split into page/method, checking wiki name & method name (XSS proof)
 if (preg_match('`^' . '(' . "[A-Za-z0-9]+" . ')/(' . "[A-Za-z0-9_-]" . '*)' . '$`', $wikireq, $matches)) {
-	list(, $GLOBALS['_BAZAR_']['pagewiki'], $method) = $matches;
-}
-elseif (preg_match('`^' . "[A-Za-z0-9]+" . '$`', $wikireq)) {
-	$GLOBALS['_BAZAR_']['pagewiki'] = $wikireq;
+    list(, $GLOBALS['_BAZAR_']['pagewiki'], $method) = $matches;
+} elseif (preg_match('`^' . "[A-Za-z0-9]+" . '$`', $wikireq)) {
+    $GLOBALS['_BAZAR_']['pagewiki'] = $wikireq;
 }
 $methode = ($method == 'bazarframe') ? '/bazarframe' : '';
 
@@ -92,17 +88,17 @@ $GLOBALS['_BAZAR_']['url'] = new Net_URL($wakkaConfig['base_url'].$GLOBALS['_BAZ
 $dsn='mysql://'.$wakkaConfig['mysql_user'].':'.$wakkaConfig['mysql_password'].'@'.$wakkaConfig['mysql_host'].'/'.$wakkaConfig['mysql_database'];
 $GLOBALS['_BAZAR_']['db'] =& DB::connect($dsn) ;
 if (DB::isError($GLOBALS['_BAZAR_']['db'])) {
-	echo $GLOBALS['_BAZAR_']['db']->getMessage();
+    echo $GLOBALS['_BAZAR_']['db']->getMessage();
 }
 
 //test de l'existance des tables de bazar et installation si absentes.
 $req = 'SHOW TABLES FROM '.$wakkaConfig['mysql_database'].' LIKE "'.BAZ_PREFIXE.'nature%"';
 $resultat = $GLOBALS['_BAZAR_']['db']->query ($req);
 if ($resultat->numRows() == 0) {
-	$fichier_sql = 'tools/bazar/install/bazar.sql';
-	if (file_exists($fichier_sql)) {
+    $fichier_sql = 'tools/bazar/install/bazar.sql';
+    if (file_exists($fichier_sql)) {
             // Des champs textes sont multilignes, d'ou la boucle sur INSERT, marqueur de fin de la requete precedente.
-            if ($lines = file($fichier_sql))  {
+            if ($lines = file($fichier_sql)) {
                 $i=0;
                 $ligne_courante=$lines[$i];
                 if (($i+1)>=count($lines)) {
@@ -116,7 +112,7 @@ if ($resultat->numRows() == 0) {
                         $line_in.=$ligne_suivante;
                         $i++;
                         $ligne_courante=$lines[$i];
-                        if (($i+1)>=count($lines))  {
+                        if (($i+1)>=count($lines)) {
                             $ligne_suivante='FIN';
                         } else {
                         $ligne_suivante=$lines[$i+1];
@@ -131,13 +127,13 @@ if ($resultat->numRows() == 0) {
 
                     $i++;
                     $ligne_courante=$lines[$i];
-                    if (($i+1)>=count($lines))  {
+                    if (($i+1)>=count($lines)) {
                         $ligne_suivante='FIN';
                     } else {
                         $ligne_suivante=$lines[$i+1];
                     }
 
-                    //if ($i == (int)$this->test) {
+                    //if ($i == (int) $this->test) {
                     //    break;
                     //}
                 }
@@ -148,7 +144,6 @@ if ($resultat->numRows() == 0) {
         }
 
 }
-
 
 // +------------------------------------------------------------------------------------------------------+
 // |                             LES CONSTANTES DES ACTIONS DE BAZAR                                      |
@@ -165,7 +160,7 @@ define ('BAZ_VOIR_AFFICHER', 'mes_fiches,consulter,rss,saisir,formulaire,listes,
 
 // Premier niveau d'action : pour toutes les fiches
 
-define ('BAZ_VOIR_DEFAUT', 'consulter'); // Recherche 
+define ('BAZ_VOIR_DEFAUT', 'consulter'); // Recherche
 define ('BAZ_VOIR_CONSULTER', 'consulter'); // Recherche
 define ('BAZ_VOIR_MES_FICHES', 'mes_fiches');
 define ('BAZ_VOIR_S_ABONNER', 'rss');
@@ -182,7 +177,7 @@ define ('BAZ_VOIR_EXPORTER', 'exporter');
 // Second : actions du choix de premier niveau.
 
 define ('BAZ_MOTEUR_RECHERCHE', 'recherche') ;
-define ('BAZ_CHOISIR_TYPE_FICHE', 'choisir_type_fiche') ; // 
+define ('BAZ_CHOISIR_TYPE_FICHE', 'choisir_type_fiche') ; //
 define ('BAZ_GERER_DROITS', 'droits') ;
 define ('BAZ_MODIFIER_FICHE', 'modif_fiches') ; // Modifier le formulaire de creation des fiches
 define ('BAZ_VOIR_FICHE', 'voir_fiche') ;
@@ -201,7 +196,6 @@ define ('BAZ_ACTION_PAS_PUBLIER', 'pas_publier') ; // Invalider la fiche
 define ('BAZ_LISTE_RSS', 'rss'); // Tous les flux  depend de s'abonner
 define ('BAZ_VOIR_FLUX_RSS', 'affiche_rss'); // Un flux
 define ('BAZ_OBTENIR_TOUTES_LES_LISTES_ET_TYPES_DE_FICHES', 'listes_et_fiches');
-
 
 // Constante pour l'envoi automatique de mail aux admins
 define ('BAZ_ENVOI_MAIL_ADMIN', false);
@@ -263,7 +257,6 @@ $GLOBALS['_BAZAR_']['langue'] = 'fr-FR';
 define ('BAZ_LANGUE_PAR_DEFAUT', 'fr') ; //Indique un code langue par defaut
 define ('BAZ_VAR_URL_LANGUE', 'lang') ; //Nom de la variable GET qui sera passee dans l'URL (Laisser vide pour les sites monolingues)
 
-
 //code pour l'inclusion des langues NE PAS MODIFIER
 if (BAZ_VAR_URL_LANGUE != '' && isset (${BAZ_VAR_URL_LANGUE})) {
     include_once BAZ_CHEMIN.'lang'.DIRECTORY_SEPARATOR.'bazar_'.${BAZ_VAR_URL_LANGUE}.'.inc.php';
@@ -291,7 +284,6 @@ define ('BAZ_AFFICHER_FILTRE_MOTEUR', true);
 // coordonnees du centre de la carte
 define('BAZ_GOOGLE_CENTRE_LAT', (isset($wakkaConfig['baz_google_centre_lat'])) ? $wakkaConfig['baz_google_centre_lat'] : '37.95286091815649');
 define('BAZ_GOOGLE_CENTRE_LON', (isset($wakkaConfig['baz_google_centre_lon'])) ? $wakkaConfig['baz_google_centre_lon'] : '9.019775390625');
-
 
 // niveau de zoom : de 1 (plus eloigne) a 15 (plus proche)
 define('BAZ_GOOGLE_ALTITUDE', (isset($wakkaConfig['baz_google_altitude'])) ? $wakkaConfig['baz_google_altitude'] : '5');
@@ -333,5 +325,3 @@ define('BAZ_JS_INIT_MAP', '');
 
 // Choix du look du template par défaut
 define ('BAZ_TEMPLATE_LISTE_DEFAUT', 'liste_accordeon.tpl.html');
-
-?>

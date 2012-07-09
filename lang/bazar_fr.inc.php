@@ -141,7 +141,7 @@ define ('BAZ_DU', 'du') ;
 define ('BAZ_AU', 'au') ;
 define ('BAZ_ANONYME', 'Anonyme');
 define ('BAZ_IDENTIFIEZ_VOUS_POUR_VOIR_VOS_FICHES', 'Pour voir vos fiches, veuillez vous identifier.');
-define ('METTRE_POINT','Mettre le point automatiquement sur la carte en fonction de :'); 
+define ('METTRE_POINT','Mettre le point automatiquement sur la carte en fonction de :');
 define ('VERIFIER_MON_ADRESSE', 'l\'adresse saisie dans ce formulaire');
 define ('VERIFIER_MON_ADRESSE_CLIENT','votre accès Internet (imprécis)');
 define ('TEXTE_POINT_DEPLACABLE', 'Si ce point ne correspond pas &agrave; votre adresse, vous pouvez le d&eacute;placer en cliquant gauche dessus et en laissant appuy&eacute;, afin de le faire correspondre parfaitement &agrave; votre adresse.');
@@ -199,4 +199,3 @@ define ('BAZ_SEPTEMBRE','Septembre');
 define ('BAZ_OCTOBRE','Octobre');
 define ('BAZ_NOVEMBRE','Novembre');
 define ('BAZ_DECEMBRE','D&eacute;cembre');
-?>

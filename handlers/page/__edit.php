@@ -27,44 +27,40 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 // Vérification de sécurité
-if (!defined("WIKINI_VERSION"))
-{
-	die ("acc&egrave;s direct interdit");
+if (!defined("WIKINI_VERSION")) {
+    die ("acc&egrave;s direct interdit");
 }
 
 if ($this->HasAccess('write')) {
-	$type = $this->GetTripleValue($this->GetPageTag(), 'http://outils-reseaux.org/_vocabulary/type', '', '');
-	if ($type == 'fiche_bazar') {
-		//dans le cas ou on vient de modifier dans le formulaire une fiche bazar, on enregistre les modifications
-		if (isset($_POST['id_fiche'])) {
-			$GLOBALS['_BAZAR_']['id_fiche'] = $_POST['id_fiche'];
-			$tab_nature = baz_valeurs_type_de_fiche($_POST['id_typeannonce']);
-			$GLOBALS['_BAZAR_']['id_typeannonce']=$tab_nature['bn_id_nature'];
-			$GLOBALS['_BAZAR_']['typeannonce']=$tab_nature['bn_label_nature'];
-			$GLOBALS['_BAZAR_']['condition']=$tab_nature['bn_condition'];
-			$GLOBALS['_BAZAR_']['template']=$tab_nature['bn_template'];
-			$GLOBALS['_BAZAR_']['commentaire']=$tab_nature['bn_commentaire'];
-			$GLOBALS['_BAZAR_']['appropriation']=$tab_nature['bn_appropriation'];
-			$GLOBALS['_BAZAR_']['class']=$tab_nature['bn_label_class'];
-			baz_formulaire(BAZ_ACTION_MODIFIER_V);
-			$this->Redirect($this->Href());
-		} 
-
-		else {
-			$page = $this->LoadPage($this->GetPageTag());
-			$tab_valeurs = json_decode( $page['body'], true);
-			$tab_valeurs = array_map('utf8_decode', $tab_valeurs);
-			$GLOBALS['_BAZAR_']['id_fiche'] = $tab_valeurs['id_fiche'];
-			$tab_nature = baz_valeurs_type_de_fiche($tab_valeurs['id_typeannonce']);
-			$GLOBALS['_BAZAR_']['id_typeannonce']=$tab_nature['bn_id_nature'];
-			$GLOBALS['_BAZAR_']['typeannonce']=$tab_nature['bn_label_nature'];
-			$GLOBALS['_BAZAR_']['condition']=$tab_nature['bn_condition'];
-			$GLOBALS['_BAZAR_']['template']=$tab_nature['bn_template'];
-			$GLOBALS['_BAZAR_']['commentaire']=$tab_nature['bn_commentaire'];
-			$GLOBALS['_BAZAR_']['appropriation']=$tab_nature['bn_appropriation'];
-			$GLOBALS['_BAZAR_']['class']=$tab_nature['bn_label_class'];
-			$pageeditionfiche = baz_formulaire(BAZ_ACTION_MODIFIER, $this->href('edit'), $tab_valeurs);
-		}
-	}
+    $type = $this->GetTripleValue($this->GetPageTag(), 'http://outils-reseaux.org/_vocabulary/type', '', '');
+    if ($type == 'fiche_bazar') {
+        //dans le cas ou on vient de modifier dans le formulaire une fiche bazar, on enregistre les modifications
+        if (isset($_POST['id_fiche'])) {
+            $GLOBALS['_BAZAR_']['id_fiche'] = $_POST['id_fiche'];
+            $tab_nature = baz_valeurs_type_de_fiche($_POST['id_typeannonce']);
+            $GLOBALS['_BAZAR_']['id_typeannonce']=$tab_nature['bn_id_nature'];
+            $GLOBALS['_BAZAR_']['typeannonce']=$tab_nature['bn_label_nature'];
+            $GLOBALS['_BAZAR_']['condition']=$tab_nature['bn_condition'];
+            $GLOBALS['_BAZAR_']['template']=$tab_nature['bn_template'];
+            $GLOBALS['_BAZAR_']['commentaire']=$tab_nature['bn_commentaire'];
+            $GLOBALS['_BAZAR_']['appropriation']=$tab_nature['bn_appropriation'];
+            $GLOBALS['_BAZAR_']['class']=$tab_nature['bn_label_class'];
+            baz_formulaire(BAZ_ACTION_MODIFIER_V);
+            $this->Redirect($this->Href());
+        } else {
+            $page = $this->LoadPage($this->GetPageTag());
+            $tab_valeurs = json_decode( $page['body'], true);
+            $tab_valeurs = array_map('utf8_decode', $tab_valeurs);
+            $GLOBALS['_BAZAR_']['id_fiche'] = $tab_valeurs['id_fiche'];
+            $tab_nature = baz_valeurs_type_de_fiche($tab_valeurs['id_typeannonce']);
+            $GLOBALS['_BAZAR_']['id_typeannonce']=$tab_nature['bn_id_nature'];
+            $GLOBALS['_BAZAR_']['typeannonce']=$tab_nature['bn_label_nature'];
+            $GLOBALS['_BAZAR_']['condition']=$tab_nature['bn_condition'];
+            $GLOBALS['_BAZAR_']['template']=$tab_nature['bn_template'];
+            $GLOBALS['_BAZAR_']['commentaire']=$tab_nature['bn_commentaire'];
+            $GLOBALS['_BAZAR_']['appropriation']=$tab_nature['bn_appropriation'];
+            $GLOBALS['_BAZAR_']['class']=$tab_nature['bn_label_class'];
+            $pageeditionfiche = baz_formulaire(BAZ_ACTION_MODIFIER, $this->href('edit'), $tab_valeurs);
+        }
+    }
 }
-?>

@@ -20,22 +20,17 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
 // Vérification de sécurité
-if (!defined("WIKINI_VERSION"))
-{
-	die ("acc&egrave;s direct interdit");
+if (!defined("WIKINI_VERSION")) {
+    die ("acc&egrave;s direct interdit");
 }
 
 header('Content-type: text/xml; charset=UTF-8');
 
-if ($HasAccessRead=$this->HasAccess("read"))
-{
+if ($HasAccessRead=$this->HasAccess("read")) {
 // TODO : Return an empty xml ?
 // TODO : Return an error read (noaccess) xml ?
-	if ($this->page)
-	{
-		// display page
-		echo $this->Format('{{bazar}}') ;
-	}
+    if ($this->page) {
+        // display page
+        echo $this->Format('{{bazar}}') ;
+    }
 }
-?>
-

@@ -27,28 +27,26 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 // Vérification de sécurité
-if (!defined("WIKINI_VERSION"))
-{
-	die ("acc&egrave;s direct interdit");
+if (!defined("WIKINI_VERSION")) {
+    die ("acc&egrave;s direct interdit");
 }
 
 echo $this->Header();
 echo '<h1>Import</h1>'."\n";
 
 if (isset($_POST['submit_url'])) {
-	echo "URL";
-	
+    echo "URL";
+
 } elseif (isset($_POST['submit_file'])) {
-	echo "file";
+    echo "file";
 
 } else {
-	echo $this->FormOpen('import');
-	echo '<label for="urlimport">Entrez l\'URL du YesWiki d\'où vous souhaitez importer des données</label>'."\n";
-	echo '<input type="text" name="urlimport" id="urlimport" value="http://" /><input name="submit_url" type="submit" value="Envoyer" /><br /><br />'."\n";
-	echo '<label for="fileimport">Ou entrez le fichier de sauvegarde YesWiki</label>'."\n";
-	echo '<input type="file" name="fileimport" id="filelimport" /><input name="submit_file" type="submit" value="Importer ce fichier" />'."\n";
-	echo $this->FormClose();
+    echo $this->FormOpen('import');
+    echo '<label for="urlimport">Entrez l\'URL du YesWiki d\'où vous souhaitez importer des données</label>'."\n";
+    echo '<input type="text" name="urlimport" id="urlimport" value="http://" /><input name="submit_url" type="submit" value="Envoyer" /><br /><br />'."\n";
+    echo '<label for="fileimport">Ou entrez le fichier de sauvegarde YesWiki</label>'."\n";
+    echo '<input type="file" name="fileimport" id="filelimport" /><input name="submit_file" type="submit" value="Importer ce fichier" />'."\n";
+    echo $this->FormClose();
 }
 
 echo $this->Footer();
-?>

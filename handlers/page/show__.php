@@ -27,12 +27,10 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 // Vérification de sécurité
-if (!defined("WIKINI_VERSION"))
-{
-	die ("acc&egrave;s direct interdit");
+if (!defined("WIKINI_VERSION")) {
+    die ("acc&egrave;s direct interdit");
 }
 if (isset($valjson)) {
-	$plugin_output_new = preg_replace ('/(<input type="hidden" name="body" value=".*" \/>)/Uis',
-		'<input type="hidden" name="body" value="'.htmlspecialchars($valjson).'" />', $plugin_output_new);
+    $plugin_output_new = preg_replace ('/(<input type="hidden" name="body" value=".*" \/>)/Uis',
+        '<input type="hidden" name="body" value="'.htmlspecialchars($valjson).'" />', $plugin_output_new);
 }
-?>
