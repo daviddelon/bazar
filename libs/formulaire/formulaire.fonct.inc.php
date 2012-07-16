@@ -106,7 +106,7 @@ function afficher_image($nom_image, $label, $class, $largeur_vignette, $hauteur_
 
 function redimensionner_image($image_src, $image_dest, $largeur, $hauteur)
 {
-    require_once 'tools/bazar/libs/vendor/class.imagetransform.php';
+    require_once 'tools'.DIRECTORY_SEPARATOR.'bazar'.DIRECTORY_SEPARATOR.'libs'.DIRECTORY_SEPARATOR.'vendor'.DIRECTORY_SEPARATOR.'class.imagetransform.php';
     $imgTrans = new imageTransform();
     $imgTrans->sourceFile = $image_src;
     $imgTrans->targetFile = $image_dest;
@@ -920,7 +920,7 @@ function champs_mail(&$formtemplate, $tableau_template, $mode, $valeurs_fiche)
     } elseif ($mode == 'html') {
         $html = '';
         if (isset($valeurs_fiche[$tableau_template[1]]) && $valeurs_fiche[$tableau_template[1]]!='') {
-            $html = '<div class="BAZ_rubrique>'."\n".
+            $html = '<div class="BAZ_rubrique">'."\n".
                     '<span class="BAZ_label">'.$tableau_template[2].'&nbsp;:</span>'."\n";
             $html .= '<span class="BAZ_texte"><a href="mailto:'.$valeurs_fiche[$tableau_template[1]].'" class="BAZ_lien_mail">';
             $html .= $valeurs_fiche[$tableau_template[1]].'</a></span>'."\n".'</div>'."\n";
@@ -1251,7 +1251,7 @@ function image(&$formtemplate, $tableau_template, $mode, $valeurs_fiche)
             //il y a bien le fichier image, on affiche l'image, avec possibilite de la supprimer ou de la modifier
             if (file_exists(BAZ_CHEMIN_UPLOAD.$valeurs_fiche[$type.$identifiant])) {
 
-                require_once BAZ_CHEMIN.'libs'.DIRECTORY_SEPARATOR.'HTML/QuickForm/html.php';
+                require_once BAZ_CHEMIN.'libs'.DIRECTORY_SEPARATOR.'vendor'.DIRECTORY_SEPARATOR.'HTML/QuickForm/html.php';
                 $formtemplate->addElement(new HTML_QuickForm_html("\n".'<fieldset class="bazar_fieldset">'."\n".'<legend>'.$label.'</legend>'."\n")) ;
 
                 $lien_supprimer = $GLOBALS['wiki']->href( 'edit', $GLOBALS['wiki']->GetPageTag() );
@@ -1347,7 +1347,7 @@ function labelhtml(&$formtemplate, $tableau_template, $mode, $valeurs_fiche)
     list($type, $texte_saisie, $texte_recherche, $texte_fiche) = $tableau_template;
 
     if ($mode == 'saisie') {
-        require_once BAZ_CHEMIN.'libs'.DIRECTORY_SEPARATOR.'HTML/QuickForm/html.php';
+        require_once BAZ_CHEMIN.'libs'.DIRECTORY_SEPARATOR.'vendor'.DIRECTORY_SEPARATOR.'HTML/QuickForm/html.php';
         $formtemplate->addElement(new HTML_QuickForm_html("\n".$texte_saisie."\n")) ;
     } elseif ($mode == 'requete') {
         return;

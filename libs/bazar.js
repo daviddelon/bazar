@@ -225,26 +225,9 @@ $(document).ready(function () {
 		speed: 'fast',
 		firstDay: 1,
 		yearRange: [-70,30]  
-	});
+	}); 
 
-	$.tools.validator.localize("fr", {
-		'*'			: 'Veuillez vérifier ces champs',
-		':email'  	: 'Entrez un email valide',
-		':number' 	: 'Entrez un chiffre exclusivement',
-		':url' 		: 'Entrez une adresse URL valide',
-		'[max]'	 	: 'La valeur ne peut pas dépasser $1',
-		'[min]'		: 'La valeur doit être plus grande que $1',
-		'[required]'	: 'Champ obligatoire'
-	});
 
-	
-	$.tools.validator.fn(".bazar-select:required", function(input, value) {
-		return value != 0 ? true : {     
-			en: "Please make a selection",
-			fr: "Il faut choisir une option dans la liste d&eacute;roulante."
-		};
-	});
-	
 	//validation formulaire de saisie
 	var inputsreq = $("#formulaire input[required=required], #formulaire select[required=required], #formulaire textarea[required=required]");
 	
