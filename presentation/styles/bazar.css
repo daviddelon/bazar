@@ -356,7 +356,6 @@ width:300px;
 .input_textarea {
 height:100px;
 overflow:auto;
-border:1px solid #999;
 width:300px;
 white-space: normal;
 }
@@ -1239,7 +1238,8 @@ ul.valeur_liste li, ul.valeur_formulaire li {list-style-type:none; padding:0; ma
 
 /* year/month selector */
 #caltitle select {
-	font-size:10px;	
+	font-size:10px;
+  width: auto;
 }
 
 /* names of the days */
