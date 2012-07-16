@@ -112,6 +112,6 @@ foreach ($tableau_resultat as $fiche) {
     $GLOBALS['_BAZAR_']['url']->removeQueryString(BAZ_VARIABLE_ACTION);
 }
 include_once 'tools/bazar/libs/squelettephp.class.php';
-$squelcomment = new SquelettePhp('tools/bazar/presentation/squelettes/'.$template);
+$squelcomment = new SquelettePhp('tools/bazar/presentation/templates/'.$template);
 $squelcomment->set($fiches);
 echo $squelcomment->analyser();

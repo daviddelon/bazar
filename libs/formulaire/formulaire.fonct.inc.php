@@ -920,7 +920,7 @@ function champs_mail(&$formtemplate, $tableau_template, $mode, $valeurs_fiche)
     } elseif ($mode == 'html') {
         $html = '';
         if (isset($valeurs_fiche[$tableau_template[1]]) && $valeurs_fiche[$tableau_template[1]]!='') {
-            $html = '<div class="BAZ_rubrique>'."\n".
+            $html = '<div class="BAZ_rubrique">'."\n".
                     '<span class="BAZ_label">'.$tableau_template[2].'&nbsp;:</span>'."\n";
             $html .= '<span class="BAZ_texte"><a href="mailto:'.$valeurs_fiche[$tableau_template[1]].'" class="BAZ_lien_mail">';
             $html .= $valeurs_fiche[$tableau_template[1]].'</a></span>'."\n".'</div>'."\n";
