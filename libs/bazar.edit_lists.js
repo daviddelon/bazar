@@ -28,10 +28,10 @@
 
 $(document).ready(function () {
 	// on rend les listes déplacables
-	$(".valeur_liste").sortable({
+	$(".list-sortables").sortable({
 		handle : '.handle-listitems',
 		update : function () {
-			$("#bazar_form_lists .valeur_liste input[name^='label']").each(function(i) {
+			$("#bazar_form_lists .list-sortables input[name^='label']").each(function(i) {
 				$(this).attr('name', 'label['+(i+1)+']').
 				prev().attr('name', 'id['+(i+1)+']').
 				parent('.liste_ligne').attr('id', 'row'+(i+1)).
@@ -42,8 +42,8 @@ $(document).ready(function () {
 
 	// pour la gestion des listes, on peut rajouter dynamiquement des champs
 	$('.ajout_label_liste').on('click', function() {	
-		var nb = $("#bazar_form_lists .valeur_liste input[name^='label']").length + 1;	
-		$("#bazar_form_lists .valeur_liste").append('<li id="row'+nb+'" class="liste_ligne input-prepend input-append">'+
+		var nb = $("#bazar_form_lists .list-sortables input[name^='label']").length + 1;	
+		$("#bazar_form_lists .list-sortables").append('<li id="row'+nb+'" class="liste_ligne input-prepend input-append">'+
 			'<a title="D&eacute;placer l\'&eacute;l&eacute;ment" class="handle-listitems add-on"><i class="icon-move"></i></a>'+
 			'<input required type="text" placeholder="Cl&eacute;" name="id['+nb+']" class="input-mini" />' +
 			'<input required type="text" placeholder="Texte" name="label['+nb+']" />' +
@@ -54,15 +54,15 @@ $(document).ready(function () {
 	});
 	
 	// on supprime un champs pour une liste
-	$('#bazar_form_lists ul.valeur_liste').on('click', '.suppression_label_liste', function() {
+	$('#bazar_form_lists ul.list-sortables').on('click', '.suppression_label_liste', function() {
 		var id = '#'+$(this).parent('.liste_ligne').attr('id');
-		var nb = $("#bazar_form_lists .valeur_liste input[name^='label']").length;
+		var nb = $("#bazar_form_lists .list-sortables input[name^='label']").length;
 		if (nb > 1) {
 			if (confirm('Confirmez-vous la suppression de cette valeur dans la liste ?')) {
 				var nom = 'a_effacer_' + $(id).find("input:hidden").attr('name');
 				$(id).find("input:hidden").attr('name', nom).appendTo("#bazar_form_lists");
 				$(id).remove();
-				$("#bazar_form_lists .valeur_liste input[name^='label']").each(function(i) {
+				$("#bazar_form_lists .list-sortables input[name^='label']").each(function(i) {
 					$(this).attr('name', 'label['+(i+1)+']').
 					parent('.liste_ligne').attr('id', 'row'+(i+1)).
 					find("input:hidden").attr('name', 'ancienlabel['+(i+1)+']');

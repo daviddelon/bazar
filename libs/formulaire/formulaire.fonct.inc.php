@@ -1394,8 +1394,8 @@ function titre(&$formtemplate, $tableau_template, $mode, $valeurs_fiche)
                 }
             }
         }
-
-        return array('bf_titre' => $_POST['bf_titre']);
+        $GLOBALS['_BAZAR_']['id_fiche'] = genere_nom_wiki($_POST['bf_titre']);
+        return array('bf_titre' => $_POST['bf_titre'], 'id_fiche' => $GLOBALS['_BAZAR_']['id_fiche']);
     } elseif ($mode == 'html') {
         // Le titre
         return '<h1 class="BAZ_fiche_titre">'.htmlentities($valeurs_fiche['bf_titre']).'</h1>'."\n";

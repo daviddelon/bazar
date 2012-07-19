@@ -841,7 +841,7 @@ function baz_formulaire($mode, $url = '', $valeurs = '')
 
             if ($resultat->numRows()==1) {
                 $res = '';
-                 $ligne = $resultat->fetchRow (DB_FETCHMODE_ASSOC);
+                $ligne = $resultat->fetchRow (DB_FETCHMODE_ASSOC);
                 $GLOBALS['_BAZAR_']['id_typeannonce']=$ligne['bn_id_nature'];
                 $GLOBALS['_BAZAR_']['typeannonce']=$ligne['bn_label_nature'];
                 $GLOBALS['_BAZAR_']['condition']=$ligne['bn_condition'];
@@ -1419,7 +1419,7 @@ function baz_formulaire_des_listes($mode, $valeursliste = '')
 
     $html_valeurs_listes =  '<div class="control-group">'."\n".
                         '<label class="control-label">'.BAZ_VALEURS_LISTE.'</label>'."\n".
-                        '<ul class="valeur_liste controls">'."\n";
+                        '<ul class="list-sortables controls">'."\n";
     if (is_array($valeursliste)) {
         $tab_formulaire['titre_liste'] = $valeursliste['titre_liste'];
         $elements = $valeursliste['label'];
