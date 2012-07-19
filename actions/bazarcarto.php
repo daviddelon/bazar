@@ -120,7 +120,7 @@ echo '<script type="text/javascript" src="http://maps.google.com/maps/api/js?sen
     new google.maps.Point('.BAZ_COORD_ARRIVEE_IMAGE_OMBRE_MARQUEUR.'));
 
     //initialise la carte google
-    public function initialize()
+    function initialize()
     {
         var myLatlng = new google.maps.LatLng('.$latitude.', '.$longitude.');
         var myOptions = {
