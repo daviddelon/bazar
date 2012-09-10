@@ -2162,6 +2162,14 @@ function baz_a_le_droit( $demande = 'saisie_fiche', $id = '' )
                 return false;
             }
         }
+        if ($demande == 'voir_champ') {
+            // seuls admins et createur peuvent voir un champ protege
+            if (is_array($nomwiki) && $id == $nomwiki['name'] || $id == '' ) {
+               return true;
+            } else {
+                return false;
+            }
+        }
         if ($demande == 'modif_fiche') {
             // pour la modif d'une fiche : ouvert à tous
             return true;

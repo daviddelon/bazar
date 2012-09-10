@@ -22,19 +22,6 @@ $(document).ready(function () {
 	//antispam javascript
 	$("input[name=antispam]").val('1');
 	
-	//formulaire des formulaires
-	$(".ajout_champs_formulaire").overlay({
-		expose:			'black',
-		effect:			'apple',
-		oneInstance:	true,
-		closeOnClick:	false,
-		onBeforeLoad: function() {$('#champs_formulaire .titre_overlay').html('Ajouter un nouveau champs au formulaire');}
-	});
-	
-	$('a.bouton_annuler_formulaire').click(function() { 
-		$(".ajout_champs_formulaire").overlay().close(); 
-		return false;
-	});
 
 	//carto google
 	var divcarto = document.getElementById("map" )
@@ -207,25 +194,7 @@ $(document).ready(function () {
 
 	//============validation formulaire=======================================================================
 	//============gestion des dates=======================================================================
-	//traduction francaise
-	$.tools.dateinput.localize("fr",  {
-	   months:        'janvier,f&eacute;vrier,mars,avril,mai,juin,juillet,ao&ucirc;t,' +
-						'septembre,octobre,novembre,d&eacute;cembre',
-	   shortMonths:   'jan,f&eacute;v,mar,avr,mai,jun,jul,ao&ucirc;,sep,oct,nov,d&eacute;c',
-	   days:          'dimanche,lundi,mardi,mercredi,jeudi,vendredi,samedi',
-	   shortDays:     'dim,lun,mar,mer,jeu,ven,sam'
-	});
 
-	// dateinput initialization. the language is specified with lang- option
-	$("input[type=date]").dateinput({ 
-		lang: 'fr', 
-		format: 'yyyy-mm-dd',
-		offset: [0, 0],
-		selectors: true,
-		speed: 'fast',
-		firstDay: 1,
-		yearRange: [-70,30]  
-	}); 
 
 
 	//validation formulaire de saisie
