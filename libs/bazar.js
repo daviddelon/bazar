@@ -22,19 +22,6 @@ $(document).ready(function () {
 	//antispam javascript
 	$("input[name=antispam]").val('1');
 	
-	//formulaire des formulaires
-	$(".ajout_champs_formulaire").overlay({
-		expose:			'black',
-		effect:			'apple',
-		oneInstance:	true,
-		closeOnClick:	false,
-		onBeforeLoad: function() {$('#champs_formulaire .titre_overlay').html('Ajouter un nouveau champs au formulaire');}
-	});
-	
-	$('a.bouton_annuler_formulaire').click(function() { 
-		$(".ajout_champs_formulaire").overlay().close(); 
-		return false;
-	});
 
 	//carto google
 	var divcarto = document.getElementById("map" )
@@ -57,7 +44,7 @@ $(document).ready(function () {
 		//nb de tabs par fiche
 		var nbtotal = $(this).children("fieldset.tab").size() - 1;
 		
-		//on ajoute le nom des tabs à partir de la legende du fieldset
+		//on ajoute le nom des tabs Ã  partir de la legende du fieldset
 		$(this).children("fieldset.tab:first").before("<ul class='css-tabs'></ul>");
 		$(this).children("fieldset.tab").each(function(i) {
 			$(this).addClass("tab" + i)
@@ -176,7 +163,7 @@ $(document).ready(function () {
 	
 	//============longueur maximale d'un champs textarea
 	var textareas = $('textarea[maxlength].input_textarea');
-	// si les textarea contiennent déja quelque chose, on calcule les caractères restants
+	// si les textarea contiennent dÃ©ja quelque chose, on calcule les caractÃ¨res restants
 	textareas.each(function(){
 		var $this = $(this);
 		var max = $this.attr('maxlength');
@@ -199,7 +186,7 @@ $(document).ready(function () {
 	});
 
 
-	//============bidouille pour que les widgets en flash restent en dessous des éléments en survol===========
+	//============bidouille pour que les widgets en flash restent en dessous des Ã©lÃ©ments en survol===========
 	$("object").append('<param value="opaque" name="wmode">');$("embed").attr('wmode','opaque');
 	
 	
@@ -207,25 +194,7 @@ $(document).ready(function () {
 
 	//============validation formulaire=======================================================================
 	//============gestion des dates=======================================================================
-	//traduction francaise
-	$.tools.dateinput.localize("fr",  {
-	   months:        'janvier,f&eacute;vrier,mars,avril,mai,juin,juillet,ao&ucirc;t,' +
-						'septembre,octobre,novembre,d&eacute;cembre',
-	   shortMonths:   'jan,f&eacute;v,mar,avr,mai,jun,jul,ao&ucirc;,sep,oct,nov,d&eacute;c',
-	   days:          'dimanche,lundi,mardi,mercredi,jeudi,vendredi,samedi',
-	   shortDays:     'dim,lun,mar,mer,jeu,ven,sam'
-	});
 
-	// dateinput initialization. the language is specified with lang- option
-	$("input[type=date]").dateinput({ 
-		lang: 'fr', 
-		format: 'yyyy-mm-dd',
-		offset: [0, 0],
-		selectors: true,
-		speed: 'fast',
-		firstDay: 1,
-		yearRange: [-70,30]  
-	}); 
 
 
 	//validation formulaire de saisie
@@ -286,7 +255,7 @@ $(document).ready(function () {
 		});
 		
 		if (atleastonefieldnotvalid === true) {
-			alert('Veuillez saisir tous les champs obligatoires (avec une astérisque rouge)');
+			alert('Veuillez saisir tous les champs obligatoires (avec une astÃ©risque rouge)');
 			//on remonte en haut du formulaire
 			$('html, body').animate({scrollTop: $("#formulaire .invalid").offset().top - 80}, 800);
 		}
@@ -333,5 +302,24 @@ $(document).ready(function () {
 
 
 	$('#formulaire').removeAttr('onsubmit');
+
+	$.tools.dateinput.localize("fr",  {
+	   months:        'janvier,f&eacute;vrier,mars,avril,mai,juin,juillet,ao&ucirc;t,' +
+						'septembre,octobre,novembre,d&eacute;cembre',
+	   shortMonths:   'jan,f&eacute;v,mar,avr,mai,jun,jul,ao&ucirc;,sep,oct,nov,d&eacute;c',
+	   days:          'dimanche,lundi,mardi,mercredi,jeudi,vendredi,samedi',
+	   shortDays:     'dim,lun,mar,mer,jeu,ven,sam'
+	});
+
+	// dateinput initialization. the language is specified with lang- option
+	$("input[type=date]").dateinput({ 
+		lang: 'fr', 
+		format: 'yyyy-mm-dd',
+		offset: [0, 0],
+		selectors: true,
+		speed: 'fast',
+		firstDay: 1,
+		yearRange: [-70,30]  
+	}); 
 
 });

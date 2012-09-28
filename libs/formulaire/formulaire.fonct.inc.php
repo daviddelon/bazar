@@ -323,7 +323,7 @@ function liste(&$formtemplate, $tableau_template, $mode, $valeurs_fiche)
             $valliste = baz_valeurs_liste($tableau_template[1]);
             require_once 'HTML/QuickForm/checkbox.php';
             $i=0;
-            $optioncheckbox = array('class' => 'element_checkbox');
+            $optioncheckbox = array('class' => 'checkbox');
 
             foreach ($valliste['label'] as $id => $label) {
                 if ($i==0) $tab_chkbox = $tableau_template[2] ; else $tab_chkbox='&nbsp;';
@@ -335,7 +335,7 @@ function liste(&$formtemplate, $tableau_template, $mode, $valeurs_fiche)
             $squelette_checkbox->setElementTemplate( '<fieldset class="bazar_fieldset">'."\n".'<legend>{label}'.
                                                     '<!-- BEGIN required --><span class="symbole_obligatoire">&nbsp;*</span><!-- END required -->'."\n".
                                                     '</legend>'."\n".'{element}'."\n".'</fieldset> '."\n"."\n", $tableau_template[0].$tableau_template[1].$tableau_template[6]);
-            $squelette_checkbox->setGroupElementTemplate( "\n".'<div class="bazar_checkbox">'."\n".'{element}'."\n".'</div>'."\n", $tableau_template[0].$tableau_template[1].$tableau_template[6]);
+            $squelette_checkbox->setGroupElementTemplate( "\n".'<div class="checkbox">'."\n".'{element}'."\n".'</div>'."\n", $tableau_template[0].$tableau_template[1].$tableau_template[6]);
 
             $formtemplate->addGroup($checkbox, $tableau_template[0].$tableau_template[1].$tableau_template[6], $tableau_template[2], "\n");
         }
@@ -414,7 +414,7 @@ function checkbox(&$formtemplate, $tableau_template, $mode, $valeurs_fiche)
         }
         $squelette_checkbox->setElementTemplate( '<fieldset class="bazar_fieldset'.$classrequired.'">'."\n".'<legend>'.$req.' {label}'."\n".
                 '</legend>'."\n".'{element}'."\n".'</fieldset> '."\n"."\n", $tableau_template[0].$tableau_template[1].$tableau_template[6]);
-        $squelette_checkbox->setGroupElementTemplate( "\n".'<div class="bazar_checkbox">'."\n".'{element}'."\n".'</div>'."\n", $tableau_template[0].$tableau_template[1].$tableau_template[6]);
+        $squelette_checkbox->setGroupElementTemplate( "\n".'<div class="checkbox">'."\n".'{element}'."\n".'</div>'."\n", $tableau_template[0].$tableau_template[1].$tableau_template[6]);
         $formtemplate->addGroup($checkbox, $tableau_template[0].$tableau_template[1].$tableau_template[6], $tableau_template[2].$bulledaide, "\n");
 
         $formtemplate->setDefaults($defaultValues);
@@ -445,7 +445,7 @@ function checkbox(&$formtemplate, $tableau_template, $mode, $valeurs_fiche)
             $squelette_checkbox->setElementTemplate( '<fieldset class="bazar_fieldset">'."\n".'<legend>{label}'.
                     '<!-- BEGIN required --><span class="symbole_obligatoire">&nbsp;*</span><!-- END required -->'."\n".
                     '</legend>'."\n".'{element}'."\n".'</fieldset> '."\n"."\n", $tableau_template[0].$tableau_template[1].$tableau_template[6]);
-            $squelette_checkbox->setGroupElementTemplate( "\n".'<div class="bazar_checkbox">'."\n".'{element}'."\n".'</div>'."\n", $tableau_template[0].$tableau_template[1].$tableau_template[6]);
+            $squelette_checkbox->setGroupElementTemplate( "\n".'<div class="checkbox">'."\n".'{element}'."\n".'</div>'."\n", $tableau_template[0].$tableau_template[1].$tableau_template[6]);
 
             $formtemplate->addGroup($checkbox, $tableau_template[0].$tableau_template[1].$tableau_template[6], $tableau_template[2], "\n");
         }
@@ -672,27 +672,39 @@ $formtemplate->addElement('text', $tableau_template[1], $tableau_template[2].$bu
  * @param    string  Type d'action pour le formulaire : saisie, modification, vue,... saisie par défaut
  * @return   void
  */
-function texte(&$formtemplate, $tableau_template, $mode, $valeurs_fiche)
+function texte(&$formtemplate, $tableau_template, $mode, $valeurs_fiche,$protege=0)
 {
     list($type, $identifiant, $label, $nb_min_car, $nb_max_car, $valeur_par_defaut, $regexp, $type_input , $obligatoire, , $bulle_d_aide) = $tableau_template;
     if ($mode == 'saisie') {
         // on prepare le html de la bulle d'aide, si elle existe
         if ($bulle_d_aide != '') {
+            if ($protege==1 && isset($valeurs_fiche[$identifiant])) {
+                   $bulle_d_aide.=" (Champ masqu&eacute;)";
+            }
             $bulledaide = '<img class="tooltip_aide" title="'.htmlentities($bulle_d_aide).'" src="tools/bazar/presentation/images/aide.png" width="16" height="16" alt="image aide" />';
         } else {
-            $bulledaide = '';
+            if ($protege==1 && isset($valeurs_fiche[$identifiant])) {
+                   $bulle_d_aide="Champ masqu&eacute;";
+                   $bulledaide = '<img class="tooltip_aide" title="'.htmlentities($bulle_d_aide).'" src="tools/bazar/presentation/images/aide.png" width="16" height="16" alt="image aide" />';
+            }
+            else {
+                $bulledaide = '';
+            }
         }
 
         //gestion des valeurs par defaut : d'abord on regarde s'il y a une valeur a modifier,
         //puis s'il y a une variable passee en GET,
         //enfin on prend la valeur par defaut du formulaire sinon
         if (isset($valeurs_fiche[$identifiant])) {
-            $defauts = $valeurs_fiche[$identifiant];
+            if ($protege==0) { // Pas d'affichage des valeurs en place si fiche deja presente / mais modifiable par tous
+                $defauts = $valeurs_fiche[$identifiant];
+            }
         } elseif (isset($_GET[$identifiant])) {
             $defauts = stripslashes($_GET[$identifiant]);
         } else {
             $defauts = stripslashes($valeur_par_defaut);
         }
+
 
         //si la valeur de nb_max_car est vide, on la mets au maximum
         if ($nb_max_car == '') $nb_max_car = 255;
@@ -717,18 +729,24 @@ function texte(&$formtemplate, $tableau_template, $mode, $valeurs_fiche)
         $formtemplate->addElement('html', $input_html) ;
 
     } elseif ($mode == 'requete') {
-        return array($tableau_template[1] => $valeurs_fiche[$tableau_template[1]]);
+    // TODO tester
+        if (($protege==1) && (baz_a_le_droit('voir_champ', (isset($valeurs_fiche['createur']) ? $valeurs_fiche['createur'] : ''))) || ($protege==0)) { // admin uniquement
+            return array($tableau_template[1] => $valeurs_fiche[$tableau_template[1]]);
+        }
     } elseif ($mode == 'html') {
-        $html = '';
-        if (isset($valeurs_fiche[$tableau_template[1]]) && $valeurs_fiche[$tableau_template[1]]!='') {
-            if ($tableau_template[1] == 'bf_titre') {
-                // Le titre
-                $html .= '<h1 class="BAZ_fiche_titre">'.htmlentities($valeurs_fiche[$tableau_template[1]]).'</h1>'."\n";
-            } else {
-                $html = '<div class="BAZ_rubrique">'."\n".
-                        '<span class="BAZ_label">'.$tableau_template[2].'&nbsp;:</span>'."\n";
-                $html .= '<span class="BAZ_texte"> ';
-                $html .= htmlentities($valeurs_fiche[$tableau_template[1]]).'</span>'."\n".'</div>'."\n";
+    // TODO tester
+        if (($protege==1) && (baz_a_le_droit('voir_champ', (isset($valeurs_fiche['createur']) ? $valeurs_fiche['createur'] : ''))) || ($protege==0)) { // admin uniquement
+            $html = '';
+            if (isset($valeurs_fiche[$tableau_template[1]]) && $valeurs_fiche[$tableau_template[1]]!='') {
+                if ($tableau_template[1] == 'bf_titre') {
+                    // Le titre
+                    $html .= '<h1 class="BAZ_fiche_titre">'.htmlentities($valeurs_fiche[$tableau_template[1]]).'</h1>'."\n";
+                } else {
+                    $html = '<div class="BAZ_rubrique">'."\n".
+                            '<span class="BAZ_label">'.$tableau_template[2].'&nbsp;:</span>'."\n";
+                    $html .= '<span class="BAZ_texte"> ';
+                    $html .= htmlentities($valeurs_fiche[$tableau_template[1]]).'</span>'."\n".'</div>'."\n";
+                }
             }
         }
         //else
@@ -740,6 +758,21 @@ function texte(&$formtemplate, $tableau_template, $mode, $valeurs_fiche)
         //}
         return $html;
     }
+}
+
+
+/** texte_protege() - Ajoute un element de type texte au formulaire
+ *
+ * @param    mixed   L'objet QuickForm du formulaire
+ * @param    mixed   Le tableau des valeurs des différentes option pour l'élément texte
+ * @param    string  Type d'action pour le formulaire : saisie, modification, vue,... saisie par défaut
+ * @return   void
+ */
+function texte_protege(&$formtemplate, $tableau_template, $mode, $valeurs_fiche)
+{
+    $protege=1;
+    return texte($formtemplate, $tableau_template, $mode, $valeurs_fiche,$protege);
+ 
 }
 
 
@@ -1898,7 +1931,7 @@ function checkboxfiche(&$formtemplate, $tableau_template, $mode, $valeurs_fiche)
             $squelette_checkbox->setElementTemplate( '<fieldset class="bazar_fieldset">'."\n".'<legend>{label}'.
                     '<!-- BEGIN required --><span class="symbole_obligatoire">&nbsp;*</span><!-- END required -->'."\n".
                     '</legend>'."\n".'{element}'."\n".'</fieldset> '."\n"."\n", $tableau_template[0].$tableau_template[1].$tableau_template[6]);
-            $squelette_checkbox->setGroupElementTemplate( "\n".'<div class="bazar_checkbox">'."\n".'{element}'."\n".'</div>'."\n", $tableau_template[0].$tableau_template[1].$tableau_template[6]);
+            $squelette_checkbox->setGroupElementTemplate( "\n".'<div class="checkbox">'."\n".'{element}'."\n".'</div>'."\n", $tableau_template[0].$tableau_template[1].$tableau_template[6]);
             $formtemplate->addGroup($checkbox, $tableau_template[0].$tableau_template[1].$tableau_template[6], $tableau_template[2].$bulledaide, "\n");
         }
     } elseif ($mode == 'html') {
@@ -2003,7 +2036,7 @@ function listefiches(&$formtemplate, $tableau_template, $mode, $valeurs_fiche)
             $squelette_checkbox->setElementTemplate( '<fieldset class="bazar_fieldset">'."\n".'<legend>{label}'.
                     '<!-- BEGIN required --><span class="symbole_obligatoire">&nbsp;*</span><!-- END required -->'."\n".
                     '</legend>'."\n".'{element}'."\n".'</fieldset> '."\n"."\n", $tableau_template[0].$tableau_template[1].$tableau_template[6]);
-            $squelette_checkbox->setGroupElementTemplate( "\n".'<div class="bazar_checkbox">'."\n".'{element}'."\n".'</div>'."\n", $tableau_template[0].$tableau_template[1].$tableau_template[6]);
+            $squelette_checkbox->setGroupElementTemplate( "\n".'<div class="checkbox">'."\n".'{element}'."\n".'</div>'."\n", $tableau_template[0].$tableau_template[1].$tableau_template[6]);
             $formtemplate->addGroup($checkbox, $tableau_template[0].$tableau_template[1].$tableau_template[6], $tableau_template[2].$bulledaide, "\n");
         }
     } elseif ($mode == 'html') {
