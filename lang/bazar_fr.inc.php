@@ -62,7 +62,7 @@ define ('BAZ_NOUVEAU_FORMULAIRE_ENREGISTRE', 'Le nouveau formulaire a bien &eacu
 define ('BAZ_NOUVELLE_LISTE_ENREGISTREE', 'La nouvelle liste a bien &eacute;t&eacute; enregistr&eacute;e.');
 define ('BAZ_FORMULAIRE_MODIFIE', 'Le formulaire a bien &eacute;t&eacute; modifi&eacute;.');
 define ('BAZ_LISTE_MODIFIEE', 'La liste a bien &eacute;t&eacute; modifi&eacute;e.');
-define ('BAZ_CONFIRM_SUPPRIMER_FICHE', 'Etes vous sûr de vouloir supprimer la fiche ?');
+define ('BAZ_CONFIRM_SUPPRIMER_FICHE', 'Etes vous s&ucirc;r de vouloir supprimer la fiche ?');
 define ('BAZ_FICHE_SUPPRIMEE', 'La fiche a bien &eacute;t&eacute; supprim&eacute;e.');
 define ('BAZ_FICHE_MODIFIEE', 'La fiche a bien &eacute;t&eacute; modifi&eacute;e.');
 define ('BAZ_FICHE_VALIDEE', 'La fiche a bien &eacute;t&eacute; valid&eacute;e.');
@@ -99,7 +99,7 @@ define ('BAZ_MODIFIER', 'Modifier') ;
 define ('BAZ_MODIFIER_LA_FICHE', 'Modifier la fiche') ;
 define ('BAZ_SUPPRIMER', 'Supprimer') ;
 define ('BAZ_SUPPRIMER_IMAGE', 'Supprimer l\'image') ;
-define ('BAZ_CONFIRMATION_SUPPRESSION_IMAGE', 'Etes vous sûrs de vouloir supprimer cette image?');
+define ('BAZ_CONFIRMATION_SUPPRESSION_IMAGE', 'Etes vous s&ucirc;rs de vouloir supprimer cette image?');
 define ('BAZ_DROIT_INSUFFISANT', 'Op&eacute;ration permise au propri&eacutetaire de la fiche ou &agrave; un administrateur uniquement');
 define ('BAZ_TITRE_SAISIE_FICHE', 'Saisir une fiche : ');
 define ('BAZ_CHOIX_TYPE_FICHE', 'Choisissez le type de fiche que vous souhaitez d&eacute;poser:') ;
