@@ -49,7 +49,7 @@ define ('BAZ_CONFIRM_SUPPRIMER_LISTE', 'Attention! Toutes les donn&eacute;es enr
 define ('BAZ_NOUVEAU_FORMULAIRE', 'Saisir un nouveau formulaire');
 define ('BAZ_NOUVELLE_LISTE', 'Saisir une nouvelle liste');
 define ('BAZ_FORMULAIRE_ET_FICHES_SUPPRIMES', 'Le type de formulaire et ses fiches associ&eacute;es ont bien &eacute;t&eacute; supprim&eacute;s.');
-define ('BAZ_LISTES_SUPPRIMEES', 'La liste &agrave; bien &eacute;t&eacute; supprim&eacute;e.');
+define ('BAZ_LISTES_SUPPRIMEES', 'La liste a bien &eacute;t&eacute; supprim&eacute;e.');
 define ('BAZ_NOM_FORMULAIRE', 'Nom du formulaire');
 define ('BAZ_EFFACER', 'Effacer');
 define ('BAZ_TEMPLATE','Template');
