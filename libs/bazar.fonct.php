@@ -1556,7 +1556,7 @@ function baz_gestion_listes()
     }
 
     // il y a un id de liste a supprimer
-    elseif ( $_GET['action']==BAZ_ACTION_SUPPRIMER_LISTE && isset($_GET['idliste'] && $_GET['idliste']=='' ) && 
+    elseif ( $_GET['action']==BAZ_ACTION_SUPPRIMER_LISTE && isset($_GET['idliste']) && $_GET['idliste']=='' && 
             ($GLOBALS['wiki']->UserIsAdmin() || $GLOBALS['wiki']->UserIsOwner($_GET['idliste'])) ) {
         $GLOBALS["wiki"]->DeleteOrphanedPage($_GET['idliste']);
         $sql = 'DELETE FROM ' . $GLOBALS['wiki']->config["table_prefix"] . 'triples '
