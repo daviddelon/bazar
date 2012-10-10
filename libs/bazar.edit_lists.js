@@ -27,7 +27,7 @@
  **/
 
 $(document).ready(function () {
-	// on rend les listes déplacables
+	// on rend les listes deplacables
 	$(".list-sortables").sortable({
 		handle : '.handle-listitems',
 		update : function () {
@@ -69,7 +69,7 @@ $(document).ready(function () {
 				});
 			}
 		} else {
-			alert('Le dernier élément ne peut être supprimé.');
+			alert('Le dernier ?l?ment ne peut ?tre supprim?.');
 		}
 		return false;
 	});

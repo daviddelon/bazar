@@ -406,16 +406,17 @@ function checkbox(&$formtemplate, $tableau_template, $mode, $valeurs_fiche)
             $checkbox[$i] = $formtemplate->createElement($tableau_template[0], $id, $tab_chkbox, $label, $optioncheckbox);
             $i++;
         }
-        $squelette_checkbox =& $formtemplate->defaultRenderer();
+
+        $squelette_checkbox = & $formtemplate->defaultRenderer();
         $classrequired=''; $req = '';
         if (isset($tableau_template[8]) && $tableau_template[8]==1) {
             $classrequired .= ' chk_required';
-            $req = '<span class="symbole_obligatoire">&nbsp;*</span>';
+            $req = '<span class="symbole_obligatoire">&nbsp;*</span> ';
         }
-        $squelette_checkbox->setElementTemplate( '<fieldset class="bazar_fieldset'.$classrequired.'">'."\n".'<legend>'.$req.' {label}'."\n".
+        $squelette_checkbox->setElementTemplate( '<fieldset class="bazar_fieldset'.$classrequired.'">'."\n".'<legend>'."\n".'{label}'."\n".
                 '</legend>'."\n".'{element}'."\n".'</fieldset> '."\n"."\n", $tableau_template[0].$tableau_template[1].$tableau_template[6]);
         $squelette_checkbox->setGroupElementTemplate( "\n".'<div class="checkbox">'."\n".'{element}'."\n".'</div>'."\n", $tableau_template[0].$tableau_template[1].$tableau_template[6]);
-        $formtemplate->addGroup($checkbox, $tableau_template[0].$tableau_template[1].$tableau_template[6], $tableau_template[2].$bulledaide, "\n");
+        $formtemplate->addGroup($checkbox, $tableau_template[0].$tableau_template[1].$tableau_template[6], $req.$tableau_template[2].$bulledaide, "\n");
 
         $formtemplate->setDefaults($defaultValues);
     } elseif ($mode == 'requete') {
@@ -513,7 +514,7 @@ function jour(&$formtemplate, $tableau_template, $mode, $valeurs_fiche)
             if (isset($tableau_template[5]) && $tableau_template[5]!='') {
                 $date_html .= ' value="'.$tableau_template[5].'" />';
             } else {
-                $date_html .= ' value="0" />';
+                $date_html .= ' value="" />';
             }
         }
         $date_html .= '</div>'."\n".'</div>'."\n";

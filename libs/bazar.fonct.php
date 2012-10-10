@@ -559,187 +559,6 @@ function baz_afficher_formulaire_export()
     return $output;
 }
 
-/** baz_gestion_droits() interface de gestion des droits
-*
-*   return  string le code HTML
-*/
-function baz_gestion_droits()
-{
-    $lien_formulaire=$GLOBALS['_BAZAR_']['url'];
-    $lien_formulaire->addQueryString(BAZ_VARIABLE_ACTION, BAZ_GERER_DROITS);
-
-    //contruction du squelette du formulaire
-    $formtemplate = new HTML_QuickForm('formulaire', 'post', preg_replace ('/&amp;/', '&', $lien_formulaire->getURL()) );
-    $squelette =& $formtemplate->defaultRenderer();
-    $squelette->setFormTemplate("\n".'<form {attributes}>'."\n".'<table style="border:0;">'."\n".'{content}'."\n".'</table>'."\n".'</form>'."\n");
-    $squelette->setElementTemplate( '<tr>'."\n".'<td style="font-size:12px;width:150px;text-align:right;">'."\n".'{label} :</td>'."\n".'<td style="text-align:left;padding:5px;"> '."\n".'{element}'."\n".
-                                '<!-- BEGIN required --><span class="symbole_obligatoire">*</span><!-- END required -->'."\n".
-                                '<!-- BEGIN error --><span class="erreur">{error}</span><!-- END error -->'."\n".
-                                '</td>'."\n".'</tr>'."\n");
-    $squelette->setElementTemplate( '<tr>'."\n".'<td colspan="2" class="liste_a_cocher"><strong>{label}&nbsp;{element}</strong>'."\n".
-                                '<!-- BEGIN required --><span class="symbole_obligatoire">&nbsp;*</span><!-- END required -->'."\n".'</td>'."\n".'</tr>'."\n", 'accept_condition');
-    $squelette->setElementTemplate( '<tr><td colspan="2" class="bouton">{label}{element}</td></tr>'."\n", 'valider');
-    $squelette->setRequiredNoteTemplate("\n".'<tr>'."\n".'<td colspan="2" class="symbole_obligatoire">* {requiredNote}</td></tr>'."\n");
-    //Traduction de champs requis
-    $formtemplate->setRequiredNote(BAZ_CHAMPS_REQUIS) ;
-    $formtemplate->setJsWarnings(BAZ_ERREUR_SAISIE,BAZ_VEUILLEZ_CORRIGER);
-    //Initialisation de la variable personne
-    if ( isset($_POST['personnes']) ) {
-        $personne=$_POST['personnes'];
-    } else $personne=0;
-
-    //Cas ou les droits ont etes changes
-    if (isset($_GET['pers'])) {
-        $personne=$_GET['pers'];
-        //CAS DES DROITS POUR UN TYPE D'ANNONCE: On efface tous les droits de la personne pour ce type d'annonce
-        if (isset($_GET['idtypeannonce'])) {
-            $requete = 'DELETE FROM '.BAZ_PREFIXE.'droits WHERE bd_id_utilisateur='.$_GET['pers'].
-                   ' AND bd_id_nature_offre='.$_GET['idtypeannonce'];
-            $resultat = $GLOBALS['_BAZAR_']['db']->query($requete) ;
-            if (DB::isError($resultat)) {
-                echo ($resultat->getMessage().$resultat->getDebugInfo()) ;
-            }
-        }
-        //CAS DU SUPER ADMIN: On efface tous les droits de la personne en general
-        else {
-            $requete = 'DELETE FROM '.BAZ_PREFIXE.'droits WHERE bd_id_utilisateur='.$_GET['pers'];
-            $resultat = $GLOBALS['_BAZAR_']['db']->query($requete) ;
-            if (DB::isError($resultat)) {
-                echo ($resultat->getMessage().$resultat->getDebugInfo()) ;
-            }
-        }
-        if ($_GET['droits']=='superadmin') {
-            $requete = 'INSERT INTO '.BAZ_PREFIXE.'droits VALUES ('.$_GET['pers'].',0,0)';
-            $resultat = $GLOBALS['_BAZAR_']['db']->query($requete) ;
-            if (DB::isError($resultat)) {
-                echo ($resultat->getMessage().$resultat->getDebugInfo()) ;
-            }
-        } elseif ($_GET['droits']=='redacteur') {
-            $requete = 'INSERT INTO '.BAZ_PREFIXE.'droits VALUES ('.$_GET['pers'].','.$_GET['idtypeannonce'].',1)';
-            $resultat = $GLOBALS['_BAZAR_']['db']->query($requete) ;
-            if (DB::isError($resultat)) {
-                echo ($resultat->getMessage().$resultat->getDebugInfo()) ;
-            }
-        } elseif ($_GET['droits']=='admin') {
-            $requete = 'INSERT INTO '.BAZ_PREFIXE.'droits VALUES ('.$_GET['pers'].','.$_GET['idtypeannonce'].',2)';
-            $resultat = $GLOBALS['_BAZAR_']['db']->query($requete) ;
-            if (DB::isError($resultat)) {
-                echo ($resultat->getMessage().$resultat->getDebugInfo()) ;
-            }
-        }
-    }
-
-    //requete pour obtenir l'id, le nom et prenom des personnes inscrites a l'annuaire sauf soi meme
-    $requete = 'SELECT '.BAZ_CHAMPS_ID.', '.BAZ_CHAMPS_NOM.', '.BAZ_CHAMPS_PRENOM.' FROM '.BAZ_ANNUAIRE.
-           ' WHERE '.BAZ_CHAMPS_ID." != ".$GLOBALS['id_user'].' ORDER BY '.BAZ_CHAMPS_NOM.' ASC';
-    $resultat = $GLOBALS['_BAZAR_']['db']->query($requete) ;
-    if (DB::isError($resultat)) {
-        echo ($resultat->getMessage().$resultat->getDebugInfo()) ;
-    }
-    $res='<h2>'.BAZ_GESTION_DES_DROITS.'</h2><br />'."\n";
-    $res.=BAZ_DESCRIPTION_GESTION_DES_DROITS.'<br /><br />'."\n";
-    $personnes_select[0]=BAZ_SELECTION;
-    while ($ligne = $resultat->fetchRow(DB_FETCHMODE_ASSOC)) {
-        $personnes_select[$ligne[BAZ_CHAMPS_ID]] = $ligne[BAZ_CHAMPS_NOM]." ".$ligne[BAZ_CHAMPS_PRENOM] ;
-    }
-    $java=array ('style'=>'width:250px;','onchange'=>'this.form.submit();');
-    $formtemplate->addElement ('select', 'personnes', BAZ_LABEL_CHOIX_PERSONNE, $personnes_select, $java) ;
-    $defauts=array ('personnes'=>$personne);
-    $formtemplate->setDefaults($defauts);
-    $res.= $formtemplate->toHTML().'<br />'."\n" ;
-
-    if ($personne!=0) {
-        //cas du super utilisateur
-        $utilisateur = new Utilisateur_bazar($personne) ;
-        if ($utilisateur->isSuperAdmin()) {
-            $res.= '<br />'.BAZ_EST_SUPERADMINISTRATEUR.'<br /><br />'."\n";
-            $lien_enlever_superadmin=$GLOBALS['_BAZAR_']['url'];
-            $lien_enlever_superadmin->addQueryString(BAZ_VARIABLE_ACTION, BAZ_GERER_DROITS);
-            $lien_enlever_superadmin->addQueryString('pers', $personne);
-            $lien_enlever_superadmin->addQueryString('droits', 'aucun');
-            $res.= '<a href='.$lien_enlever_superadmin->getURL().'>'.BAZ_CHANGER_SUPERADMINISTRATEUR.'</a><br />'."\n";
-        } else {
-            $lien_passer_superadmin=$GLOBALS['_BAZAR_']['url'];
-            $lien_passer_superadmin->addQueryString(BAZ_VARIABLE_ACTION, BAZ_GERER_DROITS);
-            $lien_passer_superadmin->addQueryString('pers', $personne);
-            $lien_passer_superadmin->addQueryString('droits', 'superadmin');
-            $res.= '<a href='.$lien_passer_superadmin->getURL().'>'.BAZ_PASSER_SUPERADMINISTRATEUR.'</a><br />'."\n";
-
-            //on cherche les differentes rubriques d'annonces
-            $requete = 'SELECT bn_id_nature, bn_label_nature, bn_image_titre FROM '.BAZ_PREFIXE.'nature';
-            if (isset($GLOBALS['_BAZAR_']['langue'])) $requete .= ' where bn_ce_i18n like "'.$GLOBALS['_BAZAR_']['langue'].'%"';
-            $resultat = $GLOBALS['_BAZAR_']['db']->query($requete) ;
-            if (DB::isError($resultat)) {
-                echo ($resultat->getMessage().$resultat->getDebugInfo()) ;
-            }
-            $res.='<br /><b>'.BAZ_DROITS_PAR_TYPE.'</b><br /><br />';
-
-            $table = new HTML_Table(array ('width' => '100%', 'class' => 'table_bazar')) ;
-            $table->addRow(array ('<strong>'.BAZ_TYPE_ANNONCES.'</strong>',
-                                  '<strong>'.BAZ_DROITS_ACTUELS.'</strong>',
-                          '<strong>'.BAZ_PASSER_EN.'</strong>',
-                          '<strong>'.BAZ_OU_PASSER_EN.'</strong>')) ;
-            $table->setRowType (0, 'th') ;
-
-            while ($ligne = $resultat->fetchRow(DB_FETCHMODE_ASSOC)) {
-                $lien_aucun_droit=$GLOBALS['_BAZAR_']['url'];
-                $lien_aucun_droit->addQueryString(BAZ_VARIABLE_ACTION, BAZ_GERER_DROITS);
-                $lien_aucun_droit->addQueryString('pers', $personne);
-                $lien_aucun_droit->addQueryString('droits', 'aucun');
-                $lien_aucun_droit->addQueryString('idtypeannonce', $ligne["bn_id_nature"]);
-
-                $lien_passer_redacteur=$GLOBALS['_BAZAR_']['url'];
-                $lien_passer_redacteur->addQueryString(BAZ_VARIABLE_ACTION, BAZ_GERER_DROITS);
-                $lien_passer_redacteur->addQueryString('pers', $personne);
-                $lien_passer_redacteur->addQueryString('droits', 'redacteur');
-                $lien_passer_redacteur->addQueryString('idtypeannonce', $ligne["bn_id_nature"]);
-
-                $lien_passer_admin=$GLOBALS['_BAZAR_']['url'];
-                $lien_passer_admin->addQueryString(BAZ_VARIABLE_ACTION, BAZ_GERER_DROITS);
-                $lien_passer_admin->addQueryString('pers', $personne);
-                $lien_passer_admin->addQueryString('droits', 'admin');
-                $lien_passer_admin->addQueryString('idtypeannonce', $ligne["bn_id_nature"]);
-                if (isset($ligne['bn_image_titre'])) {
-                    $titre='&nbsp;<img src="'.BAZ_CHEMIN.'presentation/images/'.$ligne['bn_image_titre'].'" alt="'.$ligne['bn_label_nature'].'" />'."\n";
-                } else {
-                    $titre='<strong>&nbsp;'.$ligne['bn_label_nature'].'</strong>'."\n";
-                }
-                if ($utilisateur->isAdmin($ligne['bn_id_nature'])) {
-                    $table->addRow(array($titre,
-                                 BAZ_DROIT_ADMIN,
-                                 '<a href='.$lien_aucun_droit->getURL().'>'.BAZ_AUCUN_DROIT.'</a>',
-                                 '<a href='.$lien_passer_redacteur->getURL().'>'.BAZ_LABEL_REDACTEUR.'</a>'));
-                } elseif ($utilisateur->isRedacteur($ligne['bn_id_nature'])) {
-                    $table->addRow(array($titre,
-                                         BAZ_LABEL_REDACTEUR,
-                                         '<a href='.$lien_aucun_droit->getURL().'>'.BAZ_AUCUN_DROIT.'</a>',
-                                 '<a href='.$lien_passer_admin->getURL().'>'.BAZ_DROIT_ADMIN.'</a>'));
-                } else {
-                    $table->addRow(array($titre,
-                                         BAZ_AUCUN_DROIT,
-                                         '<a href='.$lien_passer_redacteur->getURL().'>'.BAZ_LABEL_REDACTEUR.'</a>',
-                                 '<a href='.$lien_passer_admin->getURL().'>'.BAZ_DROIT_ADMIN.'</a>'));
-
-                }
-            }
-
-            $table->altRowAttributes(1, array('class' => 'ligne_impaire'), array('class' => 'ligne_paire'));
-            $table->updateColAttributes(0, array('align' => 'left'));
-            $table->updateColAttributes(1, array('align' => 'left'));
-            $table->updateColAttributes(2, array('align' => 'left'));
-            $table->updateColAttributes(3, array('align' => 'left'));
-            $res.=$table->toHTML() ;
-        }
-    }
-
-    // Nettoyage de l'url
-    $GLOBALS['_BAZAR_']['url']->removeQueryString(BAZ_VARIABLE_ACTION);
-    $GLOBALS['_BAZAR_']['url']->removeQueryString('pers');
-    $GLOBALS['_BAZAR_']['url']->removeQueryString('droits');
-    $GLOBALS['_BAZAR_']['url']->removeQueryString('idtypeannonce');
-
-    return $res;
-}
 
 /** baz_formulaire() - Renvoie le formulaire pour les saisies ou modification des fiches
 *
@@ -1615,7 +1434,7 @@ function baz_gestion_listes()
 
             $liste[$valeursliste['titre_liste']] = '<li>';
 
-            if ($GLOBALS['wiki']->HasAccess('write', $ligne['resource'])) {
+            if ($GLOBALS['wiki']->UserIsAdmin() || $GLOBALS['wiki']->UserIsOwner($ligne['resource'])) {
                 $liste[$valeursliste['titre_liste']] .= '<a class="BAZ_lien_supprimer" href="'.$GLOBALS['wiki']->href('',$GLOBALS['wiki']->GetPageTag(),
                         BAZ_VARIABLE_VOIR.'='.BAZ_VOIR_LISTES.'&amp;'.BAZ_VARIABLE_ACTION.'='.BAZ_ACTION_SUPPRIMER_LISTE.'&amp;idliste='.$ligne['resource']).'"  onclick="javascript:return confirm(\''.BAZ_CONFIRM_SUPPRIMER_LISTE.' ?\');"></a>'."\n";
             }
@@ -1737,150 +1556,62 @@ function baz_gestion_listes()
     }
 
     // il y a un id de liste a supprimer
-    elseif ($_GET['action']==BAZ_ACTION_SUPPRIMER_LISTE && $GLOBALS['wiki']->HasAccess('write', $_GET['idliste'])) {
+    elseif ( $_GET['action']==BAZ_ACTION_SUPPRIMER_LISTE && isset($_GET['idliste']) && $_GET['idliste']=='' && 
+            ($GLOBALS['wiki']->UserIsAdmin() || $GLOBALS['wiki']->UserIsOwner($_GET['idliste'])) ) {
         $GLOBALS["wiki"]->DeleteOrphanedPage($_GET['idliste']);
         $sql = 'DELETE FROM ' . $GLOBALS['wiki']->config["table_prefix"] . 'triples '
             . 'WHERE resource = "' . addslashes($_GET['idliste']) . '" ';
         $GLOBALS["wiki"]->Query($sql);
+
+        // Envoie d un mail aux administrateurs
+        if (BAZ_ENVOI_MAIL_ADMIN) {
+            include_once 'Mail.php';
+            include_once 'Mail/mime.php';
+            $lien = str_replace("/wakka.php?wiki=","",$GLOBALS['wiki']->config["base_url"]);
+            $sujet = remove_accents('['.str_replace("http://","",$lien).'] liste supprimee : '.$_GET['idliste']);
+            
+            $text = 'IP utilisee : '.$_SERVER["REMOTE_ADDR"].' ('.$GLOBALS['wiki']->GetUserName().')';
+            $texthtml = $text;
+            $fichier = 'tools/bazar/presentation/bazar.css';
+            $style = file_get_contents($fichier);
+            $style = str_replace('url(', 'url('.$lien.'/tools/bazar/presentation/', $style);
+            $fiche = str_replace('src="tools', 'src="'.$lien.'/tools', baz_voir_fiche(0, $GLOBALS['_BAZAR_']['id_fiche'])).$texthtml;
+            $html = '<html><head><style type="text/css">'.$style.'</style></head><body>'.$fiche.'</body></html>';
+
+            $crlf = "\n";
+            $hdrs = array(
+                          'From'    => BAZ_ADRESSE_MAIL_ADMIN,
+                          'Subject' => $sujet
+                          );
+
+            $mime = new Mail_mime($crlf);
+
+            $mime->setTXTBody($text);
+            $mime->setHTMLBody($html);
+
+            //do not ever try to call these lines in reverse order
+            $body = $mime->get();
+            $hdrs = $mime->headers($hdrs);
+
+            $mail =& Mail::factory('mail');
+
+            //on va chercher les admins
+            $requeteadmins = 'SELECT value FROM '.$GLOBALS['wiki']->config["table_prefix"].'triples WHERE resource="ThisWikiGroup:admins" AND property="http://www.wikini.net/_vocabulary/acls" LIMIT 1';
+            $resultatadmins = $GLOBALS['_BAZAR_']['db']->query($requeteadmins);
+            $ligne = $resultatadmins->fetchRow(DB_FETCHMODE_ASSOC);
+            $tabadmin = explode("\n", $ligne['value']);
+            foreach ($tabadmin  as $line) {
+                $admin = $GLOBALS['wiki']->LoadUser(trim($line));
+                $mail->send($admin['email'], $hdrs, $body);
+            }
+        }
+
 
         //on redirige vers la page contenant toutes les listes, et on confirme par message la bonne suppression de la liste
         $GLOBALS["wiki"]->SetMessage(BAZ_LISTES_SUPPRIMEES);
         $GLOBALS["wiki"]->Redirect($GLOBALS["wiki"]->href('',$GLOBALS['wiki']->GetPageTag(), BAZ_VARIABLE_VOIR.'='.BAZ_VOIR_LISTES, false));
+
     }
-
-/*
-    // il y a un formulaire a modifier
-    if (isset($_GET['action_listes']) && $_GET['action_listes']=='modif') {
-        //recuperation des informations de la liste
-        $valeursliste = baz_valeurs_liste($_GET['idliste']);
-        $res .=  baz_formulaire_des_listes('modif_v', $valeursliste);
-
-    //il y a une nouvelle liste a saisir
-    } elseif (isset($_GET['action_listes']) && $_GET['action_listes']=='new') {
-        $res .= baz_formulaire_des_listes('new_v');
-
-    //il y a des donnees pour ajouter une nouvelle liste
-    } elseif (isset($_GET['action_listes']) && $_GET['action_listes']=='new_v') {
-        unset($_POST["valider"]);
-        $nomwikiliste = genere_nom_wiki('Liste '.$_POST['titre_liste']);
-        //on supprime les valeurs vides et on encode en utf-8 pour réussir à encoder en json
-        $i = 1;
-        $valeur["label"] = array();
-        foreach ($_POST["label"] as $label) {
-            if (($label!=NULL || $label!='') && ($_POST["id"][$i]!=NULL || $_POST["id"][$i]!='')) {
-                $valeur["label"][$_POST["id"][$i]] = $label;
-                $i++;
-            }
-        }
-        $valeur["label"] = array_map("utf8_encode", $valeur["label"]);
-        $valeur["titre_liste"] = utf8_encode($_POST["titre_liste"]);
-
-        //on sauve les valeurs d'une liste dans une PageWiki, pour garder l'historique
-        $GLOBALS["wiki"]->SavePage($nomwikiliste, json_encode($valeur));
-        //on cree un triple pour spécifier que la page wiki créée est une liste
-        $GLOBALS["wiki"]->InsertTriple($nomwikiliste, 'http://outils-reseaux.org/_vocabulary/type', 'liste', '', '');
-
-        $res .= '<div class="alert alert-success">'."\n".'<a data-dismiss="alert" class="close" type="button">&times;</a>'.BAZ_NOUVELLE_LISTE_ENREGISTREE.'</div>'."\n";
-
-    //il y a des donnees pour modifier une liste
-    } elseif (isset($_GET['action_listes']) && $_GET['action_listes']=='modif_v' && baz_a_le_droit('saisie_liste') ) {
-        unset($_POST["valider"]);
-        //on supprime les valeurs vides et on encode en utf-8 pour réussir à encoder en json
-        $i = 1;
-        $valeur["label"] = array();
-        foreach ($_POST["label"] as $label) {
-            if (($label!=NULL || $label!='') && ($_POST["id"][$i]!=NULL || $_POST["id"][$i]!='')) {
-                $valeur["label"][$_POST["id"][$i]] = $label;
-                $i++;
-            }
-        }
-        $valeur["label"] = array_map("utf8_encode", $valeur["label"]);
-        $valeur["titre_liste"] = utf8_encode($_POST["titre_liste"]);
-
-        /* ----------------- TODO: gérer les suppressions de valeurs dans les fiches associées pour garantir l'intégrité des données
-        //on vérifie si les valeurs des listes ont changées afin de garder de l'intégrité de la base des fiches
-        foreach ($_POST["ancienlabel"] as $key => $value) {
-            //si la valeur de la liste a été changée, on répercute les changements pour les fiches contenant cette valeur
-            if ( isset($_POST["label"][$key]) && $value != $_POST["label"][$key] ) {
-                //TODO: fonction baz_modifier_metas_liste($_POST['NomWiki'], $value, $_POST['label'][$key]);
-            }
-        }
-
-        //on supprime les valeurs des listes supprimées des fiches possédants ces valeurs
-        foreach ($_POST["a_effacer_ancienlabel"] as $key => $value) {
-            //TODO: fonction baz_effacer_metas_liste($_POST['NomWiki'], $value);
-        }
-
-        //on sauve les valeurs d'une liste dans une PageWiki, pour garder l'historique
-        $GLOBALS["wiki"]->SavePage($_POST['NomWiki'], json_encode($valeur));
-
-        $res .= '<div class="alert alert-success">'."\n".'<a data-dismiss="alert" class="close" type="button">&times;</a>'.BAZ_LISTE_MODIFIEE.'</div>'."\n";
-
-    // il y a un id de liste à supprimer
-    } elseif (isset($_GET['action_listes']) && $_GET['action_listes']=='delete' && baz_a_le_droit('saisie_liste')) {
-        $GLOBALS["wiki"]->DeleteOrphanedPage($_GET['idliste']);
-        $sql = 'DELETE FROM ' . $GLOBALS['wiki']->config["table_prefix"] . 'triples '
-            . 'WHERE resource = "' . addslashes($_GET['idliste']) . '" ';
-        $GLOBALS["wiki"]->Query($sql);
-
-        $res .= '<div class="alert alert-success">'."\n".'<a data-dismiss="alert" class="close" type="button">&times;</a>'.BAZ_LISTES_SUPPRIMEES.'</div>'."\n";
-    }
-   /*
-    // affichage de la liste des templates à modifier ou supprimer (on l'affiche dans tous les cas, sauf cas de modif de formulaire)
-    if (!isset($_GET['action_listes']) || ($_GET['action_listes']!='modif' && $_GET['action_listes']!='new') ) {
-
-        //requete pour obtenir l'id et le label des types d'annonces
-        $requete = 'SELECT resource FROM '.$GLOBALS['wiki']->config['table_prefix'].'triples WHERE property="http://outils-reseaux.org/_vocabulary/type" AND value="liste" ORDER BY resource';
-        $resultat = $GLOBALS['_BAZAR_']['db']->query($requete) ;
-        if (DB::isError($resultat)) {
-            return ($resultat->getMessage().$resultat->getDebugInfo()) ;
-        }
-        $liste = '';
-        while ($ligne = $resultat->fetchRow(DB_FETCHMODE_ASSOC)) {
-            $valeursliste = baz_valeurs_liste($ligne['resource']);
-
-            $lien_formulaire = clone($GLOBALS['_BAZAR_']['url']);
-            $liste .= '<li>';
-            $lien_formulaire->addQueryString('action_listes', 'delete');
-            $lien_formulaire->addQueryString('idliste', $ligne['resource']);
-            if (baz_a_le_droit('saisie_liste')) {
-                $liste .= '<a class="BAZ_lien_supprimer" href="'.str_replace('&','&amp;',$lien_formulaire->getURL()).'"  onclick="javascript:return confirm(\''.BAZ_CONFIRM_SUPPRIMER_LISTE.' ?\');"></a>'."\n";
-            }
-            $lien_formulaire->removeQueryString('action_listes');
-            $lien_formulaire->addQueryString('action_listes', 'modif');
-            $elements_liste = '';
-            foreach ($valeursliste['label'] as $val) {
-                $elements_liste .= '<option>'.$val.'</option>';
-            }
-            if ($elements_liste != '') {
-                $affichage_liste = '&nbsp;- '.BAZ_VALEURS_LISTE.' :&nbsp;<select id="liste_'.$ligne['resource'].'">'."\n".
-                '<option>'.BAZ_CHOISIR.'</option>'."\n".
-                $elements_liste."\n".
-                '</select>'."\n";
-            } else {
-                $affichage_liste = '';
-            }
-            if (baz_a_le_droit('saisie_liste')) {
-                $liste .= '<a class="BAZ_lien_modifier" href="'.str_replace('&','&amp;',$lien_formulaire->getURL()).'">'.$valeursliste['titre_liste'].'</a>'.$affichage_liste."\n";
-            } else {
-                $liste .= $valeursliste['titre_liste'].$affichage_liste."\n";
-            }
-            $lien_formulaire->removeQueryString('action_listes');
-            $lien_formulaire->removeQueryString('idliste');
-
-            $liste .='</li>'."\n";
-        }
-        if ($liste!='') {
-            $res .= '<ul class="BAZ_liste">'."\n".$liste.'</ul>'."\n";
-        } else {
-            $res .= '<div class="alert alert-info">'."\n".'<a data-dismiss="alert" class="close" type="button">&times;</a>'.BAZ_INTRO_AJOUT_LISTE.'</div>'."\n";
-        }
-
-        // ajout du lien pour creer une nouvelle liste
-        $lien_formulaire = $GLOBALS['wiki']->href('', $GLOBALS['wiki']->GetPageTag(), BAZ_VARIABLE_VOIR.'='.BAZ_VOIR_LISTES.'&amp;'.BAZ_VARIABLE_ACTION.'='.BAZ_ACTION_NOUVELLE_LISTE);
-        $res .= '<a href="'.$lien_formulaire.'" class="btn btn-primary"><i class="icon-plus icon-white"></i>&nbsp;'.BAZ_NOUVELLE_LISTE.'</a>'."\n";
-
-    }*/
 
     return $res;
 }
