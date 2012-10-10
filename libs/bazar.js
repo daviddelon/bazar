@@ -198,10 +198,8 @@ $(document).ready(function () {
 
 
 	//validation formulaire de saisie
-	var inputsreq = $("#formulaire input[required=required], #formulaire select[required=required], #formulaire textarea[required=required]");
-	
+	var inputsreq = $("#formulaire input[required=required], #formulaire select[required=required], #formulaire textarea[required=required]").not('#formulaire input.bazar-date[required=required]');
 	$('.bouton_sauver').click(function() {	
-		
 		var atleastonefieldnotvalid = false;
 		var atleastonemailfieldnotvalid = false;
 		var atleastoneurlfieldnotvalid = false;
@@ -219,6 +217,16 @@ $(document).ready(function () {
 			});
 		}
 		
+		// les dates
+		$('#formulaire input.bazar-date[required=required]').each(function() {	
+			if($(this).val()==='') {
+				atleastonefieldnotvalid = true;
+				$(this).addClass('invalid');		
+			} else {
+				$(this).removeClass('invalid');
+			}
+		});
+
 		// les emails
 		$('#formulaire input[type=email]').each(function() {
 			var reg = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
@@ -255,7 +263,7 @@ $(document).ready(function () {
 		});
 		
 		if (atleastonefieldnotvalid === true) {
-			alert('Veuillez saisir tous les champs obligatoires (avec une astérisque rouge)');
+			alert('Veuillez saisir tous les champs obligatoires (avec une asterisque rouge)');
 			//on remonte en haut du formulaire
 			$('html, body').animate({scrollTop: $("#formulaire .invalid").offset().top - 80}, 800);
 		}
