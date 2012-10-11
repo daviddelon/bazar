@@ -413,8 +413,8 @@ function checkbox(&$formtemplate, $tableau_template, $mode, $valeurs_fiche)
             $classrequired .= ' chk_required';
             $req = '<span class="symbole_obligatoire">&nbsp;*</span> ';
         }
-        $squelette_checkbox->setElementTemplate( '<fieldset class="bazar_fieldset'.$classrequired.'">'."\n".'<legend>'."\n".'{label}'."\n".
-                '</legend>'."\n".'{element}'."\n".'</fieldset> '."\n"."\n", $tableau_template[0].$tableau_template[1].$tableau_template[6]);
+        //$squelette_checkbox->setElementTemplate( '<fieldset class="bazar_fieldset'.$classrequired.'">'."\n".'<legend>'."\n".'{label}'."\n".
+        //        '</legend>'."\n".'{element}'."\n".'</fieldset> '."\n"."\n", $tableau_template[0].$tableau_template[1].$tableau_template[6]);
         $squelette_checkbox->setGroupElementTemplate( "\n".'<div class="checkbox">'."\n".'{element}'."\n".'</div>'."\n", $tableau_template[0].$tableau_template[1].$tableau_template[6]);
         $formtemplate->addGroup($checkbox, $tableau_template[0].$tableau_template[1].$tableau_template[6], $req.$tableau_template[2].$bulledaide, "\n");
 
@@ -1450,33 +1450,21 @@ function carte_google(&$formtemplate, $tableau_template, $mode, $valeurs_fiche)
     list($type, $lat, $lon, $classe, $obligatoire) = $tableau_template;
 
     if ($mode == 'saisie') {
-        if (isset($valeurs_fiche['carte_google'])) {
-            $tab=explode('|', $valeurs_fiche['carte_google']);
-            if (count($tab)>1) {
-                $defauts = array( $lat => $tab[0], $lon => $tab[1] );
-                $formtemplate->setDefaults($defauts);
-            }
-        }
+        $scriptgoogle = '
+//-----------------------------------------------------------------------------------------------------------
+//--------------------TODO : ATTENTION CODE FACTORISABLE-----------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
+var geocoder;
+var map;
+var marker;
+var infowindow;
 
-        $html_bouton = '<div class="titre_carte_google">'.METTRE_POINT.'</div>';
-
-        $html_bouton .= '<input class="btn_adresse" onclick="showAddress();" name="chercher_sur_carte" value="'.VERIFIER_MON_ADRESSE.'" type="button" />
-            <input class="btn_client" onclick="showClientAddress();" name="chercher_client" value="'.VERIFIER_MON_ADRESSE_CLIENT.'" type="button" />';
-
-        $scriptgoogle = '//-----------------------------------------------------------------------------------------------------------
-            //--------------------TODO : ATTENTION CODE FACTORISABLE-----------------------------------------------------
-            //-----------------------------------------------------------------------------------------------------------
-            var geocoder;
-        var map;
-        var marker;
-        var infowindow;
-
-        function initialize()
-        {
-            geocoder = new google.maps.Geocoder();
-            var myLatlng = new google.maps.LatLng('.BAZ_GOOGLE_CENTRE_LAT.', '.BAZ_GOOGLE_CENTRE_LON.');
-            var myOptions = {
-zoom: '.BAZ_GOOGLE_ALTITUDE.',
+function initialize()
+{
+    geocoder = new google.maps.Geocoder();
+    var myLatlng = new google.maps.LatLng('.BAZ_GOOGLE_CENTRE_LAT.', '.BAZ_GOOGLE_CENTRE_LON.');
+    var myOptions = {
+      zoom: '.BAZ_GOOGLE_ALTITUDE.',
       center: myLatlng,
       mapTypeId: google.maps.MapTypeId.'.BAZ_TYPE_CARTO.',
       navigationControl: '.BAZ_AFFICHER_NAVIGATION.',
@@ -1485,52 +1473,52 @@ zoom: '.BAZ_GOOGLE_ALTITUDE.',
       mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.'.BAZ_STYLE_CHOIX_CARTE.'},
       scaleControl: '.BAZ_AFFICHER_ECHELLE.' ,
       scrollwheel: '.BAZ_PERMETTRE_ZOOM_MOLETTE.'
-            }
-            map = new google.maps.Map(document.getElementById("map"), myOptions);
+    }
+    map = new google.maps.Map(document.getElementById("map"), myOptions);
 
-            //on pose un point si les coordonnées existent déja (cas d\'une modification de fiche)
-            if (document.getElementById("latitude") && document.getElementById("latitude").value != \'\' &&
-                    document.getElementById("longitude") && document.getElementById("longitude").value != \'\' ) {
-                var lat = document.getElementById("latitude").value;
-                var lon = document.getElementById("longitude").value;
-                latlngclient = new google.maps.LatLng(lat,lon);
-                map.setCenter(latlngclient);
-                infowindow = new google.maps.InfoWindow({
-content: "<h4>Votre emplacement<\/h4>'.TEXTE_POINT_DEPLACABLE.'",
-maxWidth: 250
-});
-//image du marqueur
-var image = new google.maps.MarkerImage(\''.BAZ_IMAGE_MARQUEUR.'\',
+    //on pose un point si les coordonnées existent déja (cas d\'une modification de fiche)
+    if (document.getElementById("latitude") && document.getElementById("latitude").value != \'\' &&
+        document.getElementById("longitude") && document.getElementById("longitude").value != \'\' ) {
+        var lat = document.getElementById("latitude").value;
+        var lon = document.getElementById("longitude").value;
+        latlngclient = new google.maps.LatLng(lat,lon);
+        map.setCenter(latlngclient);
+        infowindow = new google.maps.InfoWindow({
+        content: "<h4>Votre emplacement<\/h4>'.TEXTE_POINT_DEPLACABLE.'",
+        maxWidth: 250
+        });
+        //image du marqueur
+        var image = new google.maps.MarkerImage(\''.BAZ_IMAGE_MARQUEUR.'\',
         //taille, point d\'origine, point d\'arrivee de l\'image
         new google.maps.Size('.BAZ_DIMENSIONS_IMAGE_MARQUEUR.'),
         new google.maps.Point('.BAZ_COORD_ORIGINE_IMAGE_MARQUEUR.'),
         new google.maps.Point('.BAZ_COORD_ARRIVEE_IMAGE_MARQUEUR.'));
 
-//ombre du marqueur
-var shadow = new google.maps.MarkerImage(\''.BAZ_IMAGE_OMBRE_MARQUEUR.'\',
+        //ombre du marqueur
+        var shadow = new google.maps.MarkerImage(\''.BAZ_IMAGE_OMBRE_MARQUEUR.'\',
         // taille, point d\'origine, point d\'arrivee de l\'image de l\'ombre
         new google.maps.Size('.BAZ_DIMENSIONS_IMAGE_OMBRE_MARQUEUR.'),
         new google.maps.Point('.BAZ_COORD_ORIGINE_IMAGE_OMBRE_MARQUEUR.'),
         new google.maps.Point('.BAZ_COORD_ARRIVEE_IMAGE_OMBRE_MARQUEUR.'));
 
-marker = new google.maps.Marker({
-position: latlngclient,
-map: map,
-icon: image,
-shadow: shadow,
-title: \'Votre emplacement\',
-draggable: true
-});
-infowindow.open(map,marker);
-google.maps.event.addListener(marker, \'click\', function() {
-        infowindow.open(map,marker);
-        });
-google.maps.event.addListener(marker, "dragend", function () {
-        var lat = document.getElementById("latitude");lat.value = marker.getPosition().lat();
-        var lon = document.getElementById("longitude");lon.value = marker.getPosition().lng();
-        map.setCenter(marker.getPosition());
-        });
-}
+    marker = new google.maps.Marker({
+    position: latlngclient,
+    map: map,
+    icon: image,
+    shadow: shadow,
+    title: \'Votre emplacement\',
+    draggable: true
+    });
+    infowindow.open(map,marker);
+    google.maps.event.addListener(marker, \'click\', function() {
+            infowindow.open(map,marker);
+            });
+    google.maps.event.addListener(marker, "dragend", function () {
+            var lat = document.getElementById("latitude");lat.value = marker.getPosition().lat();
+            var lon = document.getElementById("longitude");lon.value = marker.getPosition().lng();
+            map.setCenter(marker.getPosition());
+            });
+    }
 };
 
 function showClientAddress()
@@ -1619,9 +1607,9 @@ function showAddress()
                 var lon = document.getElementById("longitude");lon.value = map.getCenter().lng();
 
                 infowindow = new google.maps.InfoWindow({
-content: "<h4>Votre emplacement<\/h4>'.TEXTE_POINT_DEPLACABLE.'",
-maxWidth: 250
-});
+                    content: "<h4>Votre emplacement<\/h4>'.TEXTE_POINT_DEPLACABLE.'",
+                    maxWidth: 250
+                });
                 //image du marqueur
                 var image = new google.maps.MarkerImage(\''.BAZ_IMAGE_MARQUEUR.'\',
                     //taille, point d\'origine, point d\'arrivee de l\'image
@@ -1629,35 +1617,35 @@ maxWidth: 250
                     new google.maps.Point('.BAZ_COORD_ORIGINE_IMAGE_MARQUEUR.'),
                     new google.maps.Point('.BAZ_COORD_ARRIVEE_IMAGE_MARQUEUR.'));
 
-//ombre du marqueur
-var shadow = new google.maps.MarkerImage(\''.BAZ_IMAGE_OMBRE_MARQUEUR.'\',
+        //ombre du marqueur
+        var shadow = new google.maps.MarkerImage(\''.BAZ_IMAGE_OMBRE_MARQUEUR.'\',
         // taille, point d\'origine, point d\'arrivee de l\'image de l\'ombre
         new google.maps.Size('.BAZ_DIMENSIONS_IMAGE_OMBRE_MARQUEUR.'),
         new google.maps.Point('.BAZ_COORD_ORIGINE_IMAGE_OMBRE_MARQUEUR.'),
         new google.maps.Point('.BAZ_COORD_ARRIVEE_IMAGE_OMBRE_MARQUEUR.'));
 
-marker = new google.maps.Marker({
-position: results[0].geometry.location,
-map: map,
-icon: image,
-shadow: shadow,
-title: \'Votre emplacement\',
-draggable: true
-});
-infowindow.open(map,marker);
-google.maps.event.addListener(marker, \'click\', function() {
-        infowindow.open(map,marker);
+        marker = new google.maps.Marker({
+            position: results[0].geometry.location,
+            map: map,
+            icon: image,
+            shadow: shadow,
+            title: \'Votre emplacement\',
+            draggable: true
         });
-google.maps.event.addListener(marker, "dragend", function () {
-        var lat = document.getElementById("latitude");lat.value = marker.getPosition().lat();
-        var lon = document.getElementById("longitude");lon.value = marker.getPosition().lng();
-        map.setCenter(marker.getPosition());
+        infowindow.open(map,marker);
+        google.maps.event.addListener(marker, \'click\', function() {
+            infowindow.open(map,marker);
+        });
+        google.maps.event.addListener(marker, "dragend", function () {
+            var lat = document.getElementById("latitude");lat.value = marker.getPosition().lat();
+            var lon = document.getElementById("longitude");lon.value = marker.getPosition().lng();
+            map.setCenter(marker.getPosition());
         });
 } else {
-    alert("Pas de résultats pour cette adresse: " + address);
+    alert("Pas de resultats pour cette adresse: " + address);
 }
 } else {
-    alert("Pas de résultats pour la raison suivante: " + status + ", rechargez la page.");
+    alert("Pas de resultats pour la raison suivante: " + status + ", rechargez la page.");
 }
 });
 }
@@ -1671,31 +1659,43 @@ if ( defined('BAZ_JS_INIT_MAP') && BAZ_JS_INIT_MAP != '' && file_exists(BAZ_JS_I
 
     ';
 };
-$script = '<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>'."\n".
-'<script type="text/javascript" src="http://www.google.com/jsapi"></script>'."\n".
-'<script type="text/javascript">
+$GLOBALS['js'] = (isset($GLOBALS['js']) ? $GLOBALS['js'] : '').'<script src="http://maps.google.com/maps/api/js?sensor=false"></script>'."\n".
+'<script src="http://www.google.com/jsapi"></script>'."\n".
+'<script>
 //<![CDATA[
 '.$scriptgoogle.'
 //]]>
 </script>';
-$formtemplate->addElement('html', $html_bouton);
-$formtemplate->addElement('html', '<div class="coordonnees_google">');
-$formtemplate->addElement('text', $lat, LATITUDE, array('id' => 'latitude','size' => 6));
-$formtemplate->addElement('text', $lon, LONGITUDE, array('id' => 'longitude', 'size' => 6));
-$formtemplate->addElement('html', '</div>');
-$formtemplate->addElement('html', $script.'<div id="map" style="width: '.BAZ_GOOGLE_IMAGE_LARGEUR.'; height: '.BAZ_GOOGLE_IMAGE_HAUTEUR.';"></div>');
+    $deflat = ''; $deflon = '';
+    if (isset($valeurs_fiche['carte_google'])) {
+        $tab = explode('|', $valeurs_fiche['carte_google']);
+        if (count($tab)>1) {
+            $deflat = ' value="'.$tab[0].'"';
+            $deflon = ' value="'.$tab[1].'"';
+        }
+    }
+    $required = (($obligatoire == 1) ? ' required="required"' : '' );
 
-if (isset($obligatoire) && $obligatoire==1) {
-    /*$formtemplate->addRule ($lat, LATITUDE . ' obligatoire', 'required', '', 'client');
-      $formtemplate->addRule ($lon, LONGITUDE . ' obligatoire', 'required', '', 'client');*/
-}
-} elseif ($mode == 'requete') {
-    return array('carte_google' => $valeurs_fiche[$lat].'|'.$valeurs_fiche[$lon]);
-} elseif ($mode == 'recherche') {
+    $formtemplate->addElement('html', '
+        <input class="btn btn-primary btn_adresse" onclick="showAddress();" name="chercher_sur_carte" value="'.VERIFIER_MON_ADRESSE.'" type="button" />
+        <input class="btn btn_client" onclick="showClientAddress();" name="chercher_client" value="'.VERIFIER_MON_ADRESSE_CLIENT.'" type="button" />
+        <div class="form-inline pull-right">'."\n".
+            'Lat : <input type="text" name="'.$lat.'" class="input-mini" id="latitude"'.$deflat.$required.' />'."\n".
+            'Lon : <input type="text" name="'.$lon.'" class="input-mini" id="longitude"'.$deflon.$required.' />'."\n".
+        '</div>'."\n".
+        '<div id="map" style="clear:right; margin-top:8px; width: '.BAZ_GOOGLE_IMAGE_LARGEUR.'; height: '.BAZ_GOOGLE_IMAGE_HAUTEUR.';"></div>');
 
-} elseif ($mode == 'html') {
+    if (isset($obligatoire) && $obligatoire==1) {
+        /*$formtemplate->addRule ($lat, LATITUDE . ' obligatoire', 'required', '', 'client');
+          $formtemplate->addRule ($lon, LONGITUDE . ' obligatoire', 'required', '', 'client');*/
+    }
+    } elseif ($mode == 'requete') {
+        return array('carte_google' => $valeurs_fiche[$lat].'|'.$valeurs_fiche[$lon]);
+    } elseif ($mode == 'recherche') {
 
-}
+    } elseif ($mode == 'html') {
+
+    }
 
 }
 
