@@ -872,7 +872,7 @@ function baz_requete_bazar_fiche($valeur)
     $valeur['statut_fiche'] = BAZ_ETAT_VALIDATION;
 
     //pour une insertion d'une nouvelle fiche, on génére l'id de la fiche
-    if (!isset($GLOBALS['_BAZAR_']['id_fiche'])) {
+    if (!isset($valeur['id_fiche'])) {
         // l'identifiant (sous forme de NomWiki) est généré à partir du titre
         $GLOBALS['_BAZAR_']['id_fiche'] = genere_nom_wiki($valeur['bf_titre']);
     }

@@ -1,4 +1,3 @@
-
 /** 
  * 
  * javascript and query tools for Bazar
@@ -118,24 +117,24 @@ $(document).ready(function () {
     //liste oui / non conditionnelle
 	$("select[id^='liste12'], select[id^='liste1']").change( function() {
 		if ($(this).val()==1) {
-			$(this).parents(".formulaire_ligne").next("div[id^='oui']").show();
-			$(this).parents(".formulaire_ligne").next("div[id^='non']").hide();
+			$(this).parents(".control-group").next("div[id^='oui']").show();
+			$(this).parents(".control-group").next("div[id^='non']").hide();
 		}
 		if ($(this).val()==2) {
-			$(this).parents(".formulaire_ligne").next("div[id^='non']").show();
-			$(this).parents(".formulaire_ligne").next("div[id^='oui']").hide();
+			$(this).parents(".control-group").next("div[id^='non']").show();
+			$(this).parents(".control-group").next("div[id^='oui']").hide();
 		}
 	});
 	//a l'ouverture du formulaire, on affiche 
 	$(".BAZ_cadre_fiche div[id^='oui'], .BAZ_cadre_fiche div[id^='non']").show();
 	$("#formulaire select[id^='liste12'], #formulaire select[id^='liste1']").each(function() {
 		if ($(this).val()==1) {
-			$(this).parents(".formulaire_ligne").next("div[id^='oui']").show();
-			$(this).parents(".formulaire_ligne").next("div[id^='non']").hide();
+			$(this).parents(".control-group").next("div[id^='oui']").show();
+			$(this).parents(".control-group").next("div[id^='non']").hide();
 		}
 		if ($(this).val()==2) {
-			$(this).parents(".formulaire_ligne").next("div[id^='non']").show();
-			$(this).parents(".formulaire_ligne").next("div[id^='oui']").hide();
+			$(this).parents(".control-group").next("div[id^='non']").show();
+			$(this).parents(".control-group").next("div[id^='oui']").hide();
 		}
 	});
 	
@@ -171,7 +170,7 @@ $(document).ready(function () {
 		if(length > max){
 			$this.val($this.val().substr(0, max));
 		}
-		$this.parents('.formulaire_ligne').find('.charsRemaining').html((max - length));
+		$this.parents('.control-group').find('.charsRemaining').html((max - length));
 	});
 
 	// on empeche d'aller au dela de la limite du nombre de caracteres
@@ -182,7 +181,7 @@ $(document).ready(function () {
 		if(length > max){
 			$this.val($this.val().substr(0, max));
 		}
-		$this.parents('.formulaire_ligne').find('.charsRemaining').html((max - length));
+		$this.parents('.control-group').find('.charsRemaining').html((max - length));
 	});
 
 
@@ -311,23 +310,29 @@ $(document).ready(function () {
 
 	$('#formulaire').removeAttr('onsubmit');
 
-	$.tools.dateinput.localize("fr",  {
-	   months:        'janvier,f&eacute;vrier,mars,avril,mai,juin,juillet,ao&ucirc;t,' +
-						'septembre,octobre,novembre,d&eacute;cembre',
-	   shortMonths:   'jan,f&eacute;v,mar,avr,mai,jun,jul,ao&ucirc;,sep,oct,nov,d&eacute;c',
-	   days:          'dimanche,lundi,mardi,mercredi,jeudi,vendredi,samedi',
-	   shortDays:     'dim,lun,mar,mer,jeu,ven,sam'
-	});
+	Modernizr.load([{
+			test : $.tools,
+		    nope: 'tools/bazar/libs/vendor/jquery.tools.min.1.7.2.js',
+		    complete : function () {
+			  	$.tools.dateinput.localize("fr",  {
+				   months:        'janvier,f&eacute;vrier,mars,avril,mai,juin,juillet,ao&ucirc;t,' +
+									'septembre,octobre,novembre,d&eacute;cembre',
+				   shortMonths:   'jan,f&eacute;v,mar,avr,mai,jun,jul,ao&ucirc;,sep,oct,nov,d&eacute;c',
+				   days:          'dimanche,lundi,mardi,mercredi,jeudi,vendredi,samedi',
+				   shortDays:     'dim,lun,mar,mer,jeu,ven,sam'
+				});
 
-	// dateinput initialization. the language is specified with lang- option
-	$("input[type=date]").dateinput({ 
-		lang: 'fr', 
-		format: 'yyyy-mm-dd',
-		offset: [0, 0],
-		selectors: true,
-		speed: 'fast',
-		firstDay: 1,
-		yearRange: [-70,30]  
-	}); 
+				// dateinput initialization. the language is specified with lang- option
+				$("input[type=date]").dateinput({ 
+					lang: 'fr', 
+					format: 'yyyy-mm-dd',
+					offset: [0, 0],
+					selectors: true,
+					speed: 'fast',
+					firstDay: 1,
+					yearRange: [-70,30]  
+				}); 
+			}
+		  }]);
 
 });
