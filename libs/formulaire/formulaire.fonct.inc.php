@@ -288,7 +288,7 @@ function liste(&$formtemplate, $tableau_template, $mode, $valeurs_fiche)
         if (is_array($valliste['label'])) {
             foreach ($valliste['label'] as $key => $label) {
                 $select_html .= '<option value="'.$key.'"';
-                if ($def != '' && strstr($key, $def)) $select_html .= ' selected="selected"';
+                if ($def != '' && $key==$def) $select_html .= ' selected="selected"';
                 $select_html .= '>'.$label.'</option>'."\n";
             }
 
@@ -500,7 +500,7 @@ function jour(&$formtemplate, $tableau_template, $mode, $valeurs_fiche)
         }
         $date_html .= $tableau_template[2].$bulledaide.' : </div>'."\n".'<div class="controls">'."\n".'<input type="date" name="'.$tableau_template[1].'" ';
 
-        $date_html .= ' class="bazar-date input_texte" id="'.$tableau_template[1].'"';
+        $date_html .= ' class="bazar-date" id="'.$tableau_template[1].'"';
 
         if (isset($tableau_template[8]) && $tableau_template[8]==1) {
             $date_html .= ' required="required"';
